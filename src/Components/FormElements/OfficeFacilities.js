@@ -1,0 +1,81 @@
+import React, {Component} from 'react';
+
+class OfficeFacilities extends Component {
+    API_URL = process.env.REACT_APP_API_URL;
+
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+
+        };
+        this.handleClick = this.handleClick.bind(this);
+        this.closePopup = this.closePopup.bind(this);
+    }
+    componentWillMount() {
+        document.addEventListener("mousedown", this.handleClick, false);
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener('mousedown', this.handleClick, false);
+    }
+    closePopup(e){
+        this.props.toggleShowOfficeFacilities()
+    };
+    handleClick(e){
+        if(this.node.contains(e.target)){
+            // clicked inside
+            return;
+        }
+        if(this.props.showOfficeFacilities === true){
+            this.closePopup();
+        }
+    }
+
+    render() {
+        const handleCheckboxChange = this.props.handleCheckboxChange;
+        let facilities = this.props.officeFacilities || [];
+        let chosenFacilities = this.props.chosenFacilities;
+        let facilitiesFilter;
+        let facilitiesMarkup = facilities.map(function(facility){
+            return(
+                <label key={facility.id}>
+                    <input type={"checkbox"} name="office_type" value={facility.id} id={"office_type"+facility.id} onChange={handleCheckboxChange} checked={chosenFacilities.includes(parseInt(facility.id))} data-label={facility.name}/>
+                    <span className="checkmark"/>
+                    <span className="input-title">
+                        {facility.name} <span className="count">({facility.count})</span>
+                    </span>
+                </label>
+            )
+        });
+
+        if(facilities.length){
+            facilitiesFilter = (
+                <div className="filter-element input-popup type-checkbox" data-type="checkbox" id="office_facilities_filter" ref={node => this.node = node}>
+                    <h4 className="filter-heading">
+                        Kontor faciliteter
+                    </h4>
+                    <div className="input-wrap" onClick={this.props.toggleShowOfficeFacilities}>
+                        <div className="chosen-value" data-empty-text="Alle typer">
+                            {this.props.chosenFacilitiesText}
+                        </div>
+                    </div>
+                    <div className={`input-popup-content ` + (this.props.showOfficeFacilities ? 'open' : 'closed')}>
+                        {facilitiesMarkup}
+                    </div>
+                </div>
+            )
+        }
+        return(
+            <React.Fragment>
+                {facilitiesFilter}
+            </React.Fragment>
+        )
+    }
+
+}
+
+export default OfficeFacilities;
+
+
