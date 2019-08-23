@@ -24,6 +24,20 @@ class OfficePostListItem extends Component {
     }
 
 
+
+    newSplash = (postDate) => {
+
+        let date = new Date(postDate);
+        let now = new Date();
+        let timeDiff = now.getTime()- date.getTime();
+        let daysDiff = timeDiff / (1000 * 3600 * 24);
+        if(daysDiff < 40){
+            return (<span className={"office-new-splash"}>Nyhed</span> )
+        } else{
+            return null;
+        }
+    }
+
     render(){
         const offices = this.props.offices || [];
 
@@ -45,13 +59,14 @@ class OfficePostListItem extends Component {
             <React.Fragment>
                 <article key={post.ID} id={"office-"+post.ID} className="single-post single-office">
                     <div className="post-images">
+                        {this.newSplash(post.post_date)}
                         <Link to={`/office/${post.slug}`} onClick={this.handleLinkClick}>
                             <div className="image" style={{backgroundImage: post.thumbnail ? 'url('+post.thumbnail+')':'none'}} />
                         </Link>
                     </div>
                     <div className={"content-wrap"}>
                         <div className="office-area">
-                            Her kommer lokation
+                            <span className="area">Storkøbenhavn</span><span className="city">Nørrebro</span>
                         </div>
                         <div className="office-title">
                             <Link to={`/office/${post.slug}`} onClick={this.handleLinkClick}>
@@ -61,12 +76,25 @@ class OfficePostListItem extends Component {
                         <div className="office-meta">
                             <div className="icons">
                                 <div className="calendar office-icon" key={"calendar"}>
+                                    <span className="icomoon icon-kalender" >
+                                    </span>
+                                    <span className="icons-title">
+                                        Min. 6 mdr.
+                                    </span>
                                 </div>
                                 <div className="capacity office-icon" key={"capacity"}>
-                                    {post.office_capacity}
+                                    <span className="icomoon icon-profil2" >
+                                    </span>
+                                    <span className="icons-title">
+                                        {post.office_capacity}
+                                    </span>
                                 </div>
                                 <div className="business office-icon" key={"business"}>
-                                    branche
+                                    <span className="icomoon icon-taske" >
+                                    </span>
+                                    <span className="icons-title">
+                                        branche
+                                    </span>
                                 </div>
                             </div>
                             {post.office_price !== false ? (

@@ -53,6 +53,10 @@ class Orderby extends Component {
             {
                 title: "Alfabetisk (Z-A)",
                 key: 'title_desc',
+            },
+            {
+                title: "Nyeste",
+                key: 'date_desc'
             }
         ];
         let comp = this;

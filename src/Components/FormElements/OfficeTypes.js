@@ -10,10 +10,11 @@ class OfficeTypes extends Component {
         this.state = {
 
         };
+        this.node = React.createRef();
         this.handleClick = this.handleClick.bind(this);
         this.closePopup = this.closePopup.bind(this);
     }
-    componentWillMount() {
+    componentDidMount() {
         document.addEventListener("mousedown", this.handleClick, false);
     }
 
@@ -24,7 +25,7 @@ class OfficeTypes extends Component {
         this.props.toggleShowOfficeType()
     };
     handleClick(e){
-        if(this.node.contains(e.target)){
+        if(this.node.current === null || this.node.contains(e.target)){
             // clicked inside
             return;
         }

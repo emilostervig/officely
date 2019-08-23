@@ -24,10 +24,10 @@ class CoWork extends Component {
             <div className="filter-element" id="office_cowork_filter">
                 <label className="filter-heading">
                     <div className="checkbox-wrap">
-                        <label>
+                        <label htmlFor={"office_cowork"} onClick={ e => e.stopPropagation() }>
                             <input type="checkbox" name="office_cowork" id="office_cowork" value="1" checked={this.props.coworkChecked} onChange={this.props.handleCoWorkChange}/>
                                 <span className="checkmark"/>
-                                <span className="input-title" onClick={this.handleCoworkClick}>Jeg er interesseret i co-working</span>
+                                <span className="input-title" >Jeg er interesseret i <span onClick={this.handleCoworkClick}>co-working</span></span>
                         </label>
                     </div>
                 </label>

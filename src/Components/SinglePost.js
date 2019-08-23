@@ -107,38 +107,14 @@ class SinglePost extends Component {
     };
 
 
+
     render(){
         let post = this.props.post;
         let owner = this.state.owner;
         let comp = this;
         let renderPost;
 
-        const periods = [
-            {
-                id: 0,
-                name: "Ubegrænset"
-            },
-            {
-                id: 1,
-                name: "Min. 1 mdr.",
-            },
-            {
-                id: 3,
-                name: "Min. 3 mdr."
-            },
-            {
-                id: 6,
-                name: "Min. 6 mdr.",
-            },
-            {
-                id: 9,
-                name: "Min. 9 mdr.",
-            },
-            {
-                id: 12,
-                name: "Min. 12 mdr.",
-            }
-        ];
+
 
 
         let Gallery;
@@ -159,13 +135,11 @@ class SinglePost extends Component {
 
 
         }
-        console.log(periods);
         if('ID' in post){
             renderPost = (
                 <div id={"post-"+post.ID} className={"single-office"} ref={this.postRef}>
                     <div className="flex-row booking">
                         <div className="gallery">
-
                             <div className="image-wrap" >
                                 {Gallery}
                             </div>
@@ -184,7 +158,7 @@ class SinglePost extends Component {
 
 
                                 <PeriodSelector
-                                    periods={periods}
+                                    periods={this.props.periods}
                                     onUpdate={this.handleUpdatePeriod}
                                 />
 
@@ -218,7 +192,7 @@ class SinglePost extends Component {
                                         </h2>
                                         <div className="facilities-wrap">
                                             {post.office_facilities.map((fac) => {
-                                                return (<div className={"single-facility"} key={fac.term_id}> <div className="checkmark"/> <span className="title">{fac.name}</span> </div> );
+                                                return (<div className={"single-facility"} key={fac.term_id}> <div className="checkmark icomoon icon-checkmark"/> <span className="title">{fac.name}</span> </div> );
                                             })}
                                         </div>
                                     </div>
@@ -248,13 +222,16 @@ class SinglePost extends Component {
                                             </tr>
                                         </tbody>
                                     </table>
+                                    <h2 className="office-title">
+                                        {post.post_title}
+                                    </h2>
                                     <ReadMore
                                         maxHeight={'65px'}
                                         openText={"Skjul"}
                                         closedText={"Læs videre"}
                                     >
 
-                                        {post.post_content}
+                                        <div dangerouslySetInnerHTML={{__html: post.post_content}}/>
                                     </ReadMore>
 
 
@@ -281,14 +258,23 @@ class SinglePost extends Component {
                                 </div>
 
                                 <div className="security-notice office-section">
-                                    <div className="heading">
-                                        Vigtigt!
+                                    <div className="flex-row">
+                                        <div className="icon">
+                                            <span className="icomoon icon-sikkerhed"/>
+                                        </div>
+                                        <div className="message">
+                                            <div className="heading">
+                                                Vigtigt!
+                                            </div>
+                                            <div className="security-content">
+                                                <p>
+                                                    <strong>Kommuniker <u>altid</u> kun via Officely.</strong> For at vi kan beskytte dig skal du aldrig overføre penge eller kommunikere uden for officely-webstedet. Officely er din sikkerhed.
+                                                </p>
+                                            </div>
+                                        </div>
+
                                     </div>
-                                    <div className="security-content">
-                                        <p>
-                                            <strong>Kommuniker <u>altid</u> kun via Officely.</strong> For at vi kan beskytte dig skal du aldrig overføre penge eller kommunikere uden for officely-webstedet. Officely er din sikkerhed.
-                                        </p>
-                                    </div>
+
                                 </div>
                                 <div className="owner-info office-section section-box">
                                     {owner !== false ? (

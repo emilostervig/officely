@@ -1,7 +1,13 @@
+// External
 import React, {Component} from 'react';
-
 import Nouislider from "nouislider-react";
 import "nouislider/distribute/nouislider.css";
+
+// Components
+
+// Functions
+import formatNumber from "../functions/formatNumber";
+import throttle from "../functions/throttle";
 
 
 class PriceRange extends Component {
@@ -13,8 +19,9 @@ class PriceRange extends Component {
 
         this.state = {
             value: 0,
+            minTemp: 0,
+            maxTemp: 10000,
         };
-        this.formatNumber = this.formatNumber.bind(this);
         this.handleClick = this.handleClick.bind(this);
         this.closePopup = this.closePopup.bind(this);
     }
@@ -40,16 +47,25 @@ class PriceRange extends Component {
         }
     }
 
-    formatNumber(num){
-        num = Math.trunc(num)
+    throttleUpdate = throttle((values) => {
+        this.setState({
+            minTemp: values[0],
+            maxTemp: values[1]
+        })
+    }, 20)
 
-        return num + ' kr.';
+    handleSet = (values) => {
+        this.setState({
+            minTemp: values[0],
+            maxTemp: values[1]
+        });
+        this.props.handlePriceChange(values);
     }
 
 
 
+
     render(){
-        const format = this.formatNumber;
         return (
             <div className="filter-element input-popup" id="office_price_filter" ref={node => this.node = node}>
                 <h4 className="filter-heading">
@@ -64,7 +80,7 @@ class PriceRange extends Component {
                         <div className="fake-input">
                             <span className="prefix">Min. </span>
                             <span className={"value"}>
-                                {this.props.minPrice}
+                                {formatNumber(this.state.minTemp)}
                             </span>
                             <span className="affix"> kr.</span>
                         </div>
@@ -73,7 +89,7 @@ class PriceRange extends Component {
                         <div className="fake-input">
                             <span className="prefix">Max. </span>
                             <span className={"value"}>
-                                {this.props.maxPrice}
+                                {formatNumber(this.state.maxTemp)}
                             </span>
                             <span className="affix"> kr.</span>
                         </div>
@@ -85,8 +101,8 @@ class PriceRange extends Component {
                         range={{min: 0, max: 10000}}
                         step={100}
                         connect
-                        onSet={this.props.handlePriceChange}
-
+                        onSet={this.handleSet}
+                        onUpdate={this.throttleUpdate}
                     />
 
                 </div>

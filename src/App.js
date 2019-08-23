@@ -11,6 +11,9 @@ import OfficePostList from './Components/OfficePostList';
 import { BrowserRouter as Router, Route} from 'react-router-dom';
 import {Switch} from "react-router-dom";
 
+// functions
+import groupBy from './Components/functions/groupBy';
+
 // Assets
 //import './wpstyle.css'
 
@@ -31,6 +34,9 @@ class App extends Component {
             noOffices: false,
             listScrolled: 0,
             postsLoading: true,
+            loadingMore: false,
+            loadedAll: false,
+            postCount: 0,
 
             // type filter
             officeTypes: [],
@@ -72,10 +78,43 @@ class App extends Component {
                 facilities: [],
                 types: [],
                 capacity: 1,
-            }
+            },
+
+
+            // Cities
+            cities: [],
+
+            // Period
+            selectedPeriod: {},
 
 
         };
+        this.periods = [
+            {
+              id: 0,
+              name: "Ubegrænset"
+            },
+            {
+              id: 1,
+              name: "Min. 1 mdr.",
+            },
+            {
+              id: 3,
+              name: "Min. 3 mdr."
+            },
+            {
+              id: 6,
+              name: "Min. 6 mdr.",
+            },
+            {
+              id: 9,
+              name: "Min. 9 mdr.",
+            },
+            {
+              id: 12,
+              name: "Min. 12 mdr.",
+            }
+        ];
 
     this.getOffices = this.getOffices.bind(this);
     this.getData = this.getData.bind(this);
@@ -99,11 +138,70 @@ class App extends Component {
 
     componentDidMount() {
         this.getData()
+        this.getMunicipalities()
     }
 
 
     componentWillUnmount() {
     }
+    getMunicipalities = () => {
+
+            fetch(`https://dawa.aws.dk/kommuner?udenforkommuneinddeling=false`)
+                .then((response) => {
+                    return response.json()
+                })
+                .then(data => {
+                    let filtered = data.map((key) => {
+                        return {
+                            name: key.navn,
+                            regioncode: key.regionskode,
+                            cities: [],
+                            code: key.kode,
+                        };
+                    })
+
+                    return this.setState({
+                        municipalities: filtered,
+                    });
+
+                }).then( data => {
+                    this.getCities();
+                })
+                .catch(error => {
+                    console.error("Error when fetching: ", error);
+                })
+    };
+    getCities = () => {
+        fetch(`https://dawa.aws.dk/supplerendebynavne2`)
+            .then((response) => {
+                return response.json()
+            })
+            .then(data => {
+                let filtered = data.map( (key) => {
+                    return {
+                        name: key.navn,
+                        municipalitycode: key.kommune.kode,
+                        postcode: key.postnumre[0].nr,
+                    }
+                });
+                let grouped = groupBy(filtered, "municipalitycode");
+                let municipalities = this.state.municipalities;
+                municipalities.forEach( (val, i) => {
+                    let munCode = val.code;
+                    if(grouped[munCode] !== undefined){
+                        municipalities[i].cities = grouped[munCode];
+                    }
+                });
+
+                this.setState({
+                    municipalities: municipalities
+                });
+            })
+
+            .catch(error => {
+                console.error("Error when fetching: ", error);
+            })
+    };
 
 
     checkLocalStorageInit() {
@@ -199,12 +297,17 @@ class App extends Component {
     return maybePost;
   }
 
-  getOffices(){
+  getOffices(more = false){
         this.setState({
-            postsLoading: true,
+            postsLoading: (!more),
+            loadingMore: more
         });
+
         let queryBase = 'officely/v2/offices?';
         let queryParts = [];
+        if(more === true){
+            queryParts.push('offset='+this.state.offices.length);
+        }
         if(this.state.chosenType !== 'all'){
             queryParts.push('office_type='+this.state.chosenType);
         }
@@ -222,6 +325,9 @@ class App extends Component {
         if(this.state.capacity !== 1){
             queryParts.push('capacity='+this.state.capacity);
         }
+        if('id' in this.state.selectedPeriod){
+            queryParts.push('period='+this.state.selectedPeriod.id);
+        }
 
         // add order
         queryParts.push('officeorder='+this.state.orderbyKey);
@@ -236,17 +342,38 @@ class App extends Component {
             .then(data => {
                 console.log(data);
                 if(!data.posts.length){
-                    this.setState({
-                        offices: data.posts,
-                        noOffices: true,
-                        postsLoading: false
-                    })
+                    let stateObj = {
+                        postsLoading: false,
+                        loadedAll: true,
+                        loadingMore: false,
+                    };
+                    if(more === false) {
+                        stateObj = {
+                            ...stateObj,
+                            noOffices: true,
+                            offices: data.posts,
+                            postCount: data.foundPosts,
+
+                        }
+                    }
+                    this.setState(stateObj)
                 } else{
-                    this.setState({
-                        offices: data.posts,
+                    let stateObj = {
                         noOffices: !data.posts.length,
-                        postsLoading: false
-                    });
+                        postsLoading: false,
+                        offices: data.posts,
+                        loadedAll: false,
+                        loadingMore: false,
+                        postCount: data.foundPosts,
+                    };
+                    if(more === true){
+                        stateObj = {
+                            ...stateObj,
+                            offices: this.state.offices.concat(data.posts),
+                            noOffices: false,
+                        };
+                    }
+                    this.setState(stateObj);
                 }
             })
             .catch(error => {
@@ -299,8 +426,8 @@ class App extends Component {
     trackScrolling = (el) => {
         console.log('scroll');
         //const wrappedElement = document.getElementById('post-list');
-        if (this.scrollReached(el, 1500)) {
-            console.log('should get new posts');
+        if (this.scrollReached(el, 1500 ) && this.state.loadingMore === false && this.state.loadedAll === false) {
+            this.getOffices(true)
             //document.removeEventListener('scroll', this.trackScrolling);
         }
     };
@@ -325,12 +452,13 @@ class App extends Component {
         officeList = (
             <React.Fragment>
                 <OfficePostList
-                    trackScrolling={this.trackScrolling}
-                    scrollReached={this.scrollReached}
-                    setListScrollPosition={this.setListScrollPosition}
+                    loadingMore={this.state.loadingMore}
                     offices={this.state.offices}
                     listScrolled={this.state.listScrolled}
                     throttle={this.throttle}
+                    trackScrolling={this.trackScrolling}
+                    scrollReached={this.scrollReached}
+                    setListScrollPosition={this.setListScrollPosition}
                 />
 
             </React.Fragment>
@@ -353,7 +481,7 @@ class App extends Component {
 
                         // post data
                         postsLoading={this.state.postsLoading}
-                        postCount={this.state.offices.length}
+                        postCount={this.state.postCount}
 
                         // types
                         officeTypes={this.state.officeTypes}
@@ -384,6 +512,14 @@ class App extends Component {
                         orderbyTitle={this.state.orderbyTitle}
                         showOrderby={this.state.showOrderby}
 
+                        // Cities
+                        municipalities={this.state.municipalities}
+
+                        // Periods
+                        periods={this.periods}
+                        selectedPeriod={this.state.selectedPeriod}
+
+
 
                     />
                     <div className="grid-container">
@@ -399,6 +535,9 @@ class App extends Component {
                       post={this.state.post}
                       getPostBySlug={this.getPostBySlug}
                       clearSingleOffice={this.clearSingleOffice}
+
+                      // Periods
+                      periods={this.periods}
                   />
               }/>
 

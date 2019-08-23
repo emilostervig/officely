@@ -10,10 +10,11 @@ class OfficeFacilities extends Component {
         this.state = {
 
         };
+        this.node = React.createRef();
         this.handleClick = this.handleClick.bind(this);
         this.closePopup = this.closePopup.bind(this);
     }
-    componentWillMount() {
+    componentDidMount() {
         document.addEventListener("mousedown", this.handleClick, false);
     }
 
@@ -24,7 +25,7 @@ class OfficeFacilities extends Component {
         this.props.toggleShowOfficeFacilities()
     };
     handleClick(e){
-        if(this.node.contains(e.target)){
+        if(this.node.current === null || this.node.contains(e.target)){
             // clicked inside
             return;
         }
@@ -52,7 +53,7 @@ class OfficeFacilities extends Component {
 
         if(facilities.length){
             facilitiesFilter = (
-                <div className="filter-element input-popup type-checkbox" data-type="checkbox" id="office_facilities_filter" ref={node => this.node = node}>
+                <div className="filter-element input-popup type-checkbox" data-type="checkbox" id="office_facilities_filter" ref={(node) => this.node = node}>
                     <h4 className="filter-heading">
                         Kontor faciliteter
                     </h4>

@@ -6,6 +6,8 @@ import OfficeFacilities from "./FormElements/OfficeFacilities";
 import CoWork from "./FormElements/CoWork";
 import PriceRange from "./FormElements/PriceRange";
 import Orderby from "./FormElements/Orderby"
+import CitySelector from "./FormElements/CitySelector";
+import PeriodSelector from "./FormElements/PeriodSelector";
 
 class FilterForm extends Component {
     API_URL = process.env.REACT_APP_API_URL;
@@ -152,9 +154,16 @@ class FilterForm extends Component {
         }
     }
 
+    handlePeriodUpdate = (value) => {
+        console.log(value)
+        this.props.updateFilterValue({
+            selectedPeriod: value,
+        })
+    }
+
     render() {
         let foundCount;
-        if(this.props.postCount > 0){
+        if(parseInt(this.props.postCount) > 0){
             foundCount = <React.Fragment>Oplev de <span className={"count"}>{this.props.postCount}</span> kontorpladser der passer til din søgning</React.Fragment>;
         } else if(parseInt(this.props.postCount ) === 0 && this.props.postsLoading !== true){
             foundCount = <React.Fragment>Ingen kontorer fundet med dine filtre, prøv venligst igen</React.Fragment>;
@@ -169,6 +178,22 @@ class FilterForm extends Component {
                 <div className="main-form">
                     <div className="grid-container">
                         <div className="field-wrap">
+                            <CitySelector
+                                title={"By"}
+                                municipalities={[
+                                    {
+                                        code: 1,
+                                        name: 'København',
+                                        cities: [
+                                            {
+                                                name: 'Frederiksberg',
+                                                postcode: 1000,
+
+                                            }
+                                        ]
+                                    }
+                                ]}
+                                />
                             <Capacity
                                 updateFilterValue={this.props.updateFilterValue}
                                 capacity={this.props.capacity}
@@ -183,6 +208,12 @@ class FilterForm extends Component {
                                 updateParentState={this.props.updateParentState}
                             />
 
+                            <PeriodSelector
+                                periods={this.props.periods}
+                                title={"Periode"}
+                                onUpdate={this.handlePeriodUpdate}
+                                selected={this.props.selectedPeriod}
+                                />
                             <PriceRange
                                 handlePriceChange={this.handlePriceChange}
                                 minPrice={this.props.minPrice}

@@ -49,7 +49,7 @@ class Capacity extends Component {
                 <h4 className="filter-heading">
                     Personer
                 </h4>
-                <div className="input-wrap">
+                <div className="input-wrap number-input">
                     <span className={"minus quantity-btn " + disabled} data-val="-1" onClick={this.handleQuantityClick}>–</span>
                     <input className="quantity-input" type="number" inputMode="numeric" name="office_capacity"
                            id="office_capacity" value={this.props.capacity} onChange={this.handleInputChange}/>

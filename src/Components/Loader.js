@@ -15,7 +15,7 @@ class Loader extends Component {
     render(){
 
         return (
-            <div id="office-list-spinner">
+            <div className="office-list-spinner">
                 <div className="sk-circle">
                     <div className="sk-circle1 sk-child"/>
                     <div className="sk-circle2 sk-child"/>

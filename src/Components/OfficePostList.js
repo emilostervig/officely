@@ -1,11 +1,12 @@
+// external
 import React, {Component} from 'react';
 import {Link} from "react-router-dom";
 
+// Components
 import OfficePostListItem from './OfficePostListItem';
+import Loader from './Loader';
 
 class OfficePostList extends Component {
-
-
     constructor(props) {
         super(props);
 
@@ -13,7 +14,6 @@ class OfficePostList extends Component {
 
         };
         this.listRef = React.createRef();
-
 
         this.handleScrollEvent = this.handleScrollEvent.bind(this);
         this.postClicked = this.postClicked.bind(this);
@@ -58,6 +58,10 @@ class OfficePostList extends Component {
                 )
             }
         };
+        let loadingMore;
+        if(this.props.loadingMore === true ){
+            loadingMore = <Loader/>
+        }
 
         return (
             <React.Fragment>
@@ -72,6 +76,8 @@ class OfficePostList extends Component {
 
                     )}
                 </div>
+                {loadingMore}
+
             </React.Fragment>
 
         );
