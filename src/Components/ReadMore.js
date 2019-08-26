@@ -80,9 +80,10 @@ class ReadMore extends Component {
                         </div>
                     </div>
                     {(this.state.innerHeight > parseInt(this.props.maxHeight)) &&
-                        <button onClick={this.toggleShow}>
+                        <div className={"toggle-btn"} onClick={this.toggleShow}>
                             {this.state.open ? this.props.openText : this.props.closedText}
-                        </button>
+                            <span className="icon icomoon icon-arrow-down"/>
+                        </div>
                     }
 
                 </div>

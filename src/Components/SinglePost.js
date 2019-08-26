@@ -9,6 +9,7 @@ import PeriodSelector from "./FormElements/PeriodSelector";
 
 // functions
 import formatNumber from "./functions/formatNumber";
+import OfficePostList from "./OfficePostList";
 
 class SinglePost extends Component {
     API_URL = process.env.REACT_APP_API_URL;
@@ -34,25 +35,46 @@ class SinglePost extends Component {
     }
 
     componentWillMount() {
-        let comp = this;
-        this.props.getPostBySlug(this.props.slug);
-        this.ownerInterval = setInterval(function(){
-            comp.getUserData(comp.props.post.post_author);
-        }, 2000)
+        console.log('componentWillMount')
 
     }
 
     componentWillUnmount(){
-        this.props.clearSingleOffice();
+        console.log('componentWillUnmount');
+        /*
+        if(this.props.slug !== this.props.post.post_name){
+            this.props.clearSingleOffice();
+        }
+
+         */
     }
 
+
     componentDidUpdate(prevProps, prevState, snapshot) {
+        console.log('componentDidUpdate')
+
         let eventClick = new Event('singleofficemount');
         window.dispatchEvent(eventClick);
+
+        /*
+        if(this.props.slug !== this.props.post.post_name && this.props.post.post_name !== undefined){
+            //this.props.clearSingleOffice();
+            this.props.getPostBySlug(this.props.slug);
+            this.scrollToPost();
+        }
+
+         */
     }
 
     componentDidMount() {
-        console.log('did mount')
+        console.log('componentDidMount')
+        let comp = this;
+        this.props.getPostBySlug(this.props.slug);
+        /*
+        this.ownerInterval = setInterval(function(){
+            comp.getUserData(comp.props.post.post_author);
+        }, 2000)
+        */
         let eventClick = new Event('singleofficemount');
         window.dispatchEvent(eventClick);
         this.scrollToPost();
@@ -106,24 +128,47 @@ class SinglePost extends Component {
         alert("new booking request \n \n Personer: " + this.state.selectedPeople + "\n\n Periode: "+this.state.selectedPeriod.name)
     };
 
+    random_elems = (arr, count) => {
+        let len = arr.length;
+        let lookup = {};
+        let tmp = [];
+
+        if (count > len)
+            count = len;
+
+        for (let i = 0; i < count; i++) {
+            let index;
+            do {
+                index = ~~(Math.random() * len);
+            } while (index in lookup);
+            lookup[index] = null;
+            tmp.push(arr[index]);
+        }
+
+        return tmp;
+    }
+
 
 
     render(){
+        console.log('first line in render()');
         let post = this.props.post;
         let owner = this.state.owner;
         let comp = this;
-        let renderPost;
+        let renderPost = null;
+
+        console.log('before gallery');
+        console.log('before gallery');
 
 
-
-
-        let Gallery;
-        if('gallery' in post && post.gallery !== false && typeof post.gallery !== undefined){
-            Gallery = post.gallery.map((img) => {
+        let gallery = null;
+        if('gallery' in this.props.post && this.props.post.gallery !== false && this.props.post.gallery !== null && typeof this.props.post.gallery !== "undefined" ){
+            console.log("GALLERY", this.props.post.gallery)
+            gallery = this.props.post.gallery.map((img, i) => {
                 let style = {
                     backgroundImage: 'url('+img+')',
                 };
-                return (<div className={"slide"}><div className={"image-slide"} style={style} key={img}/></div> )
+                return (<div key={this.props.post.ID+"+slide-no-"+i} className={"slide"}><div className={"image-slide"} style={style}/></div>)
             })
 
 
@@ -131,17 +176,41 @@ class SinglePost extends Component {
             let style = {
                 backgroundImage: 'url(https://images.unsplash.com/photo-1497366754035-f200968a6e72?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80)',
             };
-            Gallery =  <div className={"image-slide"} style={style} key={"1"}/>
-
-
+            gallery =  <div key={"+slide-placeholder"} className={"slide"}> <div className={"image-slide"} style={style}/></div>
         }
+        let relatedSection = null;
+        if(this.props.offices.length > 0){
+            let availableOffices = this.props.offices.filter( (off) => {
+                return off.ID !== post.ID;
+            });
+            availableOffices = this.random_elems(availableOffices, 4);
+            relatedSection = (
+                <div className="related-offices">
+
+                    <div className="grid-container">
+
+                        <OfficePostList
+                            loadingMore={this.state.loadingMore}
+                            offices={availableOffices}
+                            listScrolled={this.state.listScrolled}
+                            trackScrolling={this.trackScrolling}
+                            scrollReached={this.scrollReached}
+                            setListScrollPosition={this.setListScrollPosition}
+                        />
+
+                    </div>
+
+                </div>
+            )
+        }
+
         if('ID' in post){
             renderPost = (
-                <div id={"post-"+post.ID} className={"single-office"} ref={this.postRef}>
+                <div id={"post-"+post.ID} className={"single-office"} >
                     <div className="flex-row booking">
                         <div className="gallery">
                             <div className="image-wrap" >
-                                {Gallery}
+                                {gallery}
                             </div>
 
                         </div>
@@ -174,9 +243,9 @@ class SinglePost extends Component {
                                 </div>
                             </div>
                             <div className="booking-btn">
-                                <button onClick={this.handleBookingRequest}>
+                                <button className={"btn yellow"} onClick={this.handleBookingRequest}>
                                     Send anmodning
-                                    <span className="icon"/>
+                                    <span className="icon icomoon icon-right"/>
                                 </button>
                             </div>
                         </div>
@@ -184,6 +253,20 @@ class SinglePost extends Component {
                     <div className="grid-container office-sections section-box">
                         <div className="row">
                             <div className="col-sm-12 col-md-8">
+
+                                <div className="post-location">
+                                    <div className="location">
+
+                                        <div className="municipality">
+                                            Storkøbenhavn
+                                        </div>
+                                        <div className="city">
+                                            Amager
+                                        </div>
+
+                                    </div>
+
+                                </div>
 
                                 {post.office_facilities.length > 0 &&
                                     <div className="facilities office-section section-box">
@@ -308,6 +391,7 @@ class SinglePost extends Component {
         return (
             <React.Fragment>
                {renderPost}
+                {relatedSection}
             </React.Fragment>
 
         );

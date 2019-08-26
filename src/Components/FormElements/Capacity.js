@@ -37,6 +37,9 @@ class Capacity extends Component {
         if(val < 1){
             val = 1;
         }
+        if(val === this.props.capacity){
+            return;
+        }
         this.props.updateFilterValue({
             capacity: val,
         })

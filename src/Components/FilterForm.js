@@ -8,6 +8,7 @@ import PriceRange from "./FormElements/PriceRange";
 import Orderby from "./FormElements/Orderby"
 import CitySelector from "./FormElements/CitySelector";
 import PeriodSelector from "./FormElements/PeriodSelector";
+import IndustrySelector from "./FormElements/IndustrySelector";
 
 class FilterForm extends Component {
     API_URL = process.env.REACT_APP_API_URL;
@@ -155,7 +156,6 @@ class FilterForm extends Component {
     }
 
     handlePeriodUpdate = (value) => {
-        console.log(value)
         this.props.updateFilterValue({
             selectedPeriod: value,
         })
@@ -168,8 +168,6 @@ class FilterForm extends Component {
         } else if(parseInt(this.props.postCount ) === 0 && this.props.postsLoading !== true){
             foundCount = <React.Fragment>Ingen kontorer fundet med dine filtre, prøv venligst igen</React.Fragment>;
         }
-        console.log(this.props.postCount)
-        console.log(this.props.postsLoading );
         //const foundCount = this.props.postCount > 0 ? <React.fragment>Oplev de <span className={"count"}>${this.props.postCount}</span> kontorpladser der passer til din søgning</React.fragment>: '';
         //const handleOrderChange = this.handleOrderChange;
         return(
@@ -189,6 +187,10 @@ class FilterForm extends Component {
                                                 name: 'Frederiksberg',
                                                 postcode: 1000,
 
+                                            },
+                                            {
+                                                name: 'Nørrebro',
+                                                postcode: 1100
                                             }
                                         ]
                                     }
@@ -233,6 +235,26 @@ class FilterForm extends Component {
 
                             />
 
+                            <IndustrySelector
+                                industries={[
+                                    {
+                                        code: 1,
+                                        name: 'Reklame'
+                                    },
+                                    {
+                                        code: 2,
+                                        name: "It & udvikling"
+                                    },
+                                    {
+                                        code: 3,
+                                        name: "E-commerce"
+                                    },
+                                    {
+                                        code: 4,
+                                        name: "Salg & service"
+                                    }
+                                ]}
+                                />
                         </div>
                         <div className="field-wrap bottom-row">
                             <CoWork

@@ -8,14 +8,14 @@ import NoPosts from './Components/NoPosts';
 import OfficePostList from './Components/OfficePostList';
 
 // Packages
-import { BrowserRouter as Router, Route} from 'react-router-dom';
+import { BrowserRouter as Router, Route, Link} from 'react-router-dom';
 import {Switch} from "react-router-dom";
 
 // functions
 import groupBy from './Components/functions/groupBy';
 
 // Assets
-//import './wpstyle.css'
+import './wpstyle.css'
 
 class App extends Component {
   API_URL = process.env.REACT_APP_API_URL;
@@ -115,6 +115,8 @@ class App extends Component {
               name: "Min. 12 mdr.",
             }
         ];
+        this.fetchController = new AbortController();
+        this.signal = this.fetchController.signal;
 
     this.getOffices = this.getOffices.bind(this);
     this.getData = this.getData.bind(this);
@@ -123,7 +125,6 @@ class App extends Component {
     this.getPostBySlug = this.getPostBySlug.bind(this);
     this.updateFilterValue = this.updateFilterValue.bind(this);
     this.updateParentState = this.updateParentState.bind(this);
-    this.throttle = this.throttle.bind(this);
     this.scrollReached = this.scrollReached.bind(this);
     this.setListScrollPosition = this.setListScrollPosition.bind(this);
     this.clearSingleOffice = this.clearSingleOffice.bind(this);
@@ -263,43 +264,56 @@ class App extends Component {
                 console.error("Error when fetching: ", error);
             })
     };
-  getPostBySlug(slug){
-      // check if post is already in our state
-    let maybePost = this.state.offices.find(function(el){
-      return el.post_name === slug;
-    });
-    if(maybePost){
-        console.log('found post in state');
+    getPostBySlug(slug){
         this.setState({
-            post: maybePost,
+            post: {},
+        })
+          // check if post is already in our state
+        let maybePost = this.state.offices.find(function(el){
+          return el.post_name === slug;
         });
-    }
-    console.log('fetching post from getPostBySlug - slug: '+slug)
-      fetch(`${this.API_URL}officely/v2/office/${slug}`)
-          .then((response) => {
-                  return response.json()
-              }
-          )
-          .then(data => {
-              if(data){
-                  this.setState({
-                      post: data,
-                      noOffices: !data.length
-                  });
-              }
+        if(maybePost){
+            console.log('found post in state', maybePost);
 
-              console.log('new data');
-          })
-          .catch(error => {
-              console.error("Error when fetching: ", error);
-          });
 
-    return maybePost;
-  }
+            this.setState({
+                post: maybePost,
+            });
+
+            return maybePost;
+
+        }
+
+
+        console.log('fetching post from getPostBySlug - slug: '+slug)
+          fetch(`${this.API_URL}officely/v2/office/${slug}`)
+              .then((response) => {
+                      return response.json()
+                  }
+              )
+              .then(data => {
+                  if(data){
+                      this.setState({
+                          post: data,
+                          noOffices: !data.length
+                      });
+                  }
+
+                  console.log('new data');
+              })
+              .catch(error => {
+                  console.error("Error when fetching: ", error);
+              });
+
+        return maybePost;
+      }
 
   getOffices(more = false){
+        this.fetchController.abort();
+        this.fetchController = new AbortController();
+        this.signal = this.fetchController.signal;
         this.setState({
-            postsLoading: (!more),
+            postsLoading: !more,
             loadingMore: more
         });
 
@@ -334,7 +348,10 @@ class App extends Component {
 
         let query = queryBase + queryParts.join('&');
         console.log(`route: ${this.API_URL}${query}`);
-        fetch(`${this.API_URL}${query}`)
+        fetch(`${this.API_URL}${query}`,
+            {
+                signal: this.signal,
+            })
             .then((response) => {
                     return response.json()
                 }
@@ -382,34 +399,26 @@ class App extends Component {
   };
 
 
-  updateParentState(key, val){
-      this.setState({
-          [key]: val,
-      });
-  }
-
-  updateFilterValue(obj){
-      console.log('updateFilterValue - trigger getOffices', obj)
-      let newOptions = this.state.chosenFilter;
-      for (const [key, value] of Object.entries(obj)) {
-          newOptions[key] = value;
+      updateParentState(key, val){
+          this.setState({
+              [key]: val,
+          });
       }
-      // TODO: create a single object in state to run filters on. Use key value to set query parameters in fetch.
 
-      this.setState(
-          obj, () => {
-          this.getOffices();
-      });
-  }
-    throttle(fn, wait) {
-        let time = Date.now();
-        return function() {
-            if ((time + wait - Date.now()) < 0) {
-                fn();
-                time = Date.now();
-            }
-        }
-    }
+      updateFilterValue(obj){
+          console.log('updateFilterValue - trigger getOffices', obj)
+          let newOptions = this.state.chosenFilter;
+          for (const [key, value] of Object.entries(obj)) {
+              newOptions[key] = value;
+          }
+          // TODO: create a single object in state to run filters on. Use key value to set query parameters in fetch.
+
+          this.setState(
+              obj, () => {
+              this.getOffices();
+          });
+      }
+
 
     scrollReached(el, buffer) {
         if(!el){
@@ -446,7 +455,7 @@ class App extends Component {
 
     let officeList;
     if(this.state.postsLoading === true){
-        officeList = ( <Loader loading={true} />);
+        officeList = ( <Loader />);
     } else if(this.state.offices.length){
         // TODO: move all "loading" logik to PostList so entire component does not reMount when filter is changed.
         officeList = (
@@ -455,7 +464,6 @@ class App extends Component {
                     loadingMore={this.state.loadingMore}
                     offices={this.state.offices}
                     listScrolled={this.state.listScrolled}
-                    throttle={this.throttle}
                     trackScrolling={this.trackScrolling}
                     scrollReached={this.scrollReached}
                     setListScrollPosition={this.setListScrollPosition}
@@ -470,7 +478,7 @@ class App extends Component {
     return (
         <div className="app bbh-inner-section">
           <Router>
-            <Switch>
+              <Switch>
 
               <Route exact path={this.OFFICE_URL} render={() =>
                 <React.Fragment>
@@ -531,11 +539,12 @@ class App extends Component {
 
               <Route exact path={`${this.OFFICE_URL}:slug`} render={(props) =>
                   <SinglePost
+                      key={props.match.params.slug}
                       slug={props.match.params.slug}
                       post={this.state.post}
                       getPostBySlug={this.getPostBySlug}
                       clearSingleOffice={this.clearSingleOffice}
-
+                      offices={this.state.offices}
                       // Periods
                       periods={this.periods}
                   />

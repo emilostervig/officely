@@ -52,7 +52,7 @@ class PriceRange extends Component {
             minTemp: values[0],
             maxTemp: values[1]
         })
-    }, 20)
+    }, 10)
 
     handleSet = (values) => {
         this.setState({
@@ -76,24 +76,28 @@ class PriceRange extends Component {
                     </div>
                 </div>
                 <div className={`input-popup-content ` + (this.props.showOfficePrice ? 'open' : 'closed')}>
-                    <div className="min-price-display">
-                        <div className="fake-input">
-                            <span className="prefix">Min. </span>
-                            <span className={"value"}>
-                                {formatNumber(this.state.minTemp)}
-                            </span>
-                            <span className="affix"> kr.</span>
+                    <div className="price-display">
+                        <div className="min-price-display">
+                            <div className="fake-input">
+                                <span className="prefix">Min. </span>
+                                <span className={"value"}>
+                                    {formatNumber(this.state.minTemp)}
+                                </span>
+                                <span className="affix"> kr.</span>
+                            </div>
+                        </div>
+                        <span className="divider"/>
+                        <div className="max-price-display">
+                            <div className="fake-input">
+                                <span className="prefix">Max. </span>
+                                <span className={"value"}>
+                                    {formatNumber(this.state.maxTemp)}
+                                </span>
+                                <span className="affix"> kr.</span>
+                            </div>
                         </div>
                     </div>
-                    <div className="max-price-display">
-                        <div className="fake-input">
-                            <span className="prefix">Max. </span>
-                            <span className={"value"}>
-                                {formatNumber(this.state.maxTemp)}
-                            </span>
-                            <span className="affix"> kr.</span>
-                        </div>
-                    </div>
+
 
                     <Nouislider
                         id={"price-slider"}

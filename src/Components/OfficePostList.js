@@ -6,6 +6,9 @@ import {Link} from "react-router-dom";
 import OfficePostListItem from './OfficePostListItem';
 import Loader from './Loader';
 
+// functions
+import throttle from './functions/throttle';
+
 class OfficePostList extends Component {
     constructor(props) {
         super(props);
@@ -17,7 +20,7 @@ class OfficePostList extends Component {
 
         this.handleScrollEvent = this.handleScrollEvent.bind(this);
         this.postClicked = this.postClicked.bind(this);
-        this.throttleEvent = this.props.throttle(this.handleScrollEvent, 500);
+        this.throttleEvent = throttle(this.handleScrollEvent, 500);
     }
 
 
@@ -35,12 +38,17 @@ class OfficePostList extends Component {
     }
 
     handleScrollEvent() {
-        this.props.trackScrolling(this.listRef.current);
+        if(this.props.trackScrolling){
+            this.props.trackScrolling(this.listRef.current);
+        }
     }
 
     postClicked(e){
         let scrolled = window.pageYOffset || (document.documentElement || document.body.parentNode || document.body).scrollTop;
-        this.props.setListScrollPosition(scrolled);
+        if(this.props.setListScrollPosition){
+            this.props.setListScrollPosition(scrolled);
+
+        }
     }
 
 
@@ -77,7 +85,6 @@ class OfficePostList extends Component {
                     )}
                 </div>
                 {loadingMore}
-
             </React.Fragment>
 
         );
