@@ -11,6 +11,7 @@ class PeriodSelector extends Component {
             selected: (this.props.selected || {}),
             showPopup: false,
             date: false,
+            endDate: false,
         };
         this.node = React.createRef();
         this.handleClick = this.handleClick.bind(this);
@@ -37,7 +38,16 @@ class PeriodSelector extends Component {
 
 
     handleUpdate = () => {
-        this.props.onUpdate(this.state.selected)
+        let dateSet = (this.state.date && this.state.endDate);
+        let periodSet = (this.state.selected && 'id' in this.state.selected);
+
+        if(dateSet && periodSet){
+            this.props.onUpdate({
+                period: this.state.selected,
+                startDate: this.state.date,
+                endDate: this.state.endDate,
+            })
+        }
     };
 
     handleRadioUpdate = (e) => {
@@ -47,9 +57,13 @@ class PeriodSelector extends Component {
             return parseInt(i.id) === parseInt(id);
         });
 
-        this.setState({
+        let stateObj = {
             selected: chosen,
-        }, this.handleUpdate)
+        };
+        if(this.state.date){
+            stateObj.endDate = this.getEndDate(this.state.date, chosen.id);
+        }
+        this.setState(stateObj, this.handleUpdate)
 
     };
 
@@ -60,18 +74,36 @@ class PeriodSelector extends Component {
     };
 
     handleDateChange = (date) => {
-        this.setState({
-            date: date,
-        })
-    }
+        console.log(date);
+        let obj = {
+            date: date
+        };
+        if(this.state.selected && 'id' in this.state.selected){
+            let endDate = this.getEndDate(date);
+            obj.endDate = endDate;
+        }
+        this.setState(obj, this.handleUpdate)
+    };
 
+    getEndDate = (date, period = this.state.selected.id) => {
+        if(!this.state.selected && !period){
+            return false;
+        }
+        let date2 = new Date(date);
+        date2.setMonth(date.getMonth() + period); // add months
+        date2.setDate(1); // set date to first of month
+        date2.setHours(-1); // subtract one day to get last day of previous month
+        date2.setMinutes(59); // set minutes to 59 to be safe
+        date2.setSeconds(59);  // set seconds to 59 to be safe
+        return date2;
+    };
 
     filterDates = (date) => {
         let dateMinusOne = new Date(date);
         dateMinusOne.setDate(dateMinusOne.getDate() - 1);
         let isFirstDay = dateMinusOne.getMonth() !== date.getMonth();
         return isFirstDay;
-    }
+    };
 
     formattedDate = (date) => {
         if(!date){
@@ -107,12 +139,20 @@ class PeriodSelector extends Component {
                 )
             })
         }
-        let current;
+        let nextMonthFirst;
         let now = new Date();
         if (now.getMonth() === 11) {
-            current = new Date(now.getFullYear() + 1, 0, 1);
+            nextMonthFirst = new Date(now.getFullYear() + 1, 0, 1);
         } else {
-            current = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+            nextMonthFirst = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+        }
+
+        let endDate = null;
+        if(this.state.date && 'id' in this.state.selected){
+            endDate = new Date(this.state.date);
+            endDate.setMonth(endDate.getMonth() + this.state.selected.id); // add months
+            endDate.setDate(1); // set date to first of month
+            endDate.setHours(-1); // subtract one day to get last day of previous month
         }
 
         return (
@@ -134,7 +174,9 @@ class PeriodSelector extends Component {
                         selected={this.state.date}
                         onChange={this.handleDateChange}
                         filterDate={this.filterDates}
-                        minDate={current}
+                        minDate={nextMonthFirst}
+                        startDate={this.state.date}
+                        endDate={this.state.endDate}
                         />
                 </div>
             </div>

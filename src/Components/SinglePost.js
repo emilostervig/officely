@@ -13,10 +13,11 @@ import PeriodSelector from "./FormElements/PeriodSelector";
 // functions
 import formatNumber from "./functions/formatNumber";
 import OfficePostList from "./OfficePostList";
+import throttle from "./functions/throttle";
 
 class SinglePost extends Component {
     API_URL = process.env.REACT_APP_API_URL;
-
+    IMAGES = process.env.REACT_APP_IMAGE_FOLDER;
 
     constructor(props) {
         super(props);
@@ -26,16 +27,20 @@ class SinglePost extends Component {
             owner: false,
             selectedPeople: 1,
             selectedPeriod: false,
+            favourited: false,
+            startDate: false,
+            endDate: false,
         };
         // ref
-        this.postRef = React.createRef();
         this.bookingBox = React.createRef();
+        //this.bookingRow = React.createRef();
 
         // methods
         this.scrollToPost = this.scrollToPost.bind(this);
         this.getUserData =  this.getUserData.bind(this);
         this.handleUpdatePeople = this.handleUpdatePeople.bind(this);
         this.handleUpdatePeriod = this.handleUpdatePeriod.bind(this);
+        this.throttleScroll = throttle(this.stickyOnScroll, 100);
     }
 
     componentWillMount() {
@@ -45,7 +50,7 @@ class SinglePost extends Component {
 
     componentWillUnmount(){
         console.log('componentWillUnmount');
-        document.removeEventListener('scroll', this.stickyOnScroll)
+        document.removeEventListener('scroll', this.throttleScroll)
         /*
         if(this.props.slug !== this.props.post.post_name){
             this.props.clearSingleOffice();
@@ -74,7 +79,7 @@ class SinglePost extends Component {
     componentDidMount() {
         let comp = this;
         this.props.getPostBySlug(this.props.slug)
-        const scrollEvent = document.addEventListener('scroll', this.stickyOnScroll)
+        const scrollEvent = document.addEventListener('scroll', this.throttleScroll)
 
         this.ownerInterval = setInterval(function(){
             comp.getUserData(comp.props.post.post_author);
@@ -84,22 +89,47 @@ class SinglePost extends Component {
         //window.dispatchEvent(eventClick);
         this.scrollToPost();
     }
+    toggleFavoutite = () => {
+        this.setState({
+            favourited: !this.state.favourited,
+        })
+    }
     stickyOnScroll = (e) => {
-        let ref = this.bookingBox
-        let refTop = this.top;
-
-        var currentScroll = window.pageYOffset; // get current position
-
-        if (currentScroll >= refTop) {           // apply position: fixed if you
-            ref.style.position = "fixed";
-            ref.style.top = '0';
-            ref.style.left = '0';
-
-        } else {                                   // apply position: static
-            ref.style.position = 'static';
+        let ref = this.bookingBox;
+        let refTop = this.bookingRowTop;
+        let left = this.bookingBoxLeft;
+        let w = ref.clientWidth;
+        let h = ref.clientHeight;
+        if(this.bookingRow !== null){
+            refTop = this.bookingRow.getBoundingClientRect().top;
+            left = this.bookingRow.clientWidth + this.bookingRow.getBoundingClientRect().left - w;
         }
 
-    }
+
+        let postBot = this.postBottom;
+
+
+        let currentScroll = window.pageYOffset; // get current position
+
+        if((postBot - h) <= currentScroll) {
+            ref.style.position = "absolute";
+            ref.style.top = (postBot - h)+'px';
+
+        } else if (refTop <= 0) {           // apply position: fixed
+            ref.style.position = "fixed";
+            ref.style.top = '0';
+            ref.style.left = left+'px';
+            ref.style.width = w+'px';
+            ref.style.height = h+'px';
+
+        } else {                                   // apply position: relative
+            ref.style.position = 'relative';
+            ref.style.left = '0';
+            ref.style.width = '';
+            ref.style.height = '';
+        }
+
+    };
     getUserData(id){
         if(!id){
             return;
@@ -129,16 +159,17 @@ class SinglePost extends Component {
     }
 
     handleUpdatePeople(val){
-        console.log(val);
         this.setState({
             selectedPeople: val,
         });
     }
 
     handleUpdatePeriod(selected){
-        console.log(selected);
+    console.log(selected)
         this.setState({
-            selectedPeriod: selected,
+            selectedPeriod: selected.period,
+            startDate: selected.startDate,
+            endDate: selected.endDate,
         });
 
     }
@@ -157,7 +188,7 @@ class SinglePost extends Component {
     }
 
     handleBookingRequest = () => {
-        alert("new booking request \n \n Personer: " + this.state.selectedPeople + "\n\n Periode: "+this.state.selectedPeriod.name)
+        alert("new booking request \n \n Personer: " + this.state.selectedPeople + "\n\n Periode: "+this.state.selectedPeriod.name+"\n\n Start: "+this.state.startDate+"\n\n Slut: "+this.state.endDate)
     };
 
     random_elems = (arr, count) => {
@@ -183,19 +214,15 @@ class SinglePost extends Component {
 
 
     render(){
-        console.log('first line in render()');
         let post = this.props.post;
         let owner = this.state.owner;
         let comp = this;
         let renderPost = null;
 
-        console.log('before gallery');
-        console.log('before gallery');
 
 
         let gallery = null;
         if('gallery' in this.props.post && this.props.post.gallery !== false && this.props.post.gallery !== null && typeof this.props.post.gallery !== "undefined" ){
-            console.log("GALLERY", this.props.post.gallery)
             gallery = this.props.post.gallery.map((img, i) => {
                 let style = {
                     backgroundImage: 'url('+img+')',
@@ -250,9 +277,9 @@ class SinglePost extends Component {
                         arrowRight={<span className="slide-arrow slide-next icon icomoon icon-arrow-right" />}
                         addArrowClickHandler
                     >
-                        {post.gallery.map( (el) => {
+                        {post.gallery.map( (el,i) => {
                             return (
-                                <div className={"slide"} style={{backgroundImage: "url("+el+")"}} onDragStart={handleOnDragStart}/>
+                                <div key={`${post.ID}_${i}`} className={"slide"} style={{backgroundImage: "url("+el+")"}} onDragStart={handleOnDragStart}/>
                             )
                         })}
                         </Carousel>
@@ -264,9 +291,25 @@ class SinglePost extends Component {
 
         if('ID' in post){
             renderPost = (
-                <div id={"post-"+post.ID} className={"single-office"} >
-                    <div className="flex-row booking">
+                <div id={"post-"+post.ID} className={"single-office"} ref={(node) => {
+                    if(node !== null){
+                        let bound = node.getBoundingClientRect();
+                        this.postBottom = node.clientHeight;
+                    }
+
+                }}>
+                    <div className="flex-row booking" ref={(node) => {
+                        if(node !== null){
+                            this.bookingRow = node;
+                            let bound =  node.getBoundingClientRect()
+                            this.bookingRowTop = bound.top;
+                            this.bookingRowLeft = bound.left;
+                        }
+                    }}>
                         <div className="gallery">
+                            <div className={"favourite-post " + (this.state.favourited ? 'active' : '')} onClick={this.toggleFavoutite}>
+                                <span className={"icon icomoon icon-hjerte-"+ (this.state.favourited ? "aktiv" : "border")}  />
+                            </div>
                             <div className="image-wrap" >
                                 {newGallery}
                             </div>
@@ -276,7 +319,8 @@ class SinglePost extends Component {
                             this.bookingBox = node;
                             if(node !== null){
                                 let bound =  node.getBoundingClientRect()
-                                this.top = bound.top;
+                                this.bookingBoxTop = bound.top;
+                                this.bookingBoxLeft = bound.left;
                             }
 
                         }}>
@@ -307,7 +351,12 @@ class SinglePost extends Component {
                                          / pr. mdr.
                                     </span>
                                 </div>
+
+                                <div className="safety-notice">
+                                    <p>Aftalen er først i hus når i begge har godkendt aftalen. Og bare rolig du betaler ikke før alt er på plads!</p>
+                                </div>
                             </div>
+
                             <div className="booking-btn">
                                 <button className={"btn yellow"} onClick={this.handleBookingRequest}>
                                     Send anmodning
@@ -385,26 +434,30 @@ class SinglePost extends Component {
 
 
                                     <div className="map">
-                                        HER MANGLER KORT
+                                        <img src={this.IMAGES+"map.png"}/>
                                         <div className="nb-text">
                                             NB. Du får den præcise adresse ved gensidig aftale om leje
                                         </div>
                                     </div>
                                 </div>
 
-                                <div className="office-rules office-section section-box">
-
-
-                                    {post.office_rules.map((el) => {
-                                        return <Accordion
-                                            label={el.name}
-                                            key={el.name}
-                                            >
-                                            {el.value}
-                                        </Accordion>
-                                    })}
-
-                                </div>
+                                {post.office_rules != null && post.office_rules.length > 0 &&
+                                    <div className="office-rules office-section section-box">
+                                        <h2 className="section-title">
+                                            Kontorregler
+                                        </h2>
+                                        <div className="accordion-wrap">
+                                            {post.office_rules.map((el) => {
+                                                return <Accordion
+                                                    label={el.name}
+                                                    key={el.name}
+                                                >
+                                                    {el.value}
+                                                </Accordion>
+                                            })}
+                                        </div>
+                                    </div>
+                                }
 
                                 <div className="security-notice office-section">
                                     <div className="flex-row">

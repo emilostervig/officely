@@ -12,7 +12,7 @@ class OfficePostListItem extends Component {
         super(props);
 
         this.state = {
-
+            favourited: ('favourited' in this.props.post) ? this.props.post.favourited : false,
         };
 
         this.handleLinkClick = this.handleLinkClick.bind(this);
@@ -23,7 +23,11 @@ class OfficePostListItem extends Component {
         this.props.postClicked();
     }
 
-
+    toggleFavoutite = () => {
+        this.setState({
+            favourited: !this.state.favourited,
+        })
+    }
 
     newSplash = (postDate) => {
 
@@ -36,6 +40,14 @@ class OfficePostListItem extends Component {
         } else{
             return null;
         }
+    }
+
+    favouriteBtn = (favourited) => {
+        return (
+            <div className={"favourite-post "+(favourited ? 'active' : '')} onClick={this.toggleFavoutite}>
+                <span className={"icon icomoon icon-hjerte-"+ (favourited ? "aktiv" : "border")}  />
+            </div>
+        )
     }
 
     render(){
@@ -60,6 +72,7 @@ class OfficePostListItem extends Component {
                 <article key={post.ID} id={"office-"+post.ID} className="single-post single-office">
                     <div className="post-images">
                         {this.newSplash(post.post_date)}
+                        {this.favouriteBtn(this.state.favourited)}
                         <Link to={`/office/${post.slug}`} onClick={this.handleLinkClick}>
                             <div className="image" style={{backgroundImage: post.thumbnail ? 'url('+post.thumbnail+')':'none'}} />
                         </Link>

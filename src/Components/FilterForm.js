@@ -9,6 +9,7 @@ import Orderby from "./FormElements/Orderby"
 import CitySelector from "./FormElements/CitySelector";
 import PeriodSelector from "./FormElements/PeriodSelector";
 import IndustrySelector from "./FormElements/IndustrySelector";
+import RadioSelect from "./FormElements/RadioSelect";
 
 class FilterForm extends Component {
     API_URL = process.env.REACT_APP_API_URL;
@@ -78,6 +79,13 @@ class FilterForm extends Component {
             chosenFacilities: options,
             chosenFacilitiesText: text,
         });
+    }
+
+    handleIndustryChange = (selected) => {
+        this.props.updateFilterValue({
+            selectedIndustry: selected
+        })
+        console.log(selected);
     }
 
     handleCoWorkChange(e) {
@@ -255,6 +263,17 @@ class FilterForm extends Component {
                                     }
                                 ]}
                                 />
+
+                                <RadioSelect
+                                    options={this.props.industries}
+                                    count={true}
+                                    enableAll={true}
+                                    allText={"Alle brancher"}
+                                    name={"industry_radio"}
+                                    startText={"Branche"}
+                                    defaultSelected={this.props.selectedIndustry.id}
+                                    onChange={this.handleIndustryChange}
+                                    />
                         </div>
                         <div className="field-wrap bottom-row">
                             <CoWork

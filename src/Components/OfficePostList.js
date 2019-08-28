@@ -23,15 +23,12 @@ class OfficePostList extends Component {
         this.throttleEvent = throttle(this.handleScrollEvent, 500);
     }
 
-
-
-
     // TODO: move scroll events to OfficeList component (create component)
     componentDidMount() {
+        console.log('componentDidMount')
         document.addEventListener('scroll', this.throttleEvent);
         window.scrollTo(0, this.props.listScrolled);
     }
-
 
     componentWillUnmount() {
         document.removeEventListener('scroll', this.throttleEvent);

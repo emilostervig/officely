@@ -19,8 +19,7 @@ import groupBy from './Components/functions/groupBy';
 
 class App extends Component {
   API_URL = process.env.REACT_APP_API_URL;
-  OFFICE_URL = process.env.REACT_APP_OFFICE_URL
-
+  OFFICE_URL = process.env.REACT_APP_OFFICE_URL;
 
   constructor(props) {
         super(props);
@@ -87,6 +86,9 @@ class App extends Component {
             // Period
             selectedPeriod: {},
 
+            // Industries
+            officeIndustries: [],
+            selectedIndustry: {id: 0},
 
         };
         this.periods = [
@@ -228,9 +230,9 @@ class App extends Component {
 
     getData() {
 
-
         this.getOfficeTypes();
         this.getOfficeFacilities();
+        this.getOfficeIndustries();
         this.getOffices();
     }
 
@@ -264,6 +266,24 @@ class App extends Component {
                 console.error("Error when fetching: ", error);
             })
     };
+
+    getOfficeIndustries = () => {
+        fetch(`${this.API_URL}wp/v2/office_industry`)
+            .then((response) => {
+                    return response.json()
+                }
+            )
+            .then(data => {
+                this.setState({
+                    officeIndustries: data
+                });
+            })
+            .catch(error => {
+                console.error("Error when fetching: ", error);
+            })
+    };
+
+
     getPostBySlug(slug){
         this.setState({
             post: {},
@@ -334,6 +354,9 @@ class App extends Component {
         }
         if('id' in this.state.selectedPeriod){
             queryParts.push('period='+this.state.selectedPeriod.id);
+        }
+        if(this.state.selectedIndustry !== false && 'id' in this.state.selectedIndustry){
+            queryParts.push('office_industry='+this.state.selectedIndustry.id);
         }
 
         // add order
@@ -520,8 +543,9 @@ class App extends Component {
                         periods={this.periods}
                         selectedPeriod={this.state.selectedPeriod}
 
-
-
+                        // Industries
+                        industries={this.state.officeIndustries}
+                        selectedIndustry={this.state.selectedIndustry}
                     />
                     <div className="grid-container">
                         {officeList}
