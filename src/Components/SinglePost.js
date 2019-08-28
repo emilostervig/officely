@@ -1,5 +1,8 @@
 // external
 import React, {Component} from 'react';
+import Carousel, { Dots } from '@brainhubeu/react-carousel';
+import '@brainhubeu/react-carousel/lib/style.css';
+
 // components
 import ReadMore from './ReadMore';
 import Loader from './Loader';
@@ -26,6 +29,7 @@ class SinglePost extends Component {
         };
         // ref
         this.postRef = React.createRef();
+        this.bookingBox = React.createRef();
 
         // methods
         this.scrollToPost = this.scrollToPost.bind(this);
@@ -41,6 +45,7 @@ class SinglePost extends Component {
 
     componentWillUnmount(){
         console.log('componentWillUnmount');
+        document.removeEventListener('scroll', this.stickyOnScroll)
         /*
         if(this.props.slug !== this.props.post.post_name){
             this.props.clearSingleOffice();
@@ -54,7 +59,7 @@ class SinglePost extends Component {
         console.log('componentDidUpdate')
 
         let eventClick = new Event('singleofficemount');
-        window.dispatchEvent(eventClick);
+        //window.dispatchEvent(eventClick);
 
         /*
         if(this.props.slug !== this.props.post.post_name && this.props.post.post_name !== undefined){
@@ -67,19 +72,34 @@ class SinglePost extends Component {
     }
 
     componentDidMount() {
-        console.log('componentDidMount')
         let comp = this;
-        this.props.getPostBySlug(this.props.slug);
-        /*
+        this.props.getPostBySlug(this.props.slug)
+        const scrollEvent = document.addEventListener('scroll', this.stickyOnScroll)
+
         this.ownerInterval = setInterval(function(){
             comp.getUserData(comp.props.post.post_author);
         }, 2000)
-        */
+
         let eventClick = new Event('singleofficemount');
-        window.dispatchEvent(eventClick);
+        //window.dispatchEvent(eventClick);
         this.scrollToPost();
     }
+    stickyOnScroll = (e) => {
+        let ref = this.bookingBox
+        let refTop = this.top;
 
+        var currentScroll = window.pageYOffset; // get current position
+
+        if (currentScroll >= refTop) {           // apply position: fixed if you
+            ref.style.position = "fixed";
+            ref.style.top = '0';
+            ref.style.left = '0';
+
+        } else {                                   // apply position: static
+            ref.style.position = 'static';
+        }
+
+    }
     getUserData(id){
         if(!id){
             return;
@@ -123,6 +143,18 @@ class SinglePost extends Component {
 
     }
 
+    newSplash = (postDate) => {
+
+        let date = new Date(postDate);
+        let now = new Date();
+        let timeDiff = now.getTime()- date.getTime();
+        let daysDiff = timeDiff / (1000 * 3600 * 24);
+        if(daysDiff < 40){
+            return (<span className={"office-new-splash"}>Nyhed</span> )
+        } else{
+            return null;
+        }
+    }
 
     handleBookingRequest = () => {
         alert("new booking request \n \n Personer: " + this.state.selectedPeople + "\n\n Periode: "+this.state.selectedPeriod.name)
@@ -188,7 +220,9 @@ class SinglePost extends Component {
                 <div className="related-offices">
 
                     <div className="grid-container">
-
+                        <div className="heading-box">
+                            <h2 className={"heading"}>Andre populære emner der matcher din søgning</h2>
+                        </div>
                         <OfficePostList
                             loadingMore={this.state.loadingMore}
                             offices={availableOffices}
@@ -203,6 +237,30 @@ class SinglePost extends Component {
                 </div>
             )
         }
+        let newGallery = null;
+        const handleOnDragStart = e => e.preventDefault()
+        if('gallery' in this.props.post && this.props.post.gallery !== false && this.props.post.gallery !== null && typeof this.props.post.gallery !== "undefined" ){
+            newGallery = (
+                <React.Fragment>
+                    <Carousel
+                        infinite
+                        dots
+                        offset={0}
+                        arrowLeft={<span className="slide-arrow slide-prev icon icomoon icon-arrow-left" />}
+                        arrowRight={<span className="slide-arrow slide-next icon icomoon icon-arrow-right" />}
+                        addArrowClickHandler
+                    >
+                        {post.gallery.map( (el) => {
+                            return (
+                                <div className={"slide"} style={{backgroundImage: "url("+el+")"}} onDragStart={handleOnDragStart}/>
+                            )
+                        })}
+                        </Carousel>
+                </React.Fragment>
+                )
+        } else{
+            newGallery = <div className={"placeholder-gallery"} style={{backgroundImage: 'url(https://images.unsplash.com/photo-1497366754035-f200968a6e72?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80)' }}/>;
+        }
 
         if('ID' in post){
             renderPost = (
@@ -210,12 +268,20 @@ class SinglePost extends Component {
                     <div className="flex-row booking">
                         <div className="gallery">
                             <div className="image-wrap" >
-                                {gallery}
+                                {newGallery}
                             </div>
 
                         </div>
-                        <div className="booking-content">
+                        <div className="booking-content" ref={(node) => {
+                            this.bookingBox = node;
+                            if(node !== null){
+                                let bound =  node.getBoundingClientRect()
+                                this.top = bound.top;
+                            }
+
+                        }}>
                             <div className="inside-booking-content">
+                                {this.newSplash(post.post_date)}
                                 <h1 className="post-title">{post.post_title}</h1>
 
                                 <NumberSelector
@@ -346,9 +412,9 @@ class SinglePost extends Component {
                                             <span className="icomoon icon-sikkerhed"/>
                                         </div>
                                         <div className="message">
-                                            <div className="heading">
+                                            <h3 className="heading">
                                                 Vigtigt!
-                                            </div>
+                                            </h3>
                                             <div className="security-content">
                                                 <p>
                                                     <strong>Kommuniker <u>altid</u> kun via Officely.</strong> For at vi kan beskytte dig skal du aldrig overføre penge eller kommunikere uden for officely-webstedet. Officely er din sikkerhed.

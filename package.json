@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@brainhubeu/react-carousel": "^1.10.17",
     "@crossfield/react-read-more": "^0.2.0",
     "nouislider-react": "^3.3.1",
     "react": "^16.8.6",

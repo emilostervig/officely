@@ -10,6 +10,7 @@ class PeriodSelector extends Component {
         this.state = {
             selected: (this.props.selected || {}),
             showPopup: false,
+            date: false,
         };
         this.node = React.createRef();
         this.handleClick = this.handleClick.bind(this);
@@ -72,6 +73,22 @@ class PeriodSelector extends Component {
         return isFirstDay;
     }
 
+    formattedDate = (date) => {
+        if(!date){
+            return false;
+        }
+        const monthNames = [
+            "Januar", "Februar", "Marts",
+            "April", "Maj", "Juni",
+            "Juli", "August", "September",
+            "Oktober", "November", "December"
+        ];
+        let monthNum = date.getMonth();
+        let month = monthNames[monthNum].substr(0, 3);
+        let day = date.getDate();
+        return `${day}. ${month}.`;
+    };
+
 
 
     render(){
@@ -105,8 +122,8 @@ class PeriodSelector extends Component {
                 </h4>
                 <div className="input-wrap" onClick={this.toggleShowPopup}>
                     <div className="chosen-value" data-empty-text="Vælg periode">
-                        {'name' in this.state.selected ?
-                            this.state.selected.name : "Vælg periode"
+                        {'name' in this.state.selected && this.state.date !== false ?
+                            this.state.selected.name + " Fra " + this.formattedDate(this.state.date) : "Vælg periode"
                         }
                     </div>
                 </div>

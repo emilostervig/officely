@@ -15,7 +15,7 @@ import {Switch} from "react-router-dom";
 import groupBy from './Components/functions/groupBy';
 
 // Assets
-import './wpstyle.css'
+//import './wpstyle.css'
 
 class App extends Component {
   API_URL = process.env.REACT_APP_API_URL;
@@ -274,18 +274,14 @@ class App extends Component {
         });
         if(maybePost){
             console.log('found post in state', maybePost);
-
-
             this.setState({
                 post: maybePost,
             });
 
-            return maybePost;
-
         }
 
 
-        console.log('fetching post from getPostBySlug - slug: '+slug)
+            console.log('fetching post from getPostBySlug - slug: '+slug)
           fetch(`${this.API_URL}officely/v2/office/${slug}`)
               .then((response) => {
                       return response.json()
@@ -299,13 +295,10 @@ class App extends Component {
                       });
                   }
 
-                  console.log('new data');
               })
               .catch(error => {
                   console.error("Error when fetching: ", error);
               });
-
-        return maybePost;
       }
 
   getOffices(more = false){
