@@ -142,6 +142,7 @@ class App extends Component {
     componentDidMount() {
         this.getData()
         this.getMunicipalities()
+        console.log(window.wpApiSettings)
     }
 
 

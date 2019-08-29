@@ -102,7 +102,21 @@ class PeriodSelector extends Component {
         let dateMinusOne = new Date(date);
         dateMinusOne.setDate(dateMinusOne.getDate() - 1);
         let isFirstDay = dateMinusOne.getMonth() !== date.getMonth();
-        return isFirstDay;
+        let booked = false;
+        if(this.props.bookedDates){
+            let dates = this.props.bookedDates;
+            for (let i = 0; i < dates.length; i++) {
+                let start = new Date(dates[i].start_date);
+                let end = new Date(dates[i].end_date);
+                if(date > start && date < end){
+                    booked = true;
+                    break;
+                }
+            }
+        }
+
+        return isFirstDay && !booked;
+
     };
 
     formattedDate = (date) => {
@@ -121,7 +135,21 @@ class PeriodSelector extends Component {
         return `${day}. ${month}.`;
     };
 
-
+    addBookedDatesClass = (date) => {
+        let booked = false;
+        if(this.props.bookedDates){
+            let dates = this.props.bookedDates;
+            for (let i = 0; i < dates.length; i++) {
+                let start = new Date(dates[i].start_date);
+                let end = new Date(dates[i].end_date);
+                if(date > start && date < end){
+                    booked = true;
+                    break;
+                }
+            }
+        }
+        return booked ? 'booked' : undefined;
+    };
 
     render(){
         let periodsMarkup = '';
@@ -177,6 +205,9 @@ class PeriodSelector extends Component {
                         minDate={nextMonthFirst}
                         startDate={this.state.date}
                         endDate={this.state.endDate}
+                        dayClassName={this.addBookedDatesClass}
+                        locale={"da"}
+
                         />
                 </div>
             </div>

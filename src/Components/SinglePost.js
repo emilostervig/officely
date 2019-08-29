@@ -30,6 +30,7 @@ class SinglePost extends Component {
             favourited: false,
             startDate: false,
             endDate: false,
+            bookedDates: false,
         };
         // ref
         this.bookingBox = React.createRef();
@@ -63,9 +64,6 @@ class SinglePost extends Component {
     componentDidUpdate(prevProps, prevState, snapshot) {
         console.log('componentDidUpdate')
 
-        let eventClick = new Event('singleofficemount');
-        //window.dispatchEvent(eventClick);
-
         /*
         if(this.props.slug !== this.props.post.post_name && this.props.post.post_name !== undefined){
             //this.props.clearSingleOffice();
@@ -78,13 +76,15 @@ class SinglePost extends Component {
 
     componentDidMount() {
         let comp = this;
-        this.props.getPostBySlug(this.props.slug)
+        if(!this.props.post || ('ID' in this.props.post) === false){
+            this.props.getPostBySlug(this.props.slug)
+        }
+        this.getBookedDates(230)
         const scrollEvent = document.addEventListener('scroll', this.throttleScroll)
 
         this.ownerInterval = setInterval(function(){
             comp.getUserData(comp.props.post.post_author);
         }, 2000)
-
         let eventClick = new Event('singleofficemount');
         //window.dispatchEvent(eventClick);
         this.scrollToPost();
@@ -93,6 +93,41 @@ class SinglePost extends Component {
         this.setState({
             favourited: !this.state.favourited,
         })
+    }
+    getBookedDates = (id) => {
+        let nonce = window.wpApiSettings.nonce;
+        if(!id){
+            console.log('no id');
+            return;
+        }
+        fetch(`${this.API_URL}officely/v2/officebookings/${id}`,
+            {
+                headers: {
+                    'X-WP-Nonce': nonce,
+                    'content-type': 'application/json'
+                },
+            })
+            .then((response) => {
+                    if(response.ok === true){
+                        return response.json();
+                    } else{
+                        console.log(response.url+": "+response.status+" - "+response.statusText)
+                        return false;
+                    }
+                }
+            )
+            .then(data => {
+                console.log(data);
+                if(data !== false){
+                    this.setState({
+                        bookedDatestest: data,
+                    })
+                }
+                return data;
+            })
+            .catch(error => {
+                console.error("Error when fetching: ", error);
+            })
     }
     stickyOnScroll = (e) => {
         let ref = this.bookingBox;
@@ -188,6 +223,23 @@ class SinglePost extends Component {
     }
 
     handleBookingRequest = () => {
+        let people = this.state.selectedPeople;
+        let period = this.state.selectedPeriod.id;
+        let startDate = this.state.startDate;
+        let endDate = this.state.endDate;
+        console.log(people, period, startDate, endDate);
+        if(people === undefined || people == null){
+            return false;
+        }
+        if(period === undefined || period === null){
+            return false;
+        }
+        if(startDate === undefined || startDate === null || startDate === false){
+            return false;
+        }
+        if(endDate === undefined || endDate === null || endDate === false){
+            return false;
+        }
         alert("new booking request \n \n Personer: " + this.state.selectedPeople + "\n\n Periode: "+this.state.selectedPeriod.name+"\n\n Start: "+this.state.startDate+"\n\n Slut: "+this.state.endDate)
     };
 
@@ -339,6 +391,7 @@ class SinglePost extends Component {
                                 <PeriodSelector
                                     periods={this.props.periods}
                                     onUpdate={this.handleUpdatePeriod}
+                                    bookedDates={post.booked_dates}
                                 />
 
 
