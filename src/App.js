@@ -84,7 +84,7 @@ class App extends Component {
             cities: [],
 
             // Period
-            selectedPeriod: {},
+            selectedPeriod: false,
 
             // Industries
             officeIndustries: [],
@@ -353,11 +353,16 @@ class App extends Component {
         if(this.state.capacity !== 1){
             queryParts.push('capacity='+this.state.capacity);
         }
-        if('id' in this.state.selectedPeriod){
-            queryParts.push('period='+this.state.selectedPeriod.id);
-        }
+
         if(this.state.selectedIndustry !== false && 'id' in this.state.selectedIndustry){
             queryParts.push('office_industry='+this.state.selectedIndustry.id);
+        }
+
+        if(this.state.selectedPeriod !== false){
+            let period = this.state.selectedPeriod.period.id;
+            let start = this.state.selectedPeriod.startDate.toISOString();
+            let end = this.state.selectedPeriod.endDate.toISOString();
+            queryParts.push(`period=${period}&start_date=${start}&end_date=${end}`);
         }
 
         // add order

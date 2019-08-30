@@ -223,6 +223,7 @@ class SinglePost extends Component {
     }
 
     handleBookingRequest = () => {
+        let nonce = window.wpApiSettings.nonce;
         let people = this.state.selectedPeople;
         let period = this.state.selectedPeriod.id;
         let startDate = this.state.startDate;
@@ -240,7 +241,37 @@ class SinglePost extends Component {
         if(endDate === undefined || endDate === null || endDate === false){
             return false;
         }
-        alert("new booking request \n \n Personer: " + this.state.selectedPeople + "\n\n Periode: "+this.state.selectedPeriod.name+"\n\n Start: "+this.state.startDate+"\n\n Slut: "+this.state.endDate)
+        let data = {
+            people: people,
+            period: period,
+            startDate: startDate,
+            endDate: endDate
+        }
+        fetch(`${this.API_URL}officely/v2/submitbooking/${this.props.post.ID}`,
+            {
+                method: "POST",
+                headers: {
+                    //'Accept': 'application/json',
+                    'X-WP-Nonce': nonce,
+                    //'content-type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                if(data !== false){
+                    // TODO: booking added, disable button?
+                }
+
+            })
+            .catch(error => {
+                console.error("Error when fetching: ", error);
+            })
+
+
+
+        //alert("new booking request \n \n Personer: " + this.state.selectedPeople + "\n\n Periode: "+this.state.selectedPeriod.name+"\n\n Start: "+this.state.startDate+"\n\n Slut: "+this.state.endDate)
     };
 
     random_elems = (arr, count) => {

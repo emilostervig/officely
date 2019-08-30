@@ -207,6 +207,7 @@ class PeriodSelector extends Component {
                         endDate={this.state.endDate}
                         dayClassName={this.addBookedDatesClass}
                         locale={"da"}
+                        dateFormat={"YYYY-MM-DD HH:MM:SS"}
 
                         />
                 </div>

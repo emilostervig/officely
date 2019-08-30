@@ -106,7 +106,7 @@ class OfficePostListItem extends Component {
                                     <span className="icomoon icon-taske" >
                                     </span>
                                     <span className="icons-title">
-                                        branche
+                                        {'office_industry' in post && post.office_industry !== false && post.office_industry.length > 0 ? post.office_industry[0].name : 'branche'}
                                     </span>
                                 </div>
                             </div>
