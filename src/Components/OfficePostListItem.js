@@ -43,6 +43,10 @@ class OfficePostListItem extends Component {
     }
 
     favouriteBtn = (favourited) => {
+        console.log(this.props.user)
+        if(!this.props.user.loggedIn){
+            return null;
+        }
         return (
             <div className={"favourite-post "+(favourited ? 'active' : '')} onClick={this.toggleFavoutite}>
                 <span className={"icon icomoon icon-hjerte-"+ (favourited ? "aktiv" : "border")}  />

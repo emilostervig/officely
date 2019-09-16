@@ -23,7 +23,6 @@ class SinglePost extends Component {
         super(props);
 
         this.state = {
-            testImage: 'http://lorempixel.com/output/cats-q-c-640-480-1.jpg',
             owner: false,
             selectedPeople: 1,
             selectedPeriod: false,
@@ -31,6 +30,7 @@ class SinglePost extends Component {
             startDate: false,
             endDate: false,
             bookedDates: false,
+            relatedOffices:[],
         };
         // ref
         this.bookingBox = React.createRef();
@@ -64,14 +64,6 @@ class SinglePost extends Component {
     componentDidUpdate(prevProps, prevState, snapshot) {
         console.log('componentDidUpdate')
 
-        /*
-        if(this.props.slug !== this.props.post.post_name && this.props.post.post_name !== undefined){
-            //this.props.clearSingleOffice();
-            this.props.getPostBySlug(this.props.slug);
-            this.scrollToPost();
-        }
-
-         */
     }
 
     componentDidMount() {
@@ -88,6 +80,27 @@ class SinglePost extends Component {
         let eventClick = new Event('singleofficemount');
         //window.dispatchEvent(eventClick);
         this.scrollToPost();
+
+        let availableOffices = this.props.offices.filter( (off) => {
+            return off.ID !== this.props.post.ID;
+        });
+        availableOffices = this.random_elems(availableOffices, 4);
+        this.setState({
+            relatedOffices: availableOffices,
+        });
+    }
+    componentWillReceiveProps(nextProps) {
+
+        if(nextProps.offices.length > 0 && this.state.relatedOffices.length === 0){
+            let availableOffices = nextProps.offices.filter( (off) => {
+                return off.ID !== this.props.post.ID;
+            });
+            availableOffices = this.random_elems(availableOffices, 4);
+            this.setState({
+                relatedOffices: availableOffices,
+            });
+        }
+
     }
     toggleFavoutite = () => {
         this.setState({
@@ -260,6 +273,7 @@ class SinglePost extends Component {
             .then(response => response.json())
             .then(data => {
                 console.log(data);
+                if(data.code)
                 if(data !== false){
                     // TODO: booking added, disable button?
                 }
@@ -321,11 +335,8 @@ class SinglePost extends Component {
             gallery =  <div key={"+slide-placeholder"} className={"slide"}> <div className={"image-slide"} style={style}/></div>
         }
         let relatedSection = null;
-        if(this.props.offices.length > 0){
-            let availableOffices = this.props.offices.filter( (off) => {
-                return off.ID !== post.ID;
-            });
-            availableOffices = this.random_elems(availableOffices, 4);
+        if(this.state.relatedOffices.length > 0){
+
             relatedSection = (
                 <div className="related-offices">
 
@@ -335,11 +346,12 @@ class SinglePost extends Component {
                         </div>
                         <OfficePostList
                             loadingMore={this.state.loadingMore}
-                            offices={availableOffices}
+                            offices={this.state.relatedOffices}
                             listScrolled={this.state.listScrolled}
                             trackScrolling={this.trackScrolling}
                             scrollReached={this.scrollReached}
                             setListScrollPosition={this.setListScrollPosition}
+                            user={this.props.user}
                         />
 
                     </div>

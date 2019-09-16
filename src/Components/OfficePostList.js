@@ -77,6 +77,7 @@ class OfficePostList extends Component {
                             key={post.ID}
                             post={post}
                             postClicked={this.postClicked}
+                            user={this.props.user}
                         />
 
                     )}

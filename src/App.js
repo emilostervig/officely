@@ -25,6 +25,12 @@ class App extends Component {
         super(props);
 
         this.state = {
+            // User
+            user: {
+                loggedIn : window.wpApiSettings.loggedIn,
+                id: window.wpApiSettings.id
+            },
+
             // Single post view
             post: {},
 
@@ -71,15 +77,6 @@ class App extends Component {
             orderbyTitle: 'Pris lav til høj',
             showOrderby: false,
 
-
-            // Test one object for all filter
-            chosenFilter: {
-                facilities: [],
-                types: [],
-                capacity: 1,
-            },
-
-
             // Cities
             cities: [],
 
@@ -117,6 +114,7 @@ class App extends Component {
               name: "Min. 12 mdr.",
             }
         ];
+
         this.fetchController = new AbortController();
         this.signal = this.fetchController.signal;
 
@@ -429,10 +427,10 @@ class App extends Component {
 
       updateFilterValue(obj){
           console.log('updateFilterValue - trigger getOffices', obj)
-          let newOptions = this.state.chosenFilter;
+          /*let newOptions = this.state.chosenFilter;
           for (const [key, value] of Object.entries(obj)) {
               newOptions[key] = value;
-          }
+          }*/
           // TODO: create a single object in state to run filters on. Use key value to set query parameters in fetch.
 
           this.setState(
@@ -489,6 +487,7 @@ class App extends Component {
                     trackScrolling={this.trackScrolling}
                     scrollReached={this.scrollReached}
                     setListScrollPosition={this.setListScrollPosition}
+                    user={this.state.user}
                 />
 
             </React.Fragment>
@@ -570,6 +569,7 @@ class App extends Component {
                       offices={this.state.offices}
                       // Periods
                       periods={this.periods}
+                      user={this.state.user}
                   />
               }/>
 
