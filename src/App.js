@@ -9,6 +9,8 @@ import OfficePostList from './Components/OfficePostList';
 
 // Packages
 import { BrowserRouter as Router, Route, Link} from 'react-router-dom';
+import {Redirect} from 'react-router-dom';
+import {withRouter} from 'react-router-dom';
 import {Switch} from "react-router-dom";
 
 // functions
@@ -87,6 +89,8 @@ class App extends Component {
             officeIndustries: [],
             selectedIndustry: {id: 0},
 
+            // test redirect from outside react
+            redirect: false,
         };
         this.periods = [
             {
@@ -129,9 +133,9 @@ class App extends Component {
     this.setListScrollPosition = this.setListScrollPosition.bind(this);
     this.clearSingleOffice = this.clearSingleOffice.bind(this);
     this.checkLocalStorageInit = this.checkLocalStorageInit.bind(this);
+
+
   }
-
-
 
     componentWillMount() {
         this.checkLocalStorageInit()
@@ -139,13 +143,26 @@ class App extends Component {
 
     componentDidMount() {
         this.getData()
-        this.getMunicipalities()
-        console.log(window.wpApiSettings)
+        this.getMunicipalities();
     }
 
 
     componentWillUnmount() {
+
     }
+    componentDidUpdate () {
+        if (this.state.redirect) {
+            this.setState({
+                redirect: false
+            })
+        }
+    }
+
+    redirectToArchive = () => {
+      this.setState({redirect: true})
+    }
+
+
     getMunicipalities = () => {
 
             fetch(`https://dawa.aws.dk/kommuner?udenforkommuneinddeling=false`)
@@ -497,8 +514,14 @@ class App extends Component {
     };
 
     return (
-        <div className="app bbh-inner-section">
+        <div className="app bbh-inner-section" >
           <Router>
+              {this.state.redirect &&
+                <Redirect to={"/office"} to={{
+                    pathname: '/office',
+                    state: {redirect: false}
+                }}/>
+              }
               <Switch>
 
               <Route exact path={this.OFFICE_URL} render={() =>
@@ -559,7 +582,7 @@ class App extends Component {
 
               }/>
 
-              <Route exact path={`${this.OFFICE_URL}:slug`} render={(props) =>
+              <Route exact path={`${this.OFFICE_URL}:slug`}  render={(props) =>
                   <SinglePost
                       key={props.match.params.slug}
                       slug={props.match.params.slug}

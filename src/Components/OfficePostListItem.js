@@ -43,7 +43,6 @@ class OfficePostListItem extends Component {
     }
 
     favouriteBtn = (favourited) => {
-        console.log(this.props.user)
         if(!this.props.user.loggedIn){
             return null;
         }

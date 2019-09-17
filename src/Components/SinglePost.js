@@ -34,6 +34,7 @@ class SinglePost extends Component {
         };
         // ref
         this.bookingBox = React.createRef();
+        this.galleryBox = React.createRef();
         //this.bookingRow = React.createRef();
 
         // methods
@@ -52,23 +53,14 @@ class SinglePost extends Component {
     componentWillUnmount(){
         console.log('componentWillUnmount');
         document.removeEventListener('scroll', this.throttleScroll)
-        /*
-        if(this.props.slug !== this.props.post.post_name){
-            this.props.clearSingleOffice();
-        }
-
-         */
-    }
-
-
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        console.log('componentDidUpdate')
-
+        this.props.clearSingleOffice();
     }
 
     componentDidMount() {
+        console.log('componentDidMount')
         let comp = this;
-        if(!this.props.post || ('ID' in this.props.post) === false){
+        if(!this.props.post || ('ID' in this.props.post) === false || ( this.props.slug !== this.props.post.post_name ) ){
+            this.props.clearSingleOffice();
             this.props.getPostBySlug(this.props.slug)
         }
         this.getBookedDates(230)
@@ -77,8 +69,7 @@ class SinglePost extends Component {
         this.ownerInterval = setInterval(function(){
             comp.getUserData(comp.props.post.post_author);
         }, 2000)
-        let eventClick = new Event('singleofficemount');
-        //window.dispatchEvent(eventClick);
+
         this.scrollToPost();
 
         let availableOffices = this.props.offices.filter( (off) => {
@@ -110,7 +101,6 @@ class SinglePost extends Component {
     getBookedDates = (id) => {
         let nonce = window.wpApiSettings.nonce;
         if(!id){
-            console.log('no id');
             return;
         }
         fetch(`${this.API_URL}officely/v2/officebookings/${id}`,
@@ -148,6 +138,8 @@ class SinglePost extends Component {
         let left = this.bookingBoxLeft;
         let w = ref.clientWidth;
         let h = ref.clientHeight;
+        let gal = this.galleryBox;
+
         if(this.bookingRow !== null){
             refTop = this.bookingRow.getBoundingClientRect().top;
             left = this.bookingRow.clientWidth + this.bookingRow.getBoundingClientRect().left - w;
@@ -156,25 +148,30 @@ class SinglePost extends Component {
 
         let postBot = this.postBottom;
 
-
         let currentScroll = window.pageYOffset; // get current position
 
-        if((postBot - h) <= currentScroll) {
+        if((postBot - h) <= currentScroll) { // scrolled further than bottom
             ref.style.position = "absolute";
             ref.style.top = (postBot - h)+'px';
+            gal.style.height = h+'px';
+            ref.classList.add('fixed');
 
         } else if (refTop <= 0) {           // apply position: fixed
             ref.style.position = "fixed";
             ref.style.top = '0';
-            ref.style.left = left+'px';
-            ref.style.width = w+'px';
+            //ref.style.left = left+'px';
+            //ref.style.width = w+'px';
             ref.style.height = h+'px';
+            ref.classList.add('fixed');
+            gal.style.height = h+'px';
+
 
         } else {                                   // apply position: relative
             ref.style.position = 'relative';
-            ref.style.left = '0';
-            ref.style.width = '';
+            //ref.style.left = '0';
+            //ref.style.width = '';
             ref.style.height = '';
+            ref.classList.remove('fixed');
         }
 
     };
@@ -232,6 +229,16 @@ class SinglePost extends Component {
             return (<span className={"office-new-splash"}>Nyhed</span> )
         } else{
             return null;
+        }
+    }
+
+    handleSubmitBooking = () => {
+        console.log(!window.wpApiSettings.loggedIn);
+        if(!window.wpApiSettings.loggedIn){
+            let loginModal = new Event('showLoginModal');
+            window.dispatchEvent(loginModal);
+        } else{
+            this.handleBookingRequest();
         }
     }
 
@@ -401,10 +408,14 @@ class SinglePost extends Component {
                             this.bookingRowLeft = bound.left;
                         }
                     }}>
-                        <div className="gallery">
-                            <div className={"favourite-post " + (this.state.favourited ? 'active' : '')} onClick={this.toggleFavoutite}>
-                                <span className={"icon icomoon icon-hjerte-"+ (this.state.favourited ? "aktiv" : "border")}  />
-                            </div>
+                        <div className="gallery" ref={(node) => {
+                            this.galleryBox = node;
+                        }}>
+                            {!!window.wpApiSettings.loggedIn &&
+                                <div className={"favourite-post " + (this.state.favourited ? 'active' : '')} onClick={this.toggleFavoutite}>
+                                    <span className={"icon icomoon icon-hjerte-"+ (this.state.favourited ? "aktiv" : "border")}  />
+                                </div>
+                            }
                             <div className="image-wrap" >
                                 {newGallery}
                             </div>
@@ -454,7 +465,7 @@ class SinglePost extends Component {
                             </div>
 
                             <div className="booking-btn">
-                                <button className={"btn yellow"} onClick={this.handleBookingRequest}>
+                                <button className={"btn yellow"} onClick={this.handleSubmitBooking}>
                                     Send anmodning
                                     <span className="icon icomoon icon-right"/>
                                 </button>
