@@ -1,6 +1,9 @@
 // external
 import React, {Component} from 'react';
 import {Link} from "react-router-dom";
+import Carousel, { Dots } from '@brainhubeu/react-carousel';
+import '@brainhubeu/react-carousel/lib/style.css';
+
 
 //  functions
 import formatNumber from "./functions/formatNumber";
@@ -68,17 +71,36 @@ class OfficePostListItem extends Component {
             }
         };
         const post = this.props.post;
-        let thumbnail;
+        const handleOnDragStart = e => e.preventDefault();
+        let gallery = null;
+        console.log(post.gallery && post.gallery.length > 0);
+        if(post.gallery && post.gallery.length > 0){
+            gallery = <React.Fragment>
+                <Carousel
+                    infinite
+                    dots
+                    offset={0}
+                >
+                    {post.gallery.map( (el,i) => {
+                        return (
+                            <div key={`${post.ID}_${i}`} className={"slide lazyload"} data-bgset={el} /*style={{backgroundImage: "url("+el+")"}}*/ onDragStart={handleOnDragStart}/>
+                        )
+                    })}
+                </Carousel>
 
+            </React.Fragment>
+        } else{
+            gallery = <div className="image" style={{backgroundImage: post.thumbnail ? 'url('+post.thumbnail+')':'none'}} />
+        }
         return (
             <React.Fragment>
                 <article key={post.ID} id={"office-"+post.ID} className="single-post single-office">
                     <div className="post-images">
                         {this.newSplash(post.post_date)}
                         {this.favouriteBtn(this.state.favourited)}
-                        <Link to={`/office/${post.slug}`} onClick={this.handleLinkClick}>
-                            <div className="image" style={{backgroundImage: post.thumbnail ? 'url('+post.thumbnail+')':'none'}} />
-                        </Link>
+                        {/*<Link to={`/office/${post.slug}`} onClick={this.handleLinkClick}> */}
+                            {gallery}
+                        {/*</Link> */}
                     </div>
                     <div className={"content-wrap"}>
                         <div className="office-area">

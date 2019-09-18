@@ -15,6 +15,7 @@ import formatNumber from "./functions/formatNumber";
 import OfficePostList from "./OfficePostList";
 import throttle from "./functions/throttle";
 
+
 class SinglePost extends Component {
     API_URL = process.env.REACT_APP_API_URL;
     IMAGES = process.env.REACT_APP_IMAGE_FOLDER;
@@ -381,7 +382,7 @@ class SinglePost extends Component {
                     >
                         {post.gallery.map( (el,i) => {
                             return (
-                                <div key={`${post.ID}_${i}`} className={"slide"} style={{backgroundImage: "url("+el+")"}} onDragStart={handleOnDragStart}/>
+                                <div key={`${post.ID}_${i}`} className={"slide lazyload"} data-bgset={el} style={{backgroundImage: "url("+el+")"}} onDragStart={handleOnDragStart}/>
                             )
                         })}
                         </Carousel>
