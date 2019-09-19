@@ -575,7 +575,7 @@ class App extends Component {
                         industries={this.state.officeIndustries}
                         selectedIndustry={this.state.selectedIndustry}
                     />
-                    <div className="grid-container">
+                    <div className="container-fluid">
                         {officeList}
                     </div>
                 </React.Fragment>

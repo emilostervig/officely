@@ -182,7 +182,7 @@ class FilterForm extends Component {
 
             <form id={"office-filter"} className={"office-filter-form"}>
                 <div className="main-form">
-                    <div className="grid-container">
+                    <div className="container-fluid office-container">
                         <div className="field-wrap">
                             <CitySelector
                                 title={"By"}
@@ -284,7 +284,7 @@ class FilterForm extends Component {
                     </div>
                 </div>
                 <div className="after-form">
-                    <div className="grid-container">
+                    <div className="container-fluid office-container">
                         <div className="field-wrap order">
                             <div className="filter-element">
                                 <h4 className="found-posts">
