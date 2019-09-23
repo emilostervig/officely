@@ -52,18 +52,37 @@ class NumberSelector extends Component {
             })
         }
 
-        //let val = e.options[e.selectedIndex].value;
-    /*
-        if(this.props.onUpdate !== undefined){
-            this.props.onUpdate(val);
-        }
-        */
-
 
     }
 
-    render(){
+    handleRadioChange = (e) => {
+        let textElement = Array.prototype.filter.call(e.target.parentNode.children, function(child){
+            return child !== e.target && child.classList.contains('input-title');
+        });
+        let id = e.target.value;
+        let selected = this.props.officeLocations.find((el) => {
+            return parseInt(el.id) === parseInt(id);
+        })
+        if(selected){
+            /*
+            let selected = {
+                id: e.target.value,
+                name: e.target.dataset.label
+            };
+            */
 
+            this.setState({
+                chosen: selected,
+            }, this.props.onChange(selected));
+        }
+    };
+
+    unescapeString = (string) => {
+        return string
+    }
+
+    render(){
+        const comp = this;
         let selectEl;
 
         if(this.props.municipalities === undefined){
@@ -88,10 +107,27 @@ class NumberSelector extends Component {
                 </select>
             </React.Fragment>
         }
+        console.log(this.props.officeLocations);
+        let types = this.props.officeLocations;
+        let typesMarkup = types.map(function(type){
+            return(
+                <label key={type.id}>
+                    <input type={"radio"} name={comp.props.name} value={type.id} id={comp.props.name+type.id} onChange={comp.handleRadioChange} checked={parseInt(comp.state.chosen.id) === type.id} data-label={type.name}/>
+                    <span className="checkmark"/>
+                    <span className="input-title">
+                        {comp.unescapeString(type.name)} {'count' in type && comp.props.count === true && <span className="count">({type.count})</span>}
+                    </span>
+                </label>
+            )
+        });
+        let currentType = types.find((el) => {
+            return el.id === parseInt(this.state.chosen.id);
+        });
+        let currentText = currentType !== undefined ? currentType.name : this.props.startText;
         return (
             <React.Fragment>
 
-            <div className="filter-element city-select input-popup type-select" data-type="select" ref={node => this.node = node}>
+            <div className="filter-element city-select input-popup type-radio" data-type="radio" ref={node => this.node = node}>
                 <h4 className="filter-heading">
                     {this.props.title}
                 </h4>
@@ -103,7 +139,7 @@ class NumberSelector extends Component {
                     </div>
                 </div>
                 <div className={`input-popup-content ` + (this.state.popupOpen ? 'open' : 'closed')}>
-                    {selectEl}
+                    {typesMarkup}
                 </div>
             </div>
             </React.Fragment>

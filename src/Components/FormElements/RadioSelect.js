@@ -9,7 +9,7 @@ class RadioSelect extends Component {
 
         this.state = {
             popupOpen: false,
-            selected: this.props.defaultSelected ? {id: this.props.defaultSelected} : false,
+            selected: this.props.defaultSelected != null ? {id: this.props.defaultSelected} : false,
         };
         this.node = React.createRef();
         this.handleClick = this.handleClick.bind(this);
@@ -55,6 +55,11 @@ class RadioSelect extends Component {
         }
     }
 
+    unescapeString = (string) => {
+        string = string.replace(/&amp;/g, '&');
+        return string;
+    }
+
     render() {
         let comp = this;
         let types = this.props.options || [];
@@ -73,18 +78,18 @@ class RadioSelect extends Component {
                     <input type={"radio"} name={comp.props.name} value={type.id} id={comp.props.name+type.id} onChange={comp.handleRadioChange} checked={parseInt(comp.state.selected.id) === type.id} data-label={type.name}/>
                     <span className="checkmark"/>
                     <span className="input-title">
-                        {unescape(type.name)} {'count' in type && comp.props.count === true && <span className="count">({type.count})</span>}
+                        {comp.unescapeString(type.name)} {'count' in type && comp.props.count === true && <span className="count">({type.count})</span>}
                     </span>
                 </label>
             )
         });
         let currentType = types.find((el) => {
-            return el.id === parseInt(this.props.chosenType);
+            return el.id === parseInt(this.state.selected.id);
         });
         let currentText = currentType !== undefined ? currentType.name : this.props.startText;
         if(types.length){
             typesFilter = (
-                <div className="filter-element input-popup type-radio" data-type="radio" id={this.props.id} ref={node => this.node = node}>
+                <div className={"filter-element input-popup type-radio " + this.props.className} data-type="radio" id={this.props.id} ref={node => this.node = node}>
                     <h4 className="filter-heading">
                         {this.props.heading}
                     </h4>

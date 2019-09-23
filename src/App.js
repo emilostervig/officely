@@ -27,6 +27,7 @@ class App extends Component {
         super(props);
 
         this.state = {
+            filterDataLoaded: false,
             // User
             user: {
                 loggedIn : window.wpApiSettings.loggedIn,
@@ -89,6 +90,10 @@ class App extends Component {
             officeIndustries: [],
             selectedIndustry: {id: 0},
 
+            // Locations
+            officeLocations: [],
+            selectedLocation: {id: 0},
+
             // test redirect from outside react
             redirect: false,
         };
@@ -126,6 +131,7 @@ class App extends Component {
     this.getData = this.getData.bind(this);
     this.getOfficeFacilities = this.getOfficeFacilities.bind(this);
     this.getOfficeTypes = this.getOfficeTypes.bind(this);
+    this.getOfficeLocations = this.getOfficeLocations.bind(this);
     this.getPostBySlug = this.getPostBySlug.bind(this);
     this.updateFilterValue = this.updateFilterValue.bind(this);
     this.updateParentState = this.updateParentState.bind(this);
@@ -142,8 +148,8 @@ class App extends Component {
     }
 
     componentDidMount() {
-        this.getData()
-        this.getMunicipalities();
+        this.getData();
+        //this.getMunicipalities();
     }
 
 
@@ -243,19 +249,64 @@ class App extends Component {
         return false;
     }
 
-
-    getData() {
-
-        this.getOfficeTypes();
-        this.getOfficeFacilities();
-        this.getOfficeIndustries();
-        this.getOffices();
+    checkStatus = (response) => {
+        if (response.ok) {
+            return Promise.resolve(response);
+        } else {
+            return Promise.reject(new Error(response.statusText));
+        }
     }
+
+    getData(){
+       Promise.all([
+            this.getOfficeLocations(),
+            this.getOfficeTypes(),
+            this.getOfficeFacilities(),
+            this.getOfficeIndustries(),
+            this.getOffices(),
+        ]).then(() => {
+            this.setState({
+                filterDataLoaded: true,
+            })
+        }).catch((err) => {
+            console.log(err);
+        });
+        /*
+        try{
+            this.getOfficeLocations();
+            this.getOfficeTypes();
+            this.getOfficeFacilities();
+            this.getOfficeIndustries();
+            this.getOffices();
+
+        }  catch(err){
+            console.log(err)
+        }*/
+
+    }
+
+    getOfficeLocations(){
+        console.log(`${this.API_URL}wp/v2/office_location`);
+        return fetch(`${this.API_URL}wp/v2/office_location`)
+            .then((response) => {
+                this.checkStatus(response);
+                return response.json()
+            })
+            .then(data => {
+                this.setState({
+                    officeLocations: data
+                });
+            })
+            .catch(error => {
+                console.error("Error when fetching: ", error);
+            })
+    };
 
     getOfficeFacilities(){
         console.log(`${this.API_URL}wp/v2/office_facilities`);
-        fetch(`${this.API_URL}wp/v2/office_facilities`)
+        return fetch(`${this.API_URL}wp/v2/office_facilities`)
             .then((response) => {
+                this.checkStatus(response);
                 return response.json()
             })
             .then(data => {
@@ -268,8 +319,9 @@ class App extends Component {
             })
     };
     getOfficeTypes(){
-        fetch(`${this.API_URL}wp/v2/office_type`)
+        return fetch(`${this.API_URL}wp/v2/office_type`)
             .then((response) => {
+                    this.checkStatus(response);
                     return response.json()
                 }
             )
@@ -284,8 +336,9 @@ class App extends Component {
     };
 
     getOfficeIndustries = () => {
-        fetch(`${this.API_URL}wp/v2/office_industry`)
+        return fetch(`${this.API_URL}wp/v2/office_industry`)
             .then((response) => {
+                    this.checkStatus(response);
                     return response.json()
                 }
             )
@@ -385,11 +438,12 @@ class App extends Component {
 
         let query = queryBase + queryParts.join('&');
         console.log(`route: ${this.API_URL}${query}`);
-        fetch(`${this.API_URL}${query}`,
+        return fetch(`${this.API_URL}${query}`,
             {
                 signal: this.signal,
             })
             .then((response) => {
+                    this.checkStatus(response);
                     return response.json()
                 }
             )
@@ -462,15 +516,12 @@ class App extends Component {
             return;
         }
         let reached = (el.getBoundingClientRect().bottom - buffer) <= window.innerHeight;
-        //console.log('el+buffer : '+el.getBoundingClientRect().bottom + buffer);
-        //console.log('win.innerHeight : '+window.innerHeight);
 
         return reached;
     }
 
 
     trackScrolling = (el) => {
-        console.log('scroll');
         //const wrappedElement = document.getElementById('post-list');
         if (this.scrollReached(el, 1500 ) && this.state.loadingMore === false && this.state.loadedAll === false) {
             this.getOffices(true)
@@ -489,7 +540,9 @@ class App extends Component {
         });
     }
   render(){
-
+    if(this.state.filterDataLoaded === false){
+        return <Loader/>
+    }
     let officeList;
     if(this.state.postsLoading === true){
         officeList = ( <Loader />);
@@ -514,7 +567,7 @@ class App extends Component {
     };
 
     return (
-        <div className="app bbh-inner-section" >
+        <div className={"app bbh-inner-section "+ (this.state.filterDataLoaded === true ? 'all-loaded' : '')} id={"office-app"}>
           <Router>
               {this.state.redirect &&
                 <Redirect to={"/office"} to={{
@@ -534,6 +587,7 @@ class App extends Component {
                         // post data
                         postsLoading={this.state.postsLoading}
                         postCount={this.state.postCount}
+                        filterDataLoaded={this.state.filterDataLoaded}
 
                         // types
                         officeTypes={this.state.officeTypes}
@@ -574,6 +628,10 @@ class App extends Component {
                         // Industries
                         industries={this.state.officeIndustries}
                         selectedIndustry={this.state.selectedIndustry}
+
+                        // locations
+                        officeLocations={this.state.officeLocations}
+                        selectedLocation={this.state.selectedLocation}
                     />
                     <div className="container-fluid">
                         {officeList}

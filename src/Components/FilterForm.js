@@ -10,6 +10,8 @@ import CitySelector from "./FormElements/CitySelector";
 import PeriodSelector from "./FormElements/PeriodSelector";
 import IndustrySelector from "./FormElements/IndustrySelector";
 import RadioSelect from "./FormElements/RadioSelect";
+import Loader from "./Loader";
+
 
 class FilterForm extends Component {
     API_URL = process.env.REACT_APP_API_URL;
@@ -169,6 +171,12 @@ class FilterForm extends Component {
         })
     }
 
+    handleCityUpdate = (value) => {
+        this.props.updateFilterValue({
+            selectedLocation: value,
+        })
+    }
+
     render() {
         let foundCount;
         if(parseInt(this.props.postCount) > 0){
@@ -178,14 +186,24 @@ class FilterForm extends Component {
         }
         //const foundCount = this.props.postCount > 0 ? <React.fragment>Oplev de <span className={"count"}>${this.props.postCount}</span> kontorpladser der passer til din søgning</React.fragment>: '';
         //const handleOrderChange = this.handleOrderChange;
+        if(this.props.filterDataLoaded === false){
+            return (<Loader/>)
+        }
         return(
 
             <form id={"office-filter"} className={"office-filter-form"}>
                 <div className="main-form">
                     <div className="container-fluid office-container">
                         <div className="field-wrap">
+
+
                             <CitySelector
                                 title={"By"}
+                                officeLocations={this.props.officeLocations}
+                                selectedLocation={this.props.selectedLocation}
+                                onChange={this.handleCityUpdate}
+
+                                // old
                                 municipalities={[
                                     {
                                         code: 1,
@@ -243,7 +261,7 @@ class FilterForm extends Component {
 
                             />
 
-                            <IndustrySelector
+                            { /*<IndustrySelector
                                 industries={[
                                     {
                                         code: 1,
@@ -263,16 +281,19 @@ class FilterForm extends Component {
                                     }
                                 ]}
                                 />
+                                */ }
 
                                 <RadioSelect
                                     options={this.props.industries}
                                     count={true}
                                     enableAll={true}
-                                    allText={"Alle brancher"}
+                                    allText={"Branche"}
                                     name={"industry_radio"}
                                     startText={"Branche"}
                                     defaultSelected={this.props.selectedIndustry.id}
                                     onChange={this.handleIndustryChange}
+                                    id={"office_industry_filter"}
+                                    className={"invert-color"}
                                     />
                         </div>
                         <div className="field-wrap bottom-row">

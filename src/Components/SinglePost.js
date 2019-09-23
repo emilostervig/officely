@@ -9,6 +9,7 @@ import Loader from './Loader';
 import Accordion from './Accordion'
 import NumberSelector from "./FormElements/NumberSelector";
 import PeriodSelector from "./FormElements/PeriodSelector";
+import ShareBtn from "./ShareBtn";
 
 // functions
 import formatNumber from "./functions/formatNumber";
@@ -172,6 +173,7 @@ class SinglePost extends Component {
             //ref.style.left = '0';
             //ref.style.width = '';
             ref.style.height = '';
+            gal.style.height = 'auto';
             ref.classList.remove('fixed');
         }
 
@@ -599,6 +601,12 @@ class SinglePost extends Component {
                                         <Loader/>
                                     )}
 
+                                </div>
+                                <div className="share-btn-section ">
+                                    <ShareBtn
+                                        icon={"icon-download"}
+                                        buttonTitle={"Del"}
+                                    />
                                 </div>
                             </div>
                         </div>

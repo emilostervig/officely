@@ -73,7 +73,6 @@ class OfficePostListItem extends Component {
         const post = this.props.post;
         const handleOnDragStart = e => e.preventDefault();
         let gallery = null;
-        console.log(post.gallery && post.gallery.length > 0);
         if(post.gallery && post.gallery.length > 0){
             gallery = <React.Fragment>
                 <Carousel
