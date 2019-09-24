@@ -177,6 +177,12 @@ class FilterForm extends Component {
         })
     }
 
+    handleOpenPopup = (popup, component) => {
+
+        console.log(popup);
+        console.log(component);
+    }
+
     render() {
         let foundCount;
         if(parseInt(this.props.postCount) > 0){
@@ -221,6 +227,7 @@ class FilterForm extends Component {
                                         ]
                                     }
                                 ]}
+
                                 />
                             <Capacity
                                 updateFilterValue={this.props.updateFilterValue}
@@ -294,6 +301,7 @@ class FilterForm extends Component {
                                     onChange={this.handleIndustryChange}
                                     id={"office_industry_filter"}
                                     className={"invert-color"}
+                                    onOpen={this.handleOpenPopup}
                                     />
                         </div>
                         <div className="field-wrap bottom-row">

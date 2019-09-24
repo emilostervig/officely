@@ -5,12 +5,16 @@
   "dependencies": {
     "@brainhubeu/react-carousel": "^1.10.17",
     "@crossfield/react-read-more": "^0.2.0",
+    "abortcontroller-polyfill": "^1.3.0",
     "nouislider-react": "^3.3.1",
+    "promise-polyfill": "^8.1.3",
     "react": "^16.8.6",
+    "react-app-polyfill": "^1.0.3",
     "react-datepicker": "^2.8.0",
     "react-dom": "^16.8.6",
     "react-router-dom": "^5.0.1",
-    "react-scripts": "3.0.1"
+    "react-scripts": "3.0.1",
+    "unfetch": "^4.1.0"
   },
   "scripts": {
     "server": "nodemon index.js",

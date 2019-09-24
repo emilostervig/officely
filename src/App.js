@@ -18,6 +18,7 @@ import groupBy from './Components/functions/groupBy';
 
 // Assets
 //import './wpstyle.css'
+const AbortController = window.AbortController;
 
 class App extends Component {
   API_URL = process.env.REACT_APP_API_URL;
@@ -123,7 +124,9 @@ class App extends Component {
               name: "Min. 12 mdr.",
             }
         ];
+        if(AbortController){
 
+        }
         this.fetchController = new AbortController();
         this.signal = this.fetchController.signal;
 

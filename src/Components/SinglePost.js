@@ -236,7 +236,6 @@ class SinglePost extends Component {
     }
 
     handleSubmitBooking = () => {
-        console.log(!window.wpApiSettings.loggedIn);
         if(!window.wpApiSettings.loggedIn){
             let loginModal = new Event('showLoginModal');
             window.dispatchEvent(loginModal);

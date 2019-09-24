@@ -12,8 +12,10 @@ class PeriodSelector extends Component {
             showPopup: false,
             date: false,
             endDate: false,
+            edge: false,
         };
         this.node = React.createRef();
+        this.popupContent = React.createRef();
         this.handleClick = this.handleClick.bind(this);
     }
 
@@ -68,6 +70,9 @@ class PeriodSelector extends Component {
     };
 
     toggleShowPopup = () => {
+        if(this.state.showPopup !== true){
+            this.onOpen();
+        }
         this.setState({
             showPopup: !this.state.showPopup,
         });
@@ -151,6 +156,16 @@ class PeriodSelector extends Component {
         return booked ? 'booked' : undefined;
     };
 
+    onOpen = () => {
+        let box = this.popupContent;
+        let bound = box.getBoundingClientRect();
+        if(bound.right > (window.innerWidth || document.documentElement.clientWidth)){
+            this.setState({
+                edge: true,
+            })
+        }
+    }
+
     render(){
         let periodsMarkup = '';
         let comp = this;
@@ -195,7 +210,7 @@ class PeriodSelector extends Component {
                         }
                     </div>
                 </div>
-                <div className={`input-popup-content ` + (this.state.showPopup ? 'open' : 'closed')}>
+                <div className={`input-popup-content ` + (this.state.showPopup ? 'open' : 'closed')+ (this.state.edge === true ? ' edge' : '')} ref={node => this.popupContent = node}>
                     {periodsMarkup}
                     <DatePicker
                         inline

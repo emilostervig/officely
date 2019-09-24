@@ -28,6 +28,9 @@ class OfficePostList extends Component {
         console.log('componentDidMount')
         document.addEventListener('scroll', this.throttleEvent);
         window.scrollTo(0, this.props.listScrolled);
+
+        let lazyLoadScroll = new Event('scroll');
+        window.dispatchEvent(lazyLoadScroll);
     }
 
     componentWillUnmount() {

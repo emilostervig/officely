@@ -81,9 +81,13 @@ class OfficePostListItem extends Component {
                     offset={0}
                 >
                     {post.gallery.map( (el,i) => {
-                        return (
-                            <div key={`${post.ID}_${i}`} className={"slide lazyload"} data-bgset={el} /*style={{backgroundImage: "url("+el+")"}}*/ onDragStart={handleOnDragStart}/>
-                        )
+                        let slide;
+                        if(i === 0){
+                            slide = <div key={`${post.ID}_${i}`} className={"slide"} style={{backgroundImage: "url("+el+")"}} onDragStart={handleOnDragStart}/>
+                        } else{
+                            slide = <div key={`${post.ID}_${i}`} className={"slide lazyload"} data-bgset={el} onDragStart={handleOnDragStart}/>
+                        }
+                        return slide;
                     })}
                 </Carousel>
 

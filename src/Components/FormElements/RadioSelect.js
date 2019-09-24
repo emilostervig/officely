@@ -10,8 +10,10 @@ class RadioSelect extends Component {
         this.state = {
             popupOpen: false,
             selected: this.props.defaultSelected != null ? {id: this.props.defaultSelected} : false,
+            edge: false,
         };
         this.node = React.createRef();
+        this.popupContent = React.createRef();
         this.handleClick = this.handleClick.bind(this);
         this.togglePopup = this.togglePopup.bind(this);
     }
@@ -24,7 +26,19 @@ class RadioSelect extends Component {
     componentWillUnmount() {
         document.removeEventListener('mousedown', this.handleClick, false);
     }
+    onOpen = () => {
+        let box = this.popupContent;
+        let bound = box.getBoundingClientRect();
+        if(bound.right > (window.innerWidth || document.documentElement.clientWidth)){
+            this.setState({
+                edge: true,
+            })
+        }
+    }
     togglePopup(e){
+        if(this.state.popupOpen !== true){
+            this.onOpen();
+        }
         this.setState({
             popupOpen: !this.state.popupOpen,
         })
@@ -87,9 +101,11 @@ class RadioSelect extends Component {
             return el.id === parseInt(this.state.selected.id);
         });
         let currentText = currentType !== undefined ? currentType.name : this.props.startText;
+
+
         if(types.length){
             typesFilter = (
-                <div className={"filter-element input-popup type-radio " + this.props.className} data-type="radio" id={this.props.id} ref={node => this.node = node}>
+                <div className={"filter-element input-popup type-radio " + this.props.className} data-type="radio" id={this.props.id} ref={node => this.node = node} >
                     <h4 className="filter-heading">
                         {this.props.heading}
                     </h4>
@@ -98,7 +114,7 @@ class RadioSelect extends Component {
                             {currentText}
                         </div>
                     </div>
-                    <div className={`input-popup-content ` + (this.state.popupOpen ? 'open' : 'closed')}>
+                    <div className={`input-popup-content ` + (this.state.popupOpen ? 'open' : 'closed') + (this.state.edge === true ? ' edge' : '')} ref={node => this.popupContent = node}>
 
                         {typesMarkup}
                     </div>

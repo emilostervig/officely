@@ -22,6 +22,7 @@ class PriceRange extends Component {
             minTemp: 0,
             maxTemp: 10000,
         };
+        this.popupContent = React.createRef();
         this.handleClick = this.handleClick.bind(this);
         this.closePopup = this.closePopup.bind(this);
     }
@@ -35,7 +36,9 @@ class PriceRange extends Component {
         document.removeEventListener('mousedown', this.handleClick, false);
     }
     closePopup(e){
+
         this.props.toggleShowOfficePrice()
+
     };
     handleClick(e){
         if(this.node.contains(e.target)){
@@ -62,20 +65,36 @@ class PriceRange extends Component {
         this.props.handlePriceChange(values);
     }
 
+    onOpen = () => {
+        let box = this.popupContent;
+        let bound = box.getBoundingClientRect();
+        console.log(bound.right, (window.innerWidth || document.documentElement.clientWidth))
+        if(bound.right > (window.innerWidth || document.documentElement.clientWidth)){
+            this.setState({
+                edge: true,
+            })
+        }
+    };
 
 
+    handlePopupClick = () => {
+        if(this.props.showOfficePrice !== true){
+            this.onOpen();
+        }
+        this.props.toggleShowOfficePrice();
+    }
 
     render(){
         return (
             <div className="filter-element input-popup" id="office_price_filter" ref={node => this.node = node}>
                 <h4 className="filter-heading">
                 </h4>
-                <div className="input-wrap" onClick={this.props.toggleShowOfficePrice}>
+                <div className="input-wrap" onClick={this.handlePopupClick}>
                     <div className="chosen-value">
                         Pris
                     </div>
                 </div>
-                <div className={`input-popup-content ` + (this.props.showOfficePrice ? 'open' : 'closed')}>
+                <div className={`input-popup-content ` + (this.props.showOfficePrice ? 'open' : 'closed')+ (this.state.edge === true ? ' edge' : '')} ref={node => this.popupContent = node}>
                     <div className="price-display">
                         <div className="min-price-display">
                             <div className="fake-input">
