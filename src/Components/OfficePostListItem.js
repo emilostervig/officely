@@ -83,9 +83,9 @@ class OfficePostListItem extends Component {
                     {post.gallery.map( (el,i) => {
                         let slide;
                         if(i === 0){
-                            slide = <div key={`${post.ID}_${i}`} className={"slide"} style={{backgroundImage: "url("+el+")"}} onDragStart={handleOnDragStart}/>
+                            slide = <Link to={post.post_link} key={`${post.ID}_${i}`} className={"slide"} style={{backgroundImage: "url("+el+")"}} onDragStart={handleOnDragStart}/>
                         } else{
-                            slide = <div key={`${post.ID}_${i}`} className={"slide lazyload"} data-bgset={el} onDragStart={handleOnDragStart}/>
+                            slide = <Link to={post.post_link} key={`${post.ID}_${i}`} className={"slide lazyload"} data-bgset={el} onDragStart={handleOnDragStart}/>
                         }
                         return slide;
                     })}
@@ -93,7 +93,7 @@ class OfficePostListItem extends Component {
 
             </React.Fragment>
         } else{
-            gallery = <div className="image" style={{backgroundImage: post.thumbnail ? 'url('+post.thumbnail+')':'none'}} />
+            gallery = <Link to={post.post_link} className="image" style={{backgroundImage: post.thumbnail ? 'url('+post.thumbnail+')':'none'}} />
         }
         return (
             <React.Fragment>
@@ -101,16 +101,14 @@ class OfficePostListItem extends Component {
                     <div className="post-images">
                         {this.newSplash(post.post_date)}
                         {this.favouriteBtn(this.state.favourited)}
-                        {/*<Link to={`/office/${post.slug}`} onClick={this.handleLinkClick}> */}
                             {gallery}
-                        {/*</Link> */}
                     </div>
                     <div className={"content-wrap"}>
                         <div className="office-area">
                             <span className="area">Storkøbenhavn</span><span className="city">Nørrebro</span>
                         </div>
                         <div className="office-title">
-                            <Link to={`/office/${post.slug}`} onClick={this.handleLinkClick}>
+                            <Link to={post.post_link} onClick={this.handleLinkClick}>
                                 <h2 className="post-title">{post.post_title}</h2>
                             </Link>
                         </div>

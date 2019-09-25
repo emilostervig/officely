@@ -208,25 +208,8 @@ class FilterForm extends Component {
                                 officeLocations={this.props.officeLocations}
                                 selectedLocation={this.props.selectedLocation}
                                 onChange={this.handleCityUpdate}
+                                name={"city-selector"}
 
-                                // old
-                                municipalities={[
-                                    {
-                                        code: 1,
-                                        name: 'København',
-                                        cities: [
-                                            {
-                                                name: 'Frederiksberg',
-                                                postcode: 1000,
-
-                                            },
-                                            {
-                                                name: 'Nørrebro',
-                                                postcode: 1100
-                                            }
-                                        ]
-                                    }
-                                ]}
 
                                 />
                             <Capacity

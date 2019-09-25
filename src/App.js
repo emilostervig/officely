@@ -274,23 +274,13 @@ class App extends Component {
         }).catch((err) => {
             console.log(err);
         });
-        /*
-        try{
-            this.getOfficeLocations();
-            this.getOfficeTypes();
-            this.getOfficeFacilities();
-            this.getOfficeIndustries();
-            this.getOffices();
 
-        }  catch(err){
-            console.log(err)
-        }*/
 
     }
 
     getOfficeLocations(){
-        console.log(`${this.API_URL}wp/v2/office_location`);
-        return fetch(`${this.API_URL}wp/v2/office_location`)
+        console.log(`${this.API_URL}wp/v2/office_location?per_page=99`);
+        return fetch(`${this.API_URL}wp/v2/office_location?per_page=99`)
             .then((response) => {
                 this.checkStatus(response);
                 return response.json()
@@ -306,8 +296,8 @@ class App extends Component {
     };
 
     getOfficeFacilities(){
-        console.log(`${this.API_URL}wp/v2/office_facilities`);
-        return fetch(`${this.API_URL}wp/v2/office_facilities`)
+        console.log(`${this.API_URL}wp/v2/office_facilities?per_page=99`);
+        return fetch(`${this.API_URL}wp/v2/office_facilities?per_page=99`)
             .then((response) => {
                 this.checkStatus(response);
                 return response.json()
@@ -322,7 +312,7 @@ class App extends Component {
             })
     };
     getOfficeTypes(){
-        return fetch(`${this.API_URL}wp/v2/office_type`)
+        return fetch(`${this.API_URL}wp/v2/office_type?per_page=99`)
             .then((response) => {
                     this.checkStatus(response);
                     return response.json()
@@ -339,7 +329,7 @@ class App extends Component {
     };
 
     getOfficeIndustries = () => {
-        return fetch(`${this.API_URL}wp/v2/office_industry`)
+        return fetch(`${this.API_URL}wp/v2/office_industry?per_page=99`)
             .then((response) => {
                     this.checkStatus(response);
                     return response.json()

@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import DatePicker from "react-datepicker/es";
+import SearchInput from "./SearchInput";
 
 class NumberSelector extends Component {
     constructor(props) {
@@ -8,8 +9,8 @@ class NumberSelector extends Component {
         this.state = {
             popupOpen: false,
             chosen: this.props.startVal || {},
+            searchString: "",
         };
-        this.handleInputChange = this.handleInputChange.bind(this);
     }
 
     componentWillMount() {
@@ -35,25 +36,7 @@ class NumberSelector extends Component {
         });
     };
 
-    handleInputChange(e){
-        let target = e.target;
-        let optionIndex = target.selectedIndex;
-        let selectedOption = target.options[optionIndex];
 
-        let postcode = target[target.selectedIndex].value;
-        let municipalCode = selectedOption.parentNode.getAttribute('value');
-
-        let municipal = this.props.municipalities.find( (mun) => {
-            return parseInt(mun.code) === parseInt(municipalCode);
-        })
-        if(municipal){
-            let city = municipal.cities.find( (city) => {
-                return parseInt(city.postcode) === parseInt(postcode);
-            })
-        }
-
-
-    }
 
     handleRadioChange = (e) => {
         let textElement = Array.prototype.filter.call(e.target.parentNode.children, function(child){
@@ -81,34 +64,34 @@ class NumberSelector extends Component {
         return string
     }
 
+
+    onSearchClear = () => {
+        this.setState({
+            searchString: "",
+        })
+    }
+
+    onSearchUpdate = (val) => {
+        this.setState({
+            searchString: val,
+        })
+    }
+
     render(){
         const comp = this;
-        let selectEl;
 
-        if(this.props.municipalities === undefined){
-            selectEl = null;
-        } else{
-            selectEl = <React.Fragment>
-                <select onChange={this.handleInputChange}>
-                    {this.props.municipalities.map( (mun, i) => {
-                        return (
-                            <optgroup label={mun.name} key={i} value={mun.code}>
-
-                                {mun.cities.map( (city, i2) => {
-                                    return(
-                                        <option key={i+"-"+i2} value={city.postcode}>
-                                            {city.name}
-                                        </option>
-                                    )
-                                })}
-                            </optgroup>
-                        )
-                    })}
-                </select>
-            </React.Fragment>
-        }
-        console.log(this.props.officeLocations);
+        let search = this.state.searchString;
         let types = this.props.officeLocations;
+        if(search.length > 0){
+            types = types.filter((el) => {
+                let reg = RegExp('('+search+')', 'gmi');
+                return reg.test(el.name);
+
+            })
+
+        } else{
+            types = [];
+        }
         let typesMarkup = types.map(function(type){
             return(
                 <label key={type.id}>
@@ -120,6 +103,10 @@ class NumberSelector extends Component {
                 </label>
             )
         });
+
+        if(types.length === 0 && search.length > 0){
+            typesMarkup = <h4 className={"no-results"}>Ingen byer fundet. Prøv igen.</h4>
+        }
         let currentType = types.find((el) => {
             return el.id === parseInt(this.state.chosen.id);
         });
@@ -139,6 +126,14 @@ class NumberSelector extends Component {
                     </div>
                 </div>
                 <div className={`input-popup-content ` + (this.state.popupOpen ? 'open' : 'closed')}>
+                    <div className="search">
+                        <SearchInput
+                            placeholder={"Søg..."}
+                            onClear={this.onSearchClear}
+                            onUpdate={this.onSearchUpdate}
+                        />
+                    </div>
+                    <hr className="divider"/>
                     {typesMarkup}
                 </div>
             </div>

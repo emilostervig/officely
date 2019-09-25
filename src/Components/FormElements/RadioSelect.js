@@ -74,6 +74,10 @@ class RadioSelect extends Component {
         return string;
     }
 
+
+
+
+
     render() {
         let comp = this;
         let types = this.props.options || [];
@@ -100,7 +104,7 @@ class RadioSelect extends Component {
         let currentType = types.find((el) => {
             return el.id === parseInt(this.state.selected.id);
         });
-        let currentText = currentType !== undefined ? currentType.name : this.props.startText;
+        let currentText = currentType !== undefined ? this.unescapeString(currentType.name) : this.props.startText;
 
 
         if(types.length){
