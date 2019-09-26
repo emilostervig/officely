@@ -349,7 +349,7 @@ class SinglePost extends Component {
             relatedSection = (
                 <div className="related-offices">
 
-                    <div className="grid-container">
+                    <div className="container-fluid">
                         <div className="heading-box">
                             <h2 className={"heading"}>Andre populære emner der matcher din søgning</h2>
                         </div>

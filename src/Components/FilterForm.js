@@ -173,7 +173,7 @@ class FilterForm extends Component {
 
     handleCityUpdate = (value) => {
         this.props.updateFilterValue({
-            selectedLocation: value,
+            selectedLocations: value,
         })
     }
 
@@ -206,7 +206,7 @@ class FilterForm extends Component {
                             <CitySelector
                                 title={"By"}
                                 officeLocations={this.props.officeLocations}
-                                selectedLocation={this.props.selectedLocation}
+                                selectedLocations={this.props.selectedLocations}
                                 onChange={this.handleCityUpdate}
                                 name={"city-selector"}
 

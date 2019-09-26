@@ -8,7 +8,7 @@ class NumberSelector extends Component {
 
         this.state = {
             popupOpen: false,
-            chosen: this.props.startVal || {},
+            chosen: this.props.selectedLocations || [],
             searchString: "",
         };
     }
@@ -38,26 +38,28 @@ class NumberSelector extends Component {
 
 
 
-    handleRadioChange = (e) => {
+    handleCheckboxChange = (e) => {
         let textElement = Array.prototype.filter.call(e.target.parentNode.children, function(child){
             return child !== e.target && child.classList.contains('input-title');
         });
-        let id = e.target.value;
+        let id = parseInt(e.target.value);
+        let checked = e.target.checked;
+
         let selected = this.props.officeLocations.find((el) => {
             return parseInt(el.id) === parseInt(id);
         })
-        if(selected){
-            /*
-            let selected = {
-                id: e.target.value,
-                name: e.target.dataset.label
-            };
-            */
 
-            this.setState({
-                chosen: selected,
-            }, this.props.onChange(selected));
+        if(checked){
+            selected = [...this.props.selectedLocations, id];
+        } else{
+            selected = this.props.selectedLocations.filter(function (val) {
+                return parseInt(val) !== parseInt(id);
+            })
         }
+        this.setState({
+            chosen: selected,
+        }, this.props.onChange(selected));
+
     };
 
     unescapeString = (string) => {
@@ -95,7 +97,7 @@ class NumberSelector extends Component {
         let typesMarkup = types.map(function(type){
             return(
                 <label key={type.id}>
-                    <input type={"radio"} name={comp.props.name} value={type.id} id={comp.props.name+type.id} onChange={comp.handleRadioChange} checked={parseInt(comp.state.chosen.id) === type.id} data-label={type.name}/>
+                    <input type={"checkbox"} name={comp.props.name} value={type.id} id={comp.props.name+type.id} onChange={comp.handleCheckboxChange} checked={comp.props.selectedLocations.includes(parseInt(type.id))} data-label={type.name}/>
                     <span className="checkmark"/>
                     <span className="input-title">
                         {comp.unescapeString(type.name)} {'count' in type && comp.props.count === true && <span className="count">({type.count})</span>}
@@ -114,7 +116,7 @@ class NumberSelector extends Component {
         return (
             <React.Fragment>
 
-            <div className="filter-element city-select input-popup type-radio" data-type="radio" ref={node => this.node = node}>
+            <div className="filter-element city-select input-popup type-checkbox" data-type="checkbox" ref={node => this.node = node}>
                 <h4 className="filter-heading">
                     {this.props.title}
                 </h4>

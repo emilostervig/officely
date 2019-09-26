@@ -93,7 +93,7 @@ class App extends Component {
 
             // Locations
             officeLocations: [],
-            selectedLocation: {id: 0},
+            selectedLocations: [],
 
             // test redirect from outside react
             redirect: false,
@@ -426,6 +426,10 @@ class App extends Component {
             queryParts.push(`period=${period}&start_date=${start}&end_date=${end}`);
         }
 
+        if(this.state.selectedLocations.length > 0){
+            let locations = this.state.selectedLocations.join(',');
+            queryParts.push(`office_location=${locations}`)
+        }
         // add order
         queryParts.push('officeorder='+this.state.orderbyKey);
 
@@ -611,9 +615,6 @@ class App extends Component {
                         orderbyTitle={this.state.orderbyTitle}
                         showOrderby={this.state.showOrderby}
 
-                        // Cities
-                        municipalities={this.state.municipalities}
-
                         // Periods
                         periods={this.periods}
                         selectedPeriod={this.state.selectedPeriod}
@@ -624,7 +625,7 @@ class App extends Component {
 
                         // locations
                         officeLocations={this.state.officeLocations}
-                        selectedLocation={this.state.selectedLocation}
+                        selectedLocations={this.state.selectedLocations}
                     />
                     <div className="container-fluid">
                         {officeList}
