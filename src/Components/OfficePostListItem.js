@@ -7,6 +7,7 @@ import '@brainhubeu/react-carousel/lib/style.css';
 
 //  functions
 import formatNumber from "./functions/formatNumber";
+import formatTitle from './functions/formatTitle';
 
 class OfficePostListItem extends Component {
 
@@ -16,6 +17,7 @@ class OfficePostListItem extends Component {
 
         this.state = {
             favourited: ('favourited' in this.props.post) ? this.props.post.favourited : false,
+            currentSlide: 0,
         };
 
         this.handleLinkClick = this.handleLinkClick.bind(this);
@@ -51,10 +53,12 @@ class OfficePostListItem extends Component {
         }
         return (
             <div className={"favourite-post "+(favourited ? 'active' : '')} onClick={this.toggleFavoutite}>
-                <span className={"icon icomoon icon-hjerte-"+ (favourited ? "aktiv" : "border")}  />
+                <span className={"icon icomoon icon-hjerte-aktiv"}  />
             </div>
         )
     }
+
+    onCarouselChange = value => this.setState({ currentSlide: parseInt(value) });
 
     render(){
         const offices = this.props.offices || [];
@@ -75,23 +79,27 @@ class OfficePostListItem extends Component {
         let gallery = null;
         if(post.gallery && post.gallery.length > 0){
             gallery = <React.Fragment>
-                <Carousel
-                    infinite
-                    dots
-                    offset={0}
-                >
-                    {post.gallery.map( (el,i) => {
-                        let slide;
-                        if(i === 0){
-                            slide = <Link to={post.post_link} key={`${post.ID}_${i}`} className={"slide"} style={{backgroundImage: "url("+el+")"}} onDragStart={handleOnDragStart}/>
-                        } else{
-                            slide = <Link to={post.post_link} key={`${post.ID}_${i}`} className={"slide lazyload"} data-bgset={el} onDragStart={handleOnDragStart}/>
-                        }
-                        return slide;
-                    })}
-                </Carousel>
+                    <Carousel
+                        infinite={false}
+                        dots
+                        offset={0}
+                        value={this.state.currentSlide}
+                        onChange={this.onCarouselChange}
+                        draggable={false}
+                    >
+                        {post.gallery.slice(0,5).map( (el,i) => {
+                            let slide;
+                            if(i === 0){
+                                slide = <Link to={post.post_link} key={`${post.ID}_${i}`} className={"slide"} style={{backgroundImage: "url("+el+")"}} onDragStart={handleOnDragStart}/>
+                            } else{
+                                slide = <Link to={post.post_link} key={`${post.ID}_${i}`} className={"slide lazyload"} data-bgset={el} onDragStart={handleOnDragStart}/>
+                            }
+                            return slide;
+                        })}
+                    </Carousel>
 
-            </React.Fragment>
+
+                </React.Fragment>
         } else{
             gallery = <Link to={post.post_link} className="image" style={{backgroundImage: post.thumbnail ? 'url('+post.thumbnail+')':'none'}} />
         }
@@ -132,7 +140,7 @@ class OfficePostListItem extends Component {
                                     <span className="icomoon icon-taske" >
                                     </span>
                                     <span className="icons-title">
-                                        {'office_industry' in post && post.office_industry !== false && post.office_industry.length > 0 ? post.office_industry[0].name : 'branche'}
+                                        {'office_industry' in post && post.office_industry !== false && post.office_industry.length > 0 ? formatTitle(post.office_industry[0].name) : 'branche'}
                                     </span>
                                 </div>
                             </div>

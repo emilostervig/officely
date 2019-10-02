@@ -1,6 +1,9 @@
 const formatNumber = ( num, fixed ) => {
     var decimalPart;
-
+    num = parseInt(num);
+    if(isNaN(num)){
+        return 0;
+    }
     var array = Math.floor(num).toString().split('');
     var index = -3;
     while ( array.length + index > 0 ) {

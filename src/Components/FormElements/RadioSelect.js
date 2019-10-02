@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 
+import formatTitle from '../functions/formatTitle';
+
 class RadioSelect extends Component {
     API_URL = process.env.REACT_APP_API_URL;
 
@@ -69,10 +71,7 @@ class RadioSelect extends Component {
         }
     }
 
-    unescapeString = (string) => {
-        string = string.replace(/&amp;/g, '&');
-        return string;
-    }
+
 
 
 
@@ -96,7 +95,7 @@ class RadioSelect extends Component {
                     <input type={"radio"} name={comp.props.name} value={type.id} id={comp.props.name+type.id} onChange={comp.handleRadioChange} checked={parseInt(comp.state.selected.id) === type.id} data-label={type.name}/>
                     <span className="checkmark"/>
                     <span className="input-title">
-                        {comp.unescapeString(type.name)} {'count' in type && comp.props.count === true && <span className="count">({type.count})</span>}
+                        {formatTitle(type.name)} {'count' in type && comp.props.count === true && <span className="count">({type.count})</span>}
                     </span>
                 </label>
             )
@@ -104,7 +103,7 @@ class RadioSelect extends Component {
         let currentType = types.find((el) => {
             return el.id === parseInt(this.state.selected.id);
         });
-        let currentText = currentType !== undefined ? this.unescapeString(currentType.name) : this.props.startText;
+        let currentText = currentType !== undefined ? formatTitle(currentType.name) : this.props.startText;
 
 
         if(types.length){

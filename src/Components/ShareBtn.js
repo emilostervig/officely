@@ -21,7 +21,7 @@ class ShareBtn extends Component {
     }
 
     handleKeydown = (e) => {
-        if(e.key === 'Escape' || e.keyCode == 27){
+        if((e.key === 'Escape' || e.keyCode == 27) && this.state.open === true){
             this.toggleShow();
         }
     }

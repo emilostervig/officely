@@ -415,7 +415,7 @@ class SinglePost extends Component {
                         }}>
                             {!!window.wpApiSettings.loggedIn &&
                                 <div className={"favourite-post " + (this.state.favourited ? 'active' : '')} onClick={this.toggleFavoutite}>
-                                    <span className={"icon icomoon icon-hjerte-"+ (this.state.favourited ? "aktiv" : "border")}  />
+                                    <span className={"icon icomoon icon-hjerte-aktiv"}  />
                                 </div>
                             }
                             <div className="image-wrap" >
