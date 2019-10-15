@@ -27,7 +27,12 @@ class SinglePost extends Component {
         this.state = {
             owner: false,
             selectedPeople: 1,
-            selectedPeriod: false,
+            //selectedPeriod: false,
+            selectedPeriod: {
+                period: false,
+                startDate: false,
+                endDate: false
+            },
             favourited: false,
             startDate: false,
             endDate: false,
@@ -215,9 +220,12 @@ class SinglePost extends Component {
     handleUpdatePeriod(selected){
     console.log(selected)
         this.setState({
-            selectedPeriod: selected.period,
-            startDate: selected.startDate,
-            endDate: selected.endDate,
+            selectedPeriod: {
+                period: selected.period,
+                startDate: selected.startDate,
+                endDate: selected.endDate,
+            },
+
         });
 
     }
@@ -236,6 +244,7 @@ class SinglePost extends Component {
     }
 
     handleSubmitBooking = () => {
+
         if(!window.wpApiSettings.loggedIn){
             let loginModal = new Event('showLoginModal');
             window.dispatchEvent(loginModal);
@@ -247,7 +256,7 @@ class SinglePost extends Component {
     handleBookingRequest = () => {
         let nonce = window.wpApiSettings.nonce;
         let people = this.state.selectedPeople;
-        let period = this.state.selectedPeriod.id;
+        let period = this.state.selectedPeriod.period.id;
         let startDate = this.state.startDate;
         let endDate = this.state.endDate;
         console.log(people, period, startDate, endDate);
@@ -448,6 +457,7 @@ class SinglePost extends Component {
                                     periods={this.props.periods}
                                     onUpdate={this.handleUpdatePeriod}
                                     bookedDates={post.booked_dates}
+                                    selected={this.state.selectedPeriod}
                                 />
 
 

@@ -9,10 +9,10 @@ class Orderby extends Component {
         super(props);
 
         this.state = {
+            showPopup: false,
             value: 0,
         };
         this.handleClick = this.handleClick.bind(this);
-        this.closePopup = this.closePopup.bind(this);
     }
 
 
@@ -23,16 +23,18 @@ class Orderby extends Component {
     componentWillUnmount() {
         document.removeEventListener('mousedown', this.handleClick, false);
     }
-    closePopup(e){
-        this.props.toggleShowOrderby()
+    togglePopup = (e) =>{
+        this.setState({
+            showPopup: !this.state.showPopup
+        });
     };
     handleClick(e){
         if(this.node.contains(e.target)){
             // clicked inside
             return;
         }
-        if(this.props.showOrderby === true){
-            this.closePopup();
+        if(this.state.showPopup === true){
+            this.togglePopup();
         }
     }
 
@@ -66,12 +68,12 @@ class Orderby extends Component {
                 <h4 className="filter-heading">
                     Sorter efter
                 </h4>
-                <div className="input-wrap" onClick={this.props.toggleShowOrderby}>
+                <div className="input-wrap" onClick={this.togglePopup}>
                     <div className="chosen-value" >
                         {this.props.orderbyTitle}
                     </div>
                 </div>
-                <div className={`input-popup-content ` + (this.props.showOrderby ? 'open' : 'closed')}>
+                <div className={`input-popup-content ` + (this.state.showPopup ? 'open' : 'closed')}>
 
                     {orderOptions.map(function(el){
                         return (

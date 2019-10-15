@@ -21,8 +21,6 @@ class RadioSelect extends Component {
     }
     componentDidMount() {
         document.addEventListener("mousedown", this.handleClick, false);
-
-
     }
 
     componentWillUnmount() {
@@ -47,6 +45,7 @@ class RadioSelect extends Component {
     }
 
     handleRadioChange = (e) => {
+
         let textElement = Array.prototype.filter.call(e.target.parentNode.children, function(child){
             return child !== e.target && child.classList.contains('input-title');
         });
@@ -80,9 +79,9 @@ class RadioSelect extends Component {
     render() {
         let comp = this;
         let types = this.props.options || [];
-
+        types = types.slice(0); // clone array so we don't make changes
         if(this.props.enableAll && !types.find((el) => {return el.id === 0})){
-            this.props.options.unshift({
+            types.unshift({
                 id: 0,
                 name: this.props.allText,
             })
@@ -92,7 +91,14 @@ class RadioSelect extends Component {
         let typesMarkup = types.map(function(type){
             return(
                 <label key={type.id}>
-                    <input type={"radio"} name={comp.props.name} value={type.id} id={comp.props.name+type.id} onChange={comp.handleRadioChange} checked={parseInt(comp.state.selected.id) === type.id} data-label={type.name}/>
+                    <input  type={"radio"}
+                            name={comp.props.name}
+                            value={type.id}
+                            id={comp.props.name+type.id}
+                            onChange={comp.handleRadioChange}
+                            checked={parseInt(comp.props.defaultSelected.id) === parseInt(type.id)}
+                            data-label={type.name}
+                    />
                     <span className="checkmark"/>
                     <span className="input-title">
                         {formatTitle(type.name)} {'count' in type && comp.props.count === true && <span className="count">({type.count})</span>}
@@ -101,10 +107,13 @@ class RadioSelect extends Component {
             )
         });
         let currentType = types.find((el) => {
-            return el.id === parseInt(this.state.selected.id);
+            return parseInt(el.id) === parseInt(this.props.defaultSelected.id);
         });
         let currentText = currentType !== undefined ? formatTitle(currentType.name) : this.props.startText;
-
+        console.log(currentType.id, this.props.defaultSelected.id);
+        if(this.props.enableAll && currentType.id === 0){
+            currentText = this.props.startText;
+        }
 
         if(types.length){
             typesFilter = (

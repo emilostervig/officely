@@ -49,10 +49,29 @@ class PeriodSelector extends Component {
                 startDate: this.state.date,
                 endDate: this.state.endDate,
             })
+        } else if(periodSet){
+            if(this.props.updateParentState){
+                this.props.updateParentState(
+                    'selectedPeriod',
+                    {
+                        period: this.state.selected,
+                        startDate: false,
+                        endDate: false,
+                    }
+                )
+            } else{
+                this.props.onUpdate({
+                    period: this.state.selected,
+                    startDate: this.state.date,
+                    endDate: this.state.endDate,
+                })
+            }
+
         }
     };
 
     handleRadioUpdate = (e) => {
+        console.log(e);
         let el = e.target;
         let id = e.target.value;
         let chosen = this.props.periods.find((i) => {
@@ -173,7 +192,7 @@ class PeriodSelector extends Component {
             periodsMarkup = this.props.periods.map((period) => {
                 return(
                     <label key={period.id} htmlFor={"office_period"+period.id}>
-                        <input type={"radio"} name={"office_period"} value={period.id} id={"office_period"+period.id} onChange={comp.handleRadioUpdate} checked={parseInt(comp.state.selected.id) === parseInt(period.id)} data-label={period.name}/>
+                        <input type={"radio"} name={"office_period"} value={period.id} id={"office_period"+period.id} onChange={comp.handleRadioUpdate} checked={parseInt(comp.props.selected.period.id) === parseInt(period.id)} data-label={period.name}/>
                         <span className="checkmark"/>
                         <span className="input-title">
                             {period.name}
@@ -205,21 +224,22 @@ class PeriodSelector extends Component {
                 </h4>
                 <div className="input-wrap" onClick={this.toggleShowPopup}>
                     <div className="chosen-value" data-empty-text="Vælg periode">
-                        {'name' in this.state.selected && this.state.date !== false ?
+                        {comp.props.selected.period !== false && this.state.date !== false ?
                             this.state.selected.name + " Fra " + this.formattedDate(this.state.date) : "Vælg periode"
                         }
                     </div>
                 </div>
                 <div className={`input-popup-content ` + (this.state.showPopup ? 'open' : 'closed')+ (this.state.edge === true ? ' edge' : '')} ref={node => this.popupContent = node}>
                     {periodsMarkup}
+                    <hr className={"divider"}/>
                     <DatePicker
                         inline
-                        selected={this.state.date}
+                        selected={this.props.selected.startDate}
                         onChange={this.handleDateChange}
                         filterDate={this.filterDates}
                         minDate={nextMonthFirst}
-                        startDate={this.state.date}
-                        endDate={this.state.endDate}
+                        startDate={this.props.selected.startDate}
+                        endDate={this.props.selected.endDate}
                         dayClassName={this.addBookedDatesClass}
                         locale={"da"}
                         dateFormat={"YYYY-MM-DD HH:MM:SS"}

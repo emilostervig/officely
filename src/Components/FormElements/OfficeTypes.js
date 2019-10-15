@@ -8,11 +8,10 @@ class OfficeTypes extends Component {
         super(props);
 
         this.state = {
-
+            showPopup: false,
         };
         this.node = React.createRef();
         this.handleClick = this.handleClick.bind(this);
-        this.closePopup = this.closePopup.bind(this);
     }
     componentDidMount() {
         document.addEventListener("mousedown", this.handleClick, false);
@@ -21,16 +20,18 @@ class OfficeTypes extends Component {
     componentWillUnmount() {
         document.removeEventListener('mousedown', this.handleClick, false);
     }
-    closePopup(e){
-        this.props.toggleShowOfficeType()
+    togglePopup = (e) =>{
+        this.setState({
+            showPopup: !this.state.showPopup,
+        })
     };
     handleClick(e){
         if(this.node.current === null || this.node.contains(e.target)){
             // clicked inside
             return;
         }
-        if(this.props.showOfficeType === true){
-            this.closePopup();
+        if(this.state.showPopup === true){
+            this.togglePopup();
         }
     }
 
@@ -61,12 +62,12 @@ class OfficeTypes extends Component {
                     <h4 className="filter-heading">
                         Kontor type
                     </h4>
-                    <div className="input-wrap" onClick={this.props.toggleShowOfficeType}>
+                    <div className="input-wrap" onClick={this.togglePopup}>
                         <div className="chosen-value" data-empty-text="Alle typer">
                             {currentText}
                         </div>
                     </div>
-                    <div className={`input-popup-content ` + (this.props.showOfficeType ? 'open' : 'closed')}>
+                    <div className={`input-popup-content ` + (this.state.showPopup ? 'open' : 'closed')}>
                         <label>
                             <input type="radio" name="office_type" value="all" id="office_type" checked={this.props.chosenType === 'all'} onChange={this.props.handleRadioChange} data-label={"Alle typer"}/>
                             <span className="checkmark"/>

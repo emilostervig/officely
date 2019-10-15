@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
-import DatePicker from "react-datepicker/es";
 import SearchInput from "./SearchInput";
 
-class NumberSelector extends Component {
+class CitySelector extends Component {
     constructor(props) {
         super(props);
 
@@ -84,13 +83,15 @@ class NumberSelector extends Component {
 
         let search = this.state.searchString;
         let types = this.props.officeLocations;
+        let topLevelTypes  = this.props.officeLocations.filter( (el) => {
+            return parseInt(el.parent) === 0;
+        })
         if(search.length > 0){
             types = types.filter((el) => {
                 let reg = RegExp('('+search+')', 'gmi');
                 return reg.test(el.name);
-
             })
-
+            topLevelTypes = [];
         } else{
             types = [];
         }
@@ -105,6 +106,20 @@ class NumberSelector extends Component {
                 </label>
             )
         });
+
+        let topLevelTypesMarkup = topLevelTypes.map( (type) => {
+            return (
+            <label key={type.id}>
+                <input type={"checkbox"} name={comp.props.name} value={type.id} id={comp.props.name+type.id} onChange={comp.handleCheckboxChange} checked={comp.props.selectedLocations.includes(parseInt(type.id))} data-label={type.name}/>
+                <span className="checkmark"/>
+                <span className="input-title">
+                        {comp.unescapeString(type.name)} {'count' in type && comp.props.count === true && <span className="count">({type.count})</span>}
+                    </span>
+            </label>
+            )
+        });
+
+
 
         if(types.length === 0 && search.length > 0){
             typesMarkup = <h4 className={"no-results"}>Ingen byer fundet. Prøv igen.</h4>
@@ -136,6 +151,7 @@ class NumberSelector extends Component {
                         />
                     </div>
                     <hr className="divider"/>
+                    {topLevelTypesMarkup}
                     {typesMarkup}
                 </div>
             </div>
@@ -145,6 +161,6 @@ class NumberSelector extends Component {
 
 }
 
-export default NumberSelector;
+export default CitySelector;
 
 

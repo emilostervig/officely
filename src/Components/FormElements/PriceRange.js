@@ -18,13 +18,14 @@ class PriceRange extends Component {
         super(props);
 
         this.state = {
+            showPopup: false,
             value: 0,
             minTemp: 0,
             maxTemp: 10000,
         };
+        this.sliderRef = React.createRef();
         this.popupContent = React.createRef();
         this.handleClick = this.handleClick.bind(this);
-        this.closePopup = this.closePopup.bind(this);
     }
 
 
@@ -35,9 +36,21 @@ class PriceRange extends Component {
     componentWillUnmount() {
         document.removeEventListener('mousedown', this.handleClick, false);
     }
-    closePopup(e){
+    componentWillUpdate(nextProps, nextState, nextContext) {
+        if(nextProps.priceChanged !== false){
+            return;
+        }
+        if(nextProps.maxPrice !== this.props.maxPriceDefault || nextProps.minPrice !== this.props.minPriceDefault){
+            this.sliderRef.noUiSlider.set([this.props.minPriceDefault, this.props.maxPriceDefault]);
+            //console.log(this.sliderRef.noUiSlider);
+        }
+    }
 
-        this.props.toggleShowOfficePrice()
+    togglePopup = (e) =>{
+        this.setState({
+            showPopup: !this.state.showPopup
+        });
+        //this.props.toggleShowOfficePrice()
 
     };
     handleClick(e){
@@ -45,8 +58,8 @@ class PriceRange extends Component {
             // clicked inside
             return;
         }
-        if(this.props.showOfficePrice === true){
-            this.closePopup();
+        if(this.state.showPopup === true){
+            this.togglePopup();
         }
     }
 
@@ -78,10 +91,10 @@ class PriceRange extends Component {
 
 
     handlePopupClick = () => {
-        if(this.props.showOfficePrice !== true){
+        if(this.state.showPopup !== true){
             this.onOpen();
         }
-        this.props.toggleShowOfficePrice();
+        this.togglePopup();
     }
 
     render(){
@@ -94,7 +107,7 @@ class PriceRange extends Component {
                         Pris
                     </div>
                 </div>
-                <div className={`input-popup-content ` + (this.props.showOfficePrice ? 'open' : 'closed')+ (this.state.edge === true ? ' edge' : '')} ref={node => this.popupContent = node}>
+                <div className={`input-popup-content ` + (this.state.showPopup ? 'open' : 'closed')+ (this.state.edge === true ? ' edge' : '')} ref={node => this.popupContent = node}>
                     <div className="price-display">
                         <div className="min-price-display">
                             <div className="fake-input">
@@ -119,6 +132,10 @@ class PriceRange extends Component {
 
 
                     <Nouislider
+                        instanceRef={instance => {
+                            this.sliderRef = instance;
+                        }}
+                        value={{min: 0, max: 5000}}
                         id={"price-slider"}
                         start={[this.props.minPrice, this.props.maxPrice]}
                         range={{min: 0, max: 10000}}
@@ -126,6 +143,7 @@ class PriceRange extends Component {
                         connect
                         onSet={this.handleSet}
                         onUpdate={this.throttleUpdate}
+
                     />
 
                 </div>

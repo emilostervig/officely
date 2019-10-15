@@ -1,17 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/src/Components/FilterForm.js" line="52" />
+    <bookmark url="file://$PROJECT_DIR$/src/Components/FilterForm.js" line="49" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9c6e1259-6001-41ab-84af-ccf9fcedd095" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/Components/functions/formatTitle.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Components/FormElements/CheckboxSelect.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Components/FilterForm.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/FilterForm.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Components/FormElements/CitySelector.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/FormElements/CitySelector.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Components/FormElements/OfficeFacilities.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/FormElements/OfficeFacilities.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Components/FormElements/OfficeTypes.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/FormElements/OfficeTypes.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Components/FormElements/Orderby.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/FormElements/Orderby.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Components/FormElements/PeriodSelector.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/FormElements/PeriodSelector.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Components/FormElements/PriceRange.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/FormElements/PriceRange.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Components/FormElements/RadioSelect.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/FormElements/RadioSelect.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Components/OfficePostListItem.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/OfficePostListItem.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Components/ShareBtn.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/ShareBtn.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Components/SinglePost.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/SinglePost.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Components/functions/formatNumber.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/functions/formatNumber.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -24,11 +31,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Components/OfficePostListItem.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="216">
-              <caret line="79" column="52" selection-start-line="79" selection-start-column="52" selection-end-line="79" selection-end-column="52" />
+            <state relative-caret-position="-817">
+              <caret line="69" column="13" selection-start-line="69" selection-start-column="13" selection-end-line="69" selection-end-column="13" />
               <folding>
                 <element signature="e#12#51#0" expanded="true" />
                 <element signature="e#219#271#0" expanded="true" />
@@ -38,10 +45,26 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/Components/ShareBtn.js">
+        <entry file="file://$PROJECT_DIR$/src/App.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="258">
-              <caret line="23" selection-start-line="23" selection-end-line="23" />
+            <state relative-caret-position="-2329">
+              <caret line="361" column="74" selection-start-line="361" selection-start-column="74" selection-end-line="361" selection-end-column="74" />
+              <folding>
+                <element signature="e#55#104#0" expanded="true" />
+                <element signature="e#312#383#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/Components/FormElements/PeriodSelector.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="257">
+              <caret line="233" column="47" selection-start-line="233" selection-start-column="47" selection-end-line="233" selection-end-column="47" />
+              <folding>
+                <element signature="e#0#39#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -49,8 +72,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Components/SinglePost.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="199">
-              <caret line="118" column="34" selection-start-line="118" selection-start-column="24" selection-end-line="118" selection-end-column="34" />
+            <state relative-caret-position="887">
+              <caret line="426" column="57" selection-start-line="426" selection-start-column="57" selection-end-line="426" selection-end-column="57" />
               <folding>
                 <element signature="e#12#51#0" expanded="true" />
                 <element signature="e#179#213#0" expanded="true" />
@@ -60,10 +83,19 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Components/FormElements/OfficeFacilities.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-202">
+              <caret line="38" column="69" selection-start-line="38" selection-start-column="69" selection-end-line="38" selection-end-column="69" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Components/FilterForm.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="239">
-              <caret line="37" selection-start-line="37" selection-end-line="37" />
+            <state relative-caret-position="397">
+              <caret line="236" column="55" selection-start-line="236" selection-start-column="55" selection-end-line="236" selection-end-column="55" />
               <folding>
                 <element signature="e#0#39#0" expanded="true" />
               </folding>
@@ -72,19 +104,10 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/Components/FormElements/OfficeTypes.js">
+        <entry file="file://$PROJECT_DIR$/src/Components/FormElements/Orderby.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="306">
-              <caret line="18" column="5" selection-start-line="18" selection-start-column="5" selection-end-line="18" selection-end-column="5" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/Components/FormElements/IndustrySelector.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="424">
-              <caret line="99" column="104" selection-start-line="99" selection-start-column="104" selection-end-line="99" selection-end-column="104" />
+            <state relative-caret-position="425">
+              <caret line="64" column="61" selection-start-line="64" selection-start-column="61" selection-end-line="64" selection-end-column="61" />
             </state>
           </provider>
         </entry>
@@ -92,26 +115,23 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Components/FormElements/RadioSelect.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="34">
-              <caret line="2" column="6" selection-start-line="2" selection-end-line="3" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/Components/functions/formatTitle.js">
-          <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="85">
-              <caret line="5" column="27" selection-start-line="5" selection-start-column="27" selection-end-line="5" selection-end-column="27" />
+              <caret line="50" column="11" selection-start-line="50" selection-start-column="11" selection-end-line="50" selection-end-column="11" />
+              <folding>
+                <element signature="e#0#39#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/Components/functions/formatNumber.js">
+        <entry file="file://$PROJECT_DIR$/src/Components/FormElements/CheckboxSelect.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="323">
-              <caret line="19" selection-end-line="20" selection-end-column="28" />
+            <state relative-caret-position="422">
+              <caret line="122" column="119" selection-start-line="122" selection-start-column="119" selection-end-line="122" selection-end-column="119" />
+              <folding>
+                <element signature="e#0#39#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -127,36 +147,36 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>onOpe</find>
-      <find>handleInputChange</find>
-      <find>onSearchChange</find>
-      <find>change</find>
-      <find>console.log</find>
-      <find>handleInopu</find>
-      <find>link</find>
-      <find>Link</find>
-      <find>image</find>
-      <find>999</find>
-      <find>capac</find>
-      <find>related</find>
-      <find>handleCheckboxChange</find>
-      <find>handleRadio</find>
-      <find>citys</find>
-      <find>city</find>
-      <find>selectedLoca</find>
-      <find>updateFilter</find>
-      <find>getOffices</find>
-      <find>selectedLocation</find>
-      <find>.join</find>
+      <find>addArr</find>
+      <find>addArrowClickHandler</find>
+      <find>Galle</find>
+      <find>clear-form</find>
+      <find>chosenFacilities</find>
+      <find>showOfficeType</find>
+      <find>props.show</find>
+      <find>toggleShow</find>
+      <find>closeP</find>
       <find>price</find>
-      <find>formatNumber</find>
-      <find>carousel</find>
-      <find>favourit</find>
-      <find>console.lo</find>
-      <find>share</find>
-      <find>selectedLocations</find>
-      <find>unescapeString</find>
-      <find>branc</find>
+      <find>toggleShowOfficeType</find>
+      <find>officeFa</find>
+      <find>toggleShowOfficeFacilities</find>
+      <find>handleOpenPopup</find>
+      <find>toggleShowOrderby</find>
+      <find>munic</find>
+      <find>cowork</find>
+      <find>coworkBanner</find>
+      <find>show</find>
+      <find>showa</find>
+      <find>handleCheckboxChange</find>
+      <find>filterform</find>
+      <find>closePopup</find>
+      <find>startTe</find>
+      <find>defaultS</find>
+      <find>onTestIndustryChange</find>
+      <find>officeIndustries</find>
+      <find>industry|handleIndustryChange|handleIndustryChange|handleIndustryChange|handleIndustryChange|handleIndustryChange|handleIndustryChange|handleIndustryChange|handleIndustryChange</find>
+      <find>selectedIndustry</find>
+      <find>test</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -188,9 +208,6 @@
         <option value="$PROJECT_DIR$/src/Components/FormElements/NumberSelector.js" />
         <option value="$PROJECT_DIR$/src/Components/functions/groupBy.js" />
         <option value="$PROJECT_DIR$/src/Components/Loader.js" />
-        <option value="$PROJECT_DIR$/src/Components/FormElements/OfficeFacilities.js" />
-        <option value="$PROJECT_DIR$/src/Components/FormElements/OfficeTypes.js" />
-        <option value="$PROJECT_DIR$/src/Components/FormElements/Orderby.js" />
         <option value="$PROJECT_DIR$/src/Components/FormElements/Capacity.js" />
         <option value="$PROJECT_DIR$/src/Components/ReadMore.js" />
         <option value="$PROJECT_DIR$/src/wpstyle.css" />
@@ -205,19 +222,23 @@
         <option value="$PROJECT_DIR$/src/index.js" />
         <option value="$PROJECT_DIR$/src/Components/OfficePostList.js" />
         <option value="$PROJECT_DIR$/src/Components/FormElements/IndustrySelector.js" />
-        <option value="$PROJECT_DIR$/src/Components/FormElements/PeriodSelector.js" />
-        <option value="$PROJECT_DIR$/src/Components/FormElements/PriceRange.js" />
         <option value="$PROJECT_DIR$/src/Components/FormElements/SearchElement.js" />
         <option value="$PROJECT_DIR$/src/Components/FormElements/SearchInput.js" />
-        <option value="$PROJECT_DIR$/src/Components/FilterForm.js" />
-        <option value="$PROJECT_DIR$/src/App.js" />
-        <option value="$PROJECT_DIR$/src/Components/FormElements/CitySelector.js" />
         <option value="$PROJECT_DIR$/src/Components/functions/formatNumber.js" />
-        <option value="$PROJECT_DIR$/src/Components/SinglePost.js" />
         <option value="$PROJECT_DIR$/src/Components/ShareBtn.js" />
         <option value="$PROJECT_DIR$/src/Components/functions/formatTitle.js" />
-        <option value="$PROJECT_DIR$/src/Components/FormElements/RadioSelect.js" />
+        <option value="$PROJECT_DIR$/src/Components/FormElements/CitySelector.js" />
+        <option value="$PROJECT_DIR$/src/Components/SinglePost.js" />
+        <option value="$PROJECT_DIR$/src/Components/FormElements/OfficeTypes.js" />
+        <option value="$PROJECT_DIR$/src/Components/FormElements/PriceRange.js" />
         <option value="$PROJECT_DIR$/src/Components/OfficePostListItem.js" />
+        <option value="$PROJECT_DIR$/src/Components/FormElements/Orderby.js" />
+        <option value="$PROJECT_DIR$/src/Components/FormElements/OfficeFacilities.js" />
+        <option value="$PROJECT_DIR$/src/Components/FormElements/RadioSelect.js" />
+        <option value="$PROJECT_DIR$/src/Components/FilterForm.js" />
+        <option value="$PROJECT_DIR$/src/App.js" />
+        <option value="$PROJECT_DIR$/src/Components/FormElements/CheckboxSelect.js" />
+        <option value="$PROJECT_DIR$/src/Components/FormElements/PeriodSelector.js" />
       </list>
     </option>
   </component>
@@ -245,32 +266,6 @@
               <item name="officely-react" type="b2602c69:ProjectViewProjectNode" />
               <item name="officely-react" type="462c0819:PsiDirectoryNode" />
               <item name="build" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="officely-react" type="b2602c69:ProjectViewProjectNode" />
-              <item name="officely-react" type="462c0819:PsiDirectoryNode" />
-              <item name="node_modules" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="officely-react" type="b2602c69:ProjectViewProjectNode" />
-              <item name="officely-react" type="462c0819:PsiDirectoryNode" />
-              <item name="node_modules" type="462c0819:PsiDirectoryNode" />
-              <item name="@brainhubeu" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="officely-react" type="b2602c69:ProjectViewProjectNode" />
-              <item name="officely-react" type="462c0819:PsiDirectoryNode" />
-              <item name="node_modules" type="462c0819:PsiDirectoryNode" />
-              <item name="@brainhubeu" type="462c0819:PsiDirectoryNode" />
-              <item name="react-carousel" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="officely-react" type="b2602c69:ProjectViewProjectNode" />
-              <item name="officely-react" type="462c0819:PsiDirectoryNode" />
-              <item name="node_modules" type="462c0819:PsiDirectoryNode" />
-              <item name="@brainhubeu" type="462c0819:PsiDirectoryNode" />
-              <item name="react-carousel" type="462c0819:PsiDirectoryNode" />
-              <item name="lib" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="officely-react" type="b2602c69:ProjectViewProjectNode" />
@@ -320,7 +315,8 @@
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="settings.editor.selected.configurable" value="reference.settings.ide.settings.web.browsers" />
+    <property name="settings.editor.selected.configurable" value="preferences.sourceCode.JavaScript" />
+    <property name="ts.external.directory.path" value="C:\Program Files\JetBrains\WebStorm 2019.1.3\plugins\JavaScriptLanguage\jsLanguageServicesImpl\external" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -380,11 +376,14 @@
       <workItem from="1569828594070" duration="2712000" />
       <workItem from="1569912390935" duration="5089000" />
       <workItem from="1570006676542" duration="5110000" />
+      <workItem from="1570432742564" duration="1878000" />
+      <workItem from="1571034223326" duration="16447000" />
+      <workItem from="1571120059081" duration="12990000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="328552000" />
+    <option name="totallyTimeSpent" value="359867000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="1912" y="-8" width="1874" height="1096" extended-state="6" />
@@ -403,7 +402,8 @@
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.50054467" side_tool="true" weight="0.29595014" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="10" sideWeight="0.49945533" visible="true" weight="0.29595014" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="10" sideWeight="0.49945533" visible="true" weight="0.15680166" />
+      <window_info anchor="bottom" id="TypeScript" order="11" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -413,9 +413,6 @@
     <option name="version" value="1" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/build/asset-manifest.json" />
-    <entry file="file://$PROJECT_DIR$/build/static/js/main.28647029.chunk.js" />
-    <entry file="file://$PROJECT_DIR$/build/static/js/2.b41502e9.chunk.js" />
     <entry file="file://$PROJECT_DIR$/build/service-worker.js" />
     <entry file="file://$PROJECT_DIR$/package-lock.json">
       <provider selected="true" editor-type-id="text-editor" />
@@ -460,13 +457,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Components/FormElements/NumberSelector.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1003">
-          <caret line="59" lean-forward="true" selection-end-line="83" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Components/functions/groupBy.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="119">
@@ -485,13 +475,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
           <caret line="15" column="35" selection-start-line="15" selection-start-column="35" selection-end-line="15" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Components/FormElements/Orderby.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="199">
-          <caret line="64" column="69" selection-start-line="64" selection-start-column="69" selection-end-line="64" selection-end-column="69" />
         </state>
       </provider>
     </entry>
@@ -549,13 +532,6 @@
     <entry file="file://$PROJECT_DIR$/src/Components/functions/fetchAPI.js">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external/react.d.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="268">
-          <caret line="298" column="24" selection-start-line="298" selection-start-column="23" selection-end-line="298" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Components/functions/ArrayFindPolyfill.js" />
     <entry file="file://$PROJECT_DIR$/src/Components/ReadMore.js">
       <provider selected="true" editor-type-id="text-editor">
@@ -585,122 +561,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/App.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="7055">
-          <caret line="422" column="61" selection-start-line="422" selection-start-column="61" selection-end-line="422" selection-end-column="61" />
-          <folding>
-            <element signature="e#55#104#0" expanded="true" />
-            <element signature="e#312#383#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Components/FormElements/SearchInput.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="952">
           <caret line="56" column="38" selection-start-line="56" selection-start-column="38" selection-end-line="56" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Components/FormElements/CitySelector.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="833">
-          <caret line="51" column="20" selection-start-line="51" selection-start-column="20" selection-end-line="51" selection-end-column="20" />
-          <folding>
-            <element signature="e#0#39#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Components/FormElements/OfficeFacilities.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="748">
-          <caret line="44" column="156" selection-start-line="44" selection-start-column="156" selection-end-line="44" selection-end-column="204" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Components/FormElements/PeriodSelector.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2720">
-          <caret line="163" column="13" selection-start-line="163" selection-start-column="13" selection-end-line="163" selection-end-column="13" />
-          <folding>
-            <element signature="e#0#39#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Components/FormElements/PriceRange.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1445">
-          <caret line="88" column="72" selection-start-line="88" selection-start-column="72" selection-end-line="88" selection-end-column="72" />
-          <folding>
-            <element signature="e#12#51#0" expanded="true" />
-            <element signature="e#171#224#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Components/ShareBtn.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="258">
-          <caret line="23" selection-start-line="23" selection-end-line="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Components/SinglePost.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="199">
-          <caret line="118" column="34" selection-start-line="118" selection-start-column="24" selection-end-line="118" selection-end-column="34" />
-          <folding>
-            <element signature="e#12#51#0" expanded="true" />
-            <element signature="e#179#213#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Components/FilterForm.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="239">
-          <caret line="37" selection-start-line="37" selection-end-line="37" />
-          <folding>
-            <element signature="e#0#39#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Components/FormElements/OfficeTypes.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="18" column="5" selection-start-line="18" selection-start-column="5" selection-end-line="18" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Components/FormElements/IndustrySelector.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="424">
-          <caret line="99" column="104" selection-start-line="99" selection-start-column="104" selection-end-line="99" selection-end-column="104" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Components/functions/formatNumber.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="19" selection-end-line="20" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Components/functions/formatTitle.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="27" selection-start-line="5" selection-start-column="27" selection-end-line="5" selection-end-column="27" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Components/FormElements/RadioSelect.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="6" selection-start-line="2" selection-end-line="3" />
         </state>
       </provider>
     </entry>
@@ -711,13 +575,173 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/Components/ShareBtn.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="391">
+          <caret line="23" selection-start-line="23" selection-end-line="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Components/functions/formatTitle.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="5" column="27" selection-start-line="5" selection-start-column="27" selection-end-line="5" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Components/functions/formatNumber.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="19" selection-end-line="20" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Components/FormElements/NumberSelector.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="40" column="9" selection-start-line="40" selection-start-column="9" selection-end-line="40" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Components/FormElements/CitySelector.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="298">
+          <caret line="103" column="42" selection-start-line="103" selection-start-column="42" selection-end-line="103" selection-end-column="42" />
+          <folding>
+            <element signature="e#0#39#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/lib/platform-impl.jar!/resources/html5-schema/html5/block.rnc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="262">
+          <caret line="248" column="16" selection-start-line="248" selection-start-column="16" selection-end-line="248" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/nouislider-react/index.d.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="17" column="21" lean-forward="true" selection-start-line="17" selection-start-column="21" selection-end-line="17" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Components/FormElements/IndustrySelector.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1683">
+          <caret line="99" column="104" selection-start-line="99" selection-start-column="104" selection-end-line="99" selection-end-column="104" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Components/FormElements/OfficeTypes.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="612">
+          <caret line="36" selection-start-line="36" selection-end-line="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Components/FormElements/PriceRange.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="20" column="21" selection-start-line="20" selection-start-column="12" selection-end-line="20" selection-end-column="21" />
+          <folding>
+            <element signature="e#12#51#0" expanded="true" />
+            <element signature="e#171#224#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/Components/OfficePostListItem.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="79" column="52" selection-start-line="79" selection-start-column="52" selection-end-line="79" selection-end-column="52" />
+        <state relative-caret-position="-817">
+          <caret line="69" column="13" selection-start-line="69" selection-start-column="13" selection-end-line="69" selection-end-column="13" />
           <folding>
             <element signature="e#12#51#0" expanded="true" />
             <element signature="e#219#271#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Components/FormElements/Orderby.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="425">
+          <caret line="64" column="61" selection-start-line="64" selection-start-column="61" selection-end-line="64" selection-end-column="61" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Components/FormElements/OfficeFacilities.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-202">
+          <caret line="38" column="69" selection-start-line="38" selection-start-column="69" selection-end-line="38" selection-end-column="69" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Components/FormElements/RadioSelect.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="50" column="11" selection-start-line="50" selection-start-column="11" selection-end-line="50" selection-end-column="11" />
+          <folding>
+            <element signature="e#0#39#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external/react.d.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="262">
+          <caret line="457" column="8" selection-start-line="457" selection-start-column="8" selection-end-line="457" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Components/SinglePost.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="887">
+          <caret line="426" column="57" selection-start-line="426" selection-start-column="57" selection-end-line="426" selection-end-column="57" />
+          <folding>
+            <element signature="e#12#51#0" expanded="true" />
+            <element signature="e#179#213#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/App.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2329">
+          <caret line="361" column="74" selection-start-line="361" selection-start-column="74" selection-end-line="361" selection-end-column="74" />
+          <folding>
+            <element signature="e#55#104#0" expanded="true" />
+            <element signature="e#312#383#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Components/FormElements/CheckboxSelect.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="422">
+          <caret line="122" column="119" selection-start-line="122" selection-start-column="119" selection-end-line="122" selection-end-column="119" />
+          <folding>
+            <element signature="e#0#39#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Components/FilterForm.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="397">
+          <caret line="236" column="55" selection-start-line="236" selection-start-column="55" selection-end-line="236" selection-end-column="55" />
+          <folding>
+            <element signature="e#0#39#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Components/FormElements/PeriodSelector.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="257">
+          <caret line="233" column="47" selection-start-line="233" selection-start-column="47" selection-end-line="233" selection-end-column="47" />
+          <folding>
+            <element signature="e#0#39#0" expanded="true" />
           </folding>
         </state>
       </provider>

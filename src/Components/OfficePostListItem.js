@@ -18,6 +18,7 @@ class OfficePostListItem extends Component {
         this.state = {
             favourited: ('favourited' in this.props.post) ? this.props.post.favourited : false,
             currentSlide: 0,
+            showCowork: false,
         };
 
         this.handleLinkClick = this.handleLinkClick.bind(this);
@@ -58,18 +59,27 @@ class OfficePostListItem extends Component {
         )
     }
 
+    toggleShowCowork = () => {
+        this.setState({
+            showCowork: !this.state.showCowork
+        })
+    };
+
     onCarouselChange = value => this.setState({ currentSlide: parseInt(value) });
 
     render(){
         const offices = this.props.offices || [];
 
-        const coworkBanner = (cowork) => {
+        const coworkBanner = (cowork, text) => {
             if(cowork === true || cowork === "1"){
                 return (
                     <div className={"cowork-banner"}>
                         <span className="title">
-                            Udlejer er interesseret i <u>co-working</u>
+                            Udlejer er interesseret i <u onMouseEnter={this.toggleShowCowork} onMouseLeave={this.toggleShowCowork}>co-working <span className={"icon icomoon icon-info"}/></u>
                         </span>
+                        <div className={`office-cowork-text ` + (this.state.showCowork ? 'open' : 'closed')}>
+                            {text}
+                        </div>
                     </div>
                 )
             }
@@ -77,11 +87,13 @@ class OfficePostListItem extends Component {
         const post = this.props.post;
         const handleOnDragStart = e => e.preventDefault();
         let gallery = null;
-        if(post.gallery && post.gallery.length > 0){
+        if(post.gallery && post.gallery.length > 1){
             gallery = <React.Fragment>
                     <Carousel
-                        infinite={false}
-                        dots
+                        infinite={true}
+                        arrowLeft={<span className="slide-arrow slide-prev icon icomoon icon-arrow-left" />}
+                        arrowRight={<span className="slide-arrow slide-next icon icomoon icon-arrow-right" />}
+                        addArrowClickHandler
                         offset={0}
                         value={this.state.currentSlide}
                         onChange={this.onCarouselChange}
@@ -155,7 +167,7 @@ class OfficePostListItem extends Component {
                             ): ''}
                         </div>
                     </div>
-                    {coworkBanner(post.office_cowork)}
+                    {coworkBanner(post.office_cowork, post.office_cowork_text)}
                 </article>
 
             </React.Fragment>

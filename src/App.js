@@ -10,7 +10,6 @@ import OfficePostList from './Components/OfficePostList';
 // Packages
 import { BrowserRouter as Router, Route, Link} from 'react-router-dom';
 import {Redirect} from 'react-router-dom';
-import {withRouter} from 'react-router-dom';
 import {Switch} from "react-router-dom";
 
 // functions
@@ -21,12 +20,49 @@ import groupBy from './Components/functions/groupBy';
 const AbortController = window.AbortController;
 
 class App extends Component {
-  API_URL = process.env.REACT_APP_API_URL;
-  OFFICE_URL = process.env.REACT_APP_OFFICE_URL;
+    API_URL = process.env.REACT_APP_API_URL;
+    OFFICE_URL = process.env.REACT_APP_OFFICE_URL;
 
-  constructor(props) {
+    constructor(props) {
         super(props);
+        this.initialFilter = {
+            // type filter
+            chosenType: 'all',
+            chosenTypeText: 'Alle typer',
 
+            // capacity filter
+            capacity: 1,
+
+            // Cowork filter
+            coworkChecked: false,
+
+            // Price slider
+            priceChanged: false,
+
+            // Orderby
+            orderbyKey: 'price_asc',
+            orderbyTitle: 'Pris lav til høj',
+
+            // Period
+            selectedPeriod: {
+                period: false,
+                startDate: false,
+                endDate: false
+            },
+
+            // Industries
+            selectedIndustry: [],
+
+            // Locations
+            selectedLocations: [],
+
+            // Facilities filter
+            chosenFacilities: [],
+            chosenFacilitiesText: 'Vælg faciliteter',
+            chosenFacilitiesDefaultText: 'Vælg faciliteter',
+
+
+        };
         this.state = {
             filterDataLoaded: false,
             // User
@@ -47,56 +83,29 @@ class App extends Component {
             loadedAll: false,
             postCount: 0,
 
-            // type filter
-            officeTypes: [],
-            chosenType: 'all',
-            chosenTypeText: 'Alle typer',
-            showOfficeType: false,
-
-            // capacity filter
-            capacity: 1,
-
             // Facilities filter
             officeFacilities: [],
-            chosenFacilities: [],
-            chosenFacilitiesText: 'Vælg faciliteter',
-            chosenFacilitiesDefaultText: 'Vælg faciliteter',
-            showOfficeFacilities: false,
 
+            // type filter
+            officeTypes: [],
 
-            // Cowork filter
-            coworkChecked: false,
+            // Locations
+            officeLocations: [],
 
+            // Industries
+            officeIndustries: [],
 
             // Price slider
             minPrice: 0,
             maxPrice: 10000,
-            minPriceDisplay: 0,
-            maxPriceDisplay: 0,
-            priceChanged: false,
-            showOfficePrice: false,
-
-            // Orderby
-            orderbyKey: 'price_asc',
-            orderbyTitle: 'Pris lav til høj',
-            showOrderby: false,
-
-            // Cities
-            cities: [],
-
-            // Period
-            selectedPeriod: false,
-
-            // Industries
-            officeIndustries: [],
-            selectedIndustry: {id: 0},
-
-            // Locations
-            officeLocations: [],
-            selectedLocations: [],
+            minPriceDefault: 0,
+            maxPriceDefault: 10000,
+            // minPriceDisplay: 0,
+            // maxPriceDisplay: 0,
 
             // test redirect from outside react
             redirect: false,
+            ...this.initialFilter
         };
         this.periods = [
             {
@@ -125,26 +134,25 @@ class App extends Component {
             }
         ];
         if(AbortController){
-
+            this.fetchController = new AbortController();
+            this.signal = this.fetchController.signal;
         }
-        this.fetchController = new AbortController();
-        this.signal = this.fetchController.signal;
 
-    this.getOffices = this.getOffices.bind(this);
-    this.getData = this.getData.bind(this);
-    this.getOfficeFacilities = this.getOfficeFacilities.bind(this);
-    this.getOfficeTypes = this.getOfficeTypes.bind(this);
-    this.getOfficeLocations = this.getOfficeLocations.bind(this);
-    this.getPostBySlug = this.getPostBySlug.bind(this);
-    this.updateFilterValue = this.updateFilterValue.bind(this);
-    this.updateParentState = this.updateParentState.bind(this);
-    this.scrollReached = this.scrollReached.bind(this);
-    this.setListScrollPosition = this.setListScrollPosition.bind(this);
-    this.clearSingleOffice = this.clearSingleOffice.bind(this);
-    this.checkLocalStorageInit = this.checkLocalStorageInit.bind(this);
+        this.getOffices = this.getOffices.bind(this);
+        this.getData = this.getData.bind(this);
+        this.getOfficeFacilities = this.getOfficeFacilities.bind(this);
+        this.getOfficeTypes = this.getOfficeTypes.bind(this);
+        this.getOfficeLocations = this.getOfficeLocations.bind(this);
+        this.getPostBySlug = this.getPostBySlug.bind(this);
+        this.updateFilterValue = this.updateFilterValue.bind(this);
+        this.updateParentState = this.updateParentState.bind(this);
+        this.scrollReached = this.scrollReached.bind(this);
+        this.setListScrollPosition = this.setListScrollPosition.bind(this);
+        this.clearSingleOffice = this.clearSingleOffice.bind(this);
+        this.checkLocalStorageInit = this.checkLocalStorageInit.bind(this);
 
 
-  }
+    }
 
     componentWillMount() {
         this.checkLocalStorageInit()
@@ -152,7 +160,6 @@ class App extends Component {
 
     componentDidMount() {
         this.getData();
-        //this.getMunicipalities();
     }
 
 
@@ -170,66 +177,6 @@ class App extends Component {
     redirectToArchive = () => {
       this.setState({redirect: true})
     }
-
-
-    getMunicipalities = () => {
-
-            fetch(`https://dawa.aws.dk/kommuner?udenforkommuneinddeling=false`)
-                .then((response) => {
-                    return response.json()
-                })
-                .then(data => {
-                    let filtered = data.map((key) => {
-                        return {
-                            name: key.navn,
-                            regioncode: key.regionskode,
-                            cities: [],
-                            code: key.kode,
-                        };
-                    })
-
-                    return this.setState({
-                        municipalities: filtered,
-                    });
-
-                }).then( data => {
-                    this.getCities();
-                })
-                .catch(error => {
-                    console.error("Error when fetching: ", error);
-                })
-    };
-    getCities = () => {
-        fetch(`https://dawa.aws.dk/supplerendebynavne2`)
-            .then((response) => {
-                return response.json()
-            })
-            .then(data => {
-                let filtered = data.map( (key) => {
-                    return {
-                        name: key.navn,
-                        municipalitycode: key.kommune.kode,
-                        postcode: key.postnumre[0].nr,
-                    }
-                });
-                let grouped = groupBy(filtered, "municipalitycode");
-                let municipalities = this.state.municipalities;
-                municipalities.forEach( (val, i) => {
-                    let munCode = val.code;
-                    if(grouped[munCode] !== undefined){
-                        municipalities[i].cities = grouped[munCode];
-                    }
-                });
-
-                this.setState({
-                    municipalities: municipalities
-                });
-            })
-
-            .catch(error => {
-                console.error("Error when fetching: ", error);
-            })
-    };
 
 
     checkLocalStorageInit() {
@@ -261,7 +208,7 @@ class App extends Component {
     }
 
     getData(){
-       Promise.all([
+        Promise.all([
             this.getOfficeLocations(),
             this.getOfficeTypes(),
             this.getOfficeFacilities(),
@@ -349,7 +296,7 @@ class App extends Component {
     getPostBySlug(slug){
         this.setState({
             post: {},
-        })
+        });
           // check if post is already in our state
         let maybePost = this.state.offices.find(function(el){
           return el.post_name === slug;
@@ -359,16 +306,13 @@ class App extends Component {
             this.setState({
                 post: maybePost,
             });
-
         }
 
-
-            console.log('fetching post from getPostBySlug - slug: '+slug)
-          fetch(`${this.API_URL}officely/v2/office/${slug}`)
+        console.log('fetching post from getPostBySlug - slug: '+slug);
+        fetch(`${this.API_URL}officely/v2/office/${slug}`)
               .then((response) => {
                       return response.json()
-                  }
-              )
+              })
               .then(data => {
                   if(data){
                       this.setState({
@@ -376,14 +320,13 @@ class App extends Component {
                           noOffices: !data.length
                       });
                   }
-
               })
               .catch(error => {
                   console.error("Error when fetching: ", error);
               });
-      }
+    }
 
-  getOffices(more = false){
+    getOffices(more = false){
         this.fetchController.abort();
         this.fetchController = new AbortController();
         this.signal = this.fetchController.signal;
@@ -415,11 +358,11 @@ class App extends Component {
             queryParts.push('capacity='+this.state.capacity);
         }
 
-        if(this.state.selectedIndustry !== false && 'id' in this.state.selectedIndustry){
-            queryParts.push('office_industry='+this.state.selectedIndustry.id);
+        if(this.state.selectedIndustry !== false && this.state.selectedIndustry !== 0 && this.state.selectedIndustry.length){
+            queryParts.push('office_industry='+this.state.selectedIndustry);
         }
 
-        if(this.state.selectedPeriod !== false){
+        if(this.state.selectedPeriod !== false && this.state.selectedPeriod.startDate !== false){
             let period = this.state.selectedPeriod.period.id;
             let start = this.state.selectedPeriod.startDate.toISOString();
             let end = this.state.selectedPeriod.endDate.toISOString();
@@ -437,8 +380,9 @@ class App extends Component {
         console.log(`route: ${this.API_URL}${query}`);
         return fetch(`${this.API_URL}${query}`,
             {
-                signal: this.signal,
-            })
+                    signal: this.signal,
+                }
+            )
             .then((response) => {
                     this.checkStatus(response);
                     return response.json()
@@ -482,31 +426,42 @@ class App extends Component {
                 }
             })
             .catch(error => {
-              console.error("Error when fetching: ", error);
+                console.error("Error when fetching: ", error);
             })
-  };
+    };
 
 
-      updateParentState(key, val){
-          this.setState({
-              [key]: val,
-          });
-      }
+    updateParentState(key, val){
+        this.setState({
+            [key]: val,
+        });
+    }
 
-      updateFilterValue(obj){
-          console.log('updateFilterValue - trigger getOffices', obj)
-          /*let newOptions = this.state.chosenFilter;
-          for (const [key, value] of Object.entries(obj)) {
-              newOptions[key] = value;
-          }*/
-          // TODO: create a single object in state to run filters on. Use key value to set query parameters in fetch.
+    updateFilterValue(obj){
+        console.log(this.initialFilter.chosenFacilities);
+        console.log('updateFilterValue - trigger getOffices', obj)
+        console.log(this.initialFilter.chosenFacilities);
+        /*let newOptions = this.state.chosenFilter;
+        for (const [key, value] of Object.entries(obj)) {
+        newOptions[key] = value;
+        }*/
+        // TODO: create a single object in state to run filters on. Use key value to set query parameters in fetch.
 
-          this.setState(
-              obj, () => {
-              this.getOffices();
-          });
-      }
-
+        this.setState(
+            obj, () => {
+                this.getOffices();
+            }
+        );
+    }
+    clearFilter = () => {
+        console.log('running clearFilter');
+        console.log(this.initialFilter.chosenFacilities);
+        this.setState(
+            this.initialFilter, () => {
+                this.getOffices();
+            }
+        )
+    };
 
     scrollReached(el, buffer) {
         if(!el){
@@ -536,127 +491,130 @@ class App extends Component {
             post: {},
         });
     }
-  render(){
-    if(this.state.filterDataLoaded === false){
-        return <Loader/>
-    }
-    let officeList;
-    if(this.state.postsLoading === true){
-        officeList = ( <Loader />);
-    } else if(this.state.offices.length){
-        // TODO: move all "loading" logik to PostList so entire component does not reMount when filter is changed.
-        officeList = (
-            <React.Fragment>
-                <OfficePostList
-                    loadingMore={this.state.loadingMore}
-                    offices={this.state.offices}
-                    listScrolled={this.state.listScrolled}
-                    trackScrolling={this.trackScrolling}
-                    scrollReached={this.scrollReached}
-                    setListScrollPosition={this.setListScrollPosition}
-                    user={this.state.user}
-                />
-
-            </React.Fragment>
-        )
-    } else {
-        officeList = ( <NoPosts/>);
-    };
-
-    return (
-        <div className={"app bbh-inner-section "+ (this.state.filterDataLoaded === true ? 'all-loaded' : '')} id={"office-app"}>
-          <Router>
-              {this.state.redirect &&
-                <Redirect to={"/office"} to={{
-                    pathname: '/office',
-                    state: {redirect: false}
-                }}/>
-              }
-              <Switch>
-
-              <Route exact path={this.OFFICE_URL} render={() =>
+    render(){
+        if(this.state.filterDataLoaded === false){
+            return <Loader/>
+        }
+        let officeList;
+        if(this.state.postsLoading === true){
+            officeList = ( <Loader />);
+        } else if(this.state.offices.length){
+            // TODO: move all "loading" logic to PostList so entire component does not reMount when filter is changed.
+            officeList = (
                 <React.Fragment>
-                    <FilterForm
-                        // methods
-                        updateFilterValue={this.updateFilterValue}
-                        updateParentState={this.updateParentState}
-
-                        // post data
-                        postsLoading={this.state.postsLoading}
-                        postCount={this.state.postCount}
-                        filterDataLoaded={this.state.filterDataLoaded}
-
-                        // types
-                        officeTypes={this.state.officeTypes}
-                        chosenType={this.state.chosenType}
-                        chosenTypeText={this.state.chosenTypeText}
-                        showOfficeType={this.state.showOfficeType}
-
-                        // capacity
-                        capacity={this.state.capacity}
-
-                        // facilities
-                        officeFacilities={this.state.officeFacilities}
-                        chosenFacilities={this.state.chosenFacilities}
-                        chosenFacilitiesText={this.state.chosenFacilitiesText}
-                        chosenFacilitiesDefaultText={this.state.chosenFacilitiesDefaultText}
-                        showOfficeFacilities={this.state.showOfficeFacilities}
-
-                        // cowork
-                        coworkChecked={this.state.coworkChecked}
-
-                        // price
-                        minPrice={this.state.minPrice}
-                        maxPrice={this.state.maxPrice}
-                        showOfficePrice={this.state.showOfficePrice}
-
-                        // orderby
-                        orderbyKey={this.state.orderbyKey}
-                        orderbyTitle={this.state.orderbyTitle}
-                        showOrderby={this.state.showOrderby}
-
-                        // Periods
-                        periods={this.periods}
-                        selectedPeriod={this.state.selectedPeriod}
-
-                        // Industries
-                        industries={this.state.officeIndustries}
-                        selectedIndustry={this.state.selectedIndustry}
-
-                        // locations
-                        officeLocations={this.state.officeLocations}
-                        selectedLocations={this.state.selectedLocations}
+                    <OfficePostList
+                        loadingMore={this.state.loadingMore}
+                        offices={this.state.offices}
+                        listScrolled={this.state.listScrolled}
+                        trackScrolling={this.trackScrolling}
+                        scrollReached={this.scrollReached}
+                        setListScrollPosition={this.setListScrollPosition}
+                        user={this.state.user}
                     />
-                    <div className="container-fluid">
-                        {officeList}
-                    </div>
+
                 </React.Fragment>
+        )
+        } else {
+            officeList = ( <NoPosts/>);
+        };
 
-              }/>
+        return (
+            <div className={"app bbh-inner-section "+ (this.state.filterDataLoaded === true ? 'all-loaded' : '')} id={"office-app"}>
+                <Router>
+                    {this.state.redirect &&
+                        <Redirect to={"/office"} to={{
+                            pathname: '/office',
+                            state: {redirect: false}
+                        }}/>
+                    }
+                    <Switch>
 
-              <Route exact path={`${this.OFFICE_URL}:slug`}  render={(props) =>
-                  <SinglePost
-                      key={props.match.params.slug}
-                      slug={props.match.params.slug}
-                      post={this.state.post}
-                      getPostBySlug={this.getPostBySlug}
-                      clearSingleOffice={this.clearSingleOffice}
-                      offices={this.state.offices}
-                      // Periods
-                      periods={this.periods}
-                      user={this.state.user}
-                  />
-              }/>
+                        <Route exact path={this.OFFICE_URL} render={() =>
+                            <React.Fragment>
+                                <FilterForm
+                                    // methods
+                                    updateFilterValue={this.updateFilterValue}
+                                    updateParentState={this.updateParentState}
+                                    clearFilter={this.clearFilter}
+
+                                    // post data
+                                    postsLoading={this.state.postsLoading}
+                                    postCount={this.state.postCount}
+                                    filterDataLoaded={this.state.filterDataLoaded}
+
+                                    // types
+                                    officeTypes={this.state.officeTypes}
+                                    chosenType={this.state.chosenType}
+                                    chosenTypeText={this.state.chosenTypeText}
+
+                                    // capacity
+                                    capacity={this.state.capacity}
+
+                                    // facilities
+                                    officeFacilities={this.state.officeFacilities}
+                                    chosenFacilities={this.state.chosenFacilities}
+                                    chosenFacilitiesText={this.state.chosenFacilitiesText}
+                                    chosenFacilitiesDefaultText={this.state.chosenFacilitiesDefaultText}
+
+                                    // cowork
+                                    coworkChecked={this.state.coworkChecked}
+
+                                    // price
+                                    minPrice={this.state.minPrice}
+                                    maxPrice={this.state.maxPrice}
+                                    minPriceDefault={this.state.minPriceDefault}
+                                    maxPriceDefault={this.state.maxPriceDefault}
+                                    priceChanged={this.state.priceChanged}
+
+                                    // orderby
+                                    orderbyKey={this.state.orderbyKey}
+                                    orderbyTitle={this.state.orderbyTitle}
+
+                                    // Periods
+                                    periods={this.periods}
+                                    selectedPeriod={this.state.selectedPeriod}
+
+                                    // Industries
+                                    industries={this.state.officeIndustries}
+                                    selectedIndustry={this.state.selectedIndustry}
+
+                                    // locations
+                                    officeLocations={this.state.officeLocations}
+                                    selectedLocations={this.state.selectedLocations}
 
 
 
-            </Switch>
+                                />
+                                <div className="container-fluid">
+                                    {officeList}
+                                </div>
+                            </React.Fragment>
+
+                        }/>
+
+                        <Route exact path={`${this.OFFICE_URL}:slug`}  render={(props) =>
+                            <SinglePost
+                                key={props.match.params.slug}
+                                slug={props.match.params.slug}
+                                post={this.state.post}
+                                getPostBySlug={this.getPostBySlug}
+                                clearSingleOffice={this.clearSingleOffice}
+                                offices={this.state.offices}
+                                // Periods
+                                periods={this.periods}
+                                user={this.state.user}
+                            />
+                        }/>
 
 
-          </Router>
-        </div>
-    );
-  }
+
+                    </Switch>
+
+
+                </Router>
+            </div>
+        );
+    }
 
 }
 
