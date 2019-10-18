@@ -70,20 +70,31 @@ class OfficePostListItem extends Component {
     render(){
         const offices = this.props.offices || [];
 
-        const coworkBanner = (cowork, text) => {
+        const coworkBanner = (cowork) => {
             if(cowork === true || cowork === "1"){
                 return (
-                    <div className={"cowork-banner"}>
-                        <span className="title">
-                            Udlejer er interesseret i <u onMouseEnter={this.toggleShowCowork} onMouseLeave={this.toggleShowCowork}>co-working <span className={"icon icomoon icon-info"}/></u>
-                        </span>
-                        <div className={`office-cowork-text ` + (this.state.showCowork ? 'open' : 'closed')}>
-                            {text}
+                    <React.Fragment>
+                        <div className={"cowork-banner"} onMouseEnter={this.toggleShowCowork} onMouseLeave={this.toggleShowCowork}>
+                            <span className="title">
+                                Udlejer er interesseret i <u >co-working <span className={"icon icomoon icon-info"}/></u>
+                            </span>
+
                         </div>
-                    </div>
+
+                    </React.Fragment>
                 )
             }
         };
+        const coworkText = (cowork, text) => {
+            if( (cowork === true || cowork === "1" ) && text.length ){
+                return(
+                    <div className={`office-cowork-text ` + (this.state.showCowork ? 'open' : 'closed')}>
+                        {text}
+                    </div>
+                )
+            }
+
+        }
         const post = this.props.post;
         const handleOnDragStart = e => e.preventDefault();
         let gallery = null;
@@ -166,8 +177,10 @@ class OfficePostListItem extends Component {
                                 </div>
                             ): ''}
                         </div>
+                        {coworkText( post.office_cowork, post.office_cowork_text) }
                     </div>
-                    {coworkBanner(post.office_cowork, post.office_cowork_text)}
+                    {coworkBanner(post.office_cowork)}
+
                 </article>
 
             </React.Fragment>

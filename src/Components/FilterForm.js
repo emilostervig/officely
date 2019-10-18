@@ -237,9 +237,9 @@ class FilterForm extends Component {
 								id={"office_industry_filter"}
 								className={"invert-color"}
 							/>
-                            <span className={"clear-form filter-element"} onClick={ () => { this.props.clearFilter() }}>
-                                Ryd søgning
-                            </span>
+                            <div className={"clear-form filter-element"} onClick={ () => { this.props.clearFilter() }}>
+                                <div className="input-wrap"><div className="chosen-value">Ryd søgning</div></div>
+                            </div>
                         </div>
                         <div className="field-wrap bottom-row">
                             <CoWork
