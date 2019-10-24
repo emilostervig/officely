@@ -5,8 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9c6e1259-6001-41ab-84af-ccf9fcedd095" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Components/FilterForm.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/FilterForm.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Components/OfficePostListItem.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/OfficePostListItem.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -19,14 +20,14 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/Components/OfficePostListItem.js">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Components/OfficePostList.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="291">
-              <caret line="80" lean-forward="true" selection-start-line="80" selection-end-line="80" />
+            <state relative-caret-position="224">
+              <caret line="27" column="11" selection-start-line="27" selection-start-column="11" selection-end-line="27" selection-end-column="11" />
               <folding>
                 <element signature="e#12#51#0" expanded="true" />
-                <element signature="e#219#271#0" expanded="true" />
+                <element signature="e#106#160#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -35,8 +36,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/App.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="6035">
-              <caret line="361" column="74" selection-start-line="361" selection-start-column="74" selection-end-line="361" selection-end-column="74" />
+            <state relative-caret-position="309">
+              <caret line="592" column="27" lean-forward="true" selection-start-line="592" selection-start-column="27" selection-end-line="592" selection-end-column="27" />
               <folding>
                 <element signature="e#55#104#0" expanded="true" />
                 <element signature="e#312#383#0" expanded="true" />
@@ -46,12 +47,11 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/Components/FormElements/PeriodSelector.js">
+        <entry file="file://$PROJECT_DIR$/src/App.test.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="257">
-              <caret line="233" column="47" selection-start-line="233" selection-start-column="47" selection-end-line="233" selection-end-column="47" />
+            <state>
               <folding>
-                <element signature="e#0#39#0" expanded="true" />
+                <element signature="e#0#26#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -79,11 +79,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Components/FilterForm.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="244">
-              <caret line="244" column="35" selection-start-line="244" selection-start-column="29" selection-end-line="244" selection-end-column="35" />
+            <state relative-caret-position="394">
+              <caret line="252" column="63" selection-start-line="252" selection-start-column="63" selection-end-line="252" selection-end-column="63" />
               <folding>
                 <element signature="e#0#39#0" expanded="true" />
               </folding>
@@ -94,7 +94,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Components/FormElements/CoWork.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="294">
+            <state relative-caret-position="323">
               <caret line="19" selection-start-line="19" selection-end-line="19" />
             </state>
           </provider>
@@ -144,7 +144,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>addArrowClickHandler</find>
       <find>Galle</find>
       <find>clear-form</find>
       <find>chosenFacilities</find>
@@ -174,6 +173,7 @@
       <find>test</find>
       <find>cowork</find>
       <find>coWork</find>
+      <find>container-fl</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -231,11 +231,11 @@
         <option value="$PROJECT_DIR$/src/Components/FormElements/Orderby.js" />
         <option value="$PROJECT_DIR$/src/Components/FormElements/OfficeFacilities.js" />
         <option value="$PROJECT_DIR$/src/Components/FormElements/RadioSelect.js" />
-        <option value="$PROJECT_DIR$/src/App.js" />
         <option value="$PROJECT_DIR$/src/Components/FormElements/CheckboxSelect.js" />
         <option value="$PROJECT_DIR$/src/Components/FormElements/PeriodSelector.js" />
-        <option value="$PROJECT_DIR$/src/Components/FilterForm.js" />
         <option value="$PROJECT_DIR$/src/Components/OfficePostListItem.js" />
+        <option value="$PROJECT_DIR$/src/App.js" />
+        <option value="$PROJECT_DIR$/src/Components/FilterForm.js" />
       </list>
     </option>
   </component>
@@ -251,7 +251,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -298,6 +297,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -376,12 +376,13 @@
       <workItem from="1570432742564" duration="1878000" />
       <workItem from="1571034223326" duration="16447000" />
       <workItem from="1571120059081" duration="12990000" />
-      <workItem from="1571379769967" duration="2763000" />
+      <workItem from="1571379769967" duration="2786000" />
+      <workItem from="1571639719357" duration="881000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="362630000" />
+    <option name="totallyTimeSpent" value="363534000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="1912" y="-8" width="1874" height="1096" extended-state="6" />
@@ -411,7 +412,6 @@
     <option name="version" value="1" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/build/service-worker.js" />
     <entry file="file://$PROJECT_DIR$/package-lock.json">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -541,17 +541,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Components/OfficePostList.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="25" column="51" selection-start-line="25" selection-start-column="51" selection-end-line="25" selection-end-column="51" />
-          <folding>
-            <element signature="e#12#51#0" expanded="true" />
-            <element signature="e#106#160#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Components/FormElements/SearchInput.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="952">
@@ -650,13 +639,23 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/App.js">
+    <entry file="file://$PROJECT_DIR$/src/Components/OfficePostListItem.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6035">
-          <caret line="361" column="74" selection-start-line="361" selection-start-column="74" selection-end-line="361" selection-end-column="74" />
+        <state relative-caret-position="291">
+          <caret line="80" selection-start-line="80" selection-end-line="80" />
           <folding>
-            <element signature="e#55#104#0" expanded="true" />
-            <element signature="e#312#383#0" expanded="true" />
+            <element signature="e#12#51#0" expanded="true" />
+            <element signature="e#219#271#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Components/FormElements/PeriodSelector.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3910">
+          <caret line="233" column="47" selection-start-line="233" selection-start-column="47" selection-end-line="233" selection-end-column="47" />
+          <folding>
+            <element signature="e#0#39#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -676,6 +675,13 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="646">
           <caret line="38" column="69" selection-start-line="38" selection-start-column="69" selection-end-line="38" selection-end-column="69" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Components/FormElements/CoWork.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="19" selection-start-line="19" selection-end-line="19" />
         </state>
       </provider>
     </entry>
@@ -706,40 +712,43 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Components/FormElements/PeriodSelector.js">
+    <entry file="file://$PROJECT_DIR$/src/Components/OfficePostList.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="257">
-          <caret line="233" column="47" selection-start-line="233" selection-start-column="47" selection-end-line="233" selection-end-column="47" />
+        <state relative-caret-position="224">
+          <caret line="27" column="11" selection-start-line="27" selection-start-column="11" selection-end-line="27" selection-end-column="11" />
           <folding>
-            <element signature="e#0#39#0" expanded="true" />
+            <element signature="e#12#51#0" expanded="true" />
+            <element signature="e#106#160#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/App.test.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/App.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="309">
+          <caret line="592" column="27" lean-forward="true" selection-start-line="592" selection-start-column="27" selection-end-line="592" selection-end-column="27" />
+          <folding>
+            <element signature="e#55#104#0" expanded="true" />
+            <element signature="e#312#383#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Components/FilterForm.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="244">
-          <caret line="244" column="35" selection-start-line="244" selection-start-column="29" selection-end-line="244" selection-end-column="35" />
+        <state relative-caret-position="394">
+          <caret line="252" column="63" selection-start-line="252" selection-start-column="63" selection-end-line="252" selection-end-column="63" />
           <folding>
             <element signature="e#0#39#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Components/FormElements/CoWork.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="294">
-          <caret line="19" selection-start-line="19" selection-end-line="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Components/OfficePostListItem.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="291">
-          <caret line="80" lean-forward="true" selection-start-line="80" selection-end-line="80" />
-          <folding>
-            <element signature="e#12#51#0" expanded="true" />
-            <element signature="e#219#271#0" expanded="true" />
           </folding>
         </state>
       </provider>

@@ -162,7 +162,7 @@ class FilterForm extends Component {
 
             <form id={"office-filter"} className={"office-filter-form"}>
                 <div className="main-form">
-                    <div className="container-fluid office-container">
+                    <div className="container-fluid retina-max office-container">
                         <div className="field-wrap">
 
 
@@ -250,7 +250,7 @@ class FilterForm extends Component {
                     </div>
                 </div>
                 <div className="after-form">
-                    <div className="container-fluid office-container">
+                    <div className="container-fluid retina-max office-container">
                         <div className="field-wrap order">
                             <div className="filter-element">
                                 <h4 className="found-posts">

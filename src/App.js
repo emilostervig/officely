@@ -585,7 +585,7 @@ class App extends Component {
 
 
                                 />
-                                <div className="container-fluid">
+                                <div className="container-fluid retina-max">
                                     {officeList}
                                 </div>
                             </React.Fragment>
