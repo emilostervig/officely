@@ -173,6 +173,32 @@ class App extends Component {
             })
         }
     }
+    getTaxonomyLocalstorage = (key) => {
+        let storageLocations = window.localStorage.getItem(key);
+        if(storageLocations){
+            storageLocations = JSON.parse(storageLocations);
+            let date = storageLocations.time;
+            let now = new Date().getTime();
+            let diff = now - date;
+            diff = Math.floor(diff/1000/60/60/24); // get diff in days
+            if(diff <= 1){ // if data not a too old
+                console.log('got '+key+' from localstorage');
+                this.setState({
+                    [key]: storageLocations.data
+                });
+                return true;
+            }
+        } else{
+            return false;
+        }
+    }
+    setTaxonomyLocalstorage = (key, data) => {
+        let storageObj = {
+            time: new Date().getTime(),
+            data: data
+        };
+        window.localStorage.setItem(key, JSON.stringify(storageObj));
+    }
 
     redirectToArchive = () => {
       this.setState({redirect: true})
@@ -226,6 +252,10 @@ class App extends Component {
     }
 
     getOfficeLocations(){
+        let getFromStorage = this.getTaxonomyLocalstorage('officeLocations');
+        if(getFromStorage){
+            return getFromStorage;
+        }
         console.log(`${this.API_URL}wp/v2/office_location?per_page=99`);
         return fetch(`${this.API_URL}wp/v2/office_location?per_page=99`)
             .then((response) => {
@@ -233,6 +263,7 @@ class App extends Component {
                 return response.json()
             })
             .then(data => {
+                this.setTaxonomyLocalstorage('officeLocations', data);
                 this.setState({
                     officeLocations: data
                 });
@@ -243,6 +274,10 @@ class App extends Component {
     };
 
     getOfficeFacilities(){
+        let getFromStorage = this.getTaxonomyLocalstorage('officeFacilities');
+        if(getFromStorage){
+            return getFromStorage;
+        }
         console.log(`${this.API_URL}wp/v2/office_facilities?per_page=99`);
         return fetch(`${this.API_URL}wp/v2/office_facilities?per_page=99`)
             .then((response) => {
@@ -250,6 +285,7 @@ class App extends Component {
                 return response.json()
             })
             .then(data => {
+                this.setTaxonomyLocalstorage('officeFacilities', data);
                 this.setState({
                     officeFacilities: data
                 });
@@ -259,6 +295,10 @@ class App extends Component {
             })
     };
     getOfficeTypes(){
+        let getFromStorage = this.getTaxonomyLocalstorage('officeTypes');
+        if(getFromStorage){
+            return getFromStorage;
+        }
         return fetch(`${this.API_URL}wp/v2/office_type?per_page=99`)
             .then((response) => {
                     this.checkStatus(response);
@@ -266,6 +306,7 @@ class App extends Component {
                 }
             )
             .then(data => {
+                this.setTaxonomyLocalstorage('officeTypes', data);
                 this.setState({
                     officeTypes: data
                 });
@@ -276,6 +317,10 @@ class App extends Component {
     };
 
     getOfficeIndustries = () => {
+        let getFromStorage = this.getTaxonomyLocalstorage('officeIndustries');
+        if(getFromStorage){
+            return getFromStorage;
+        }
         return fetch(`${this.API_URL}wp/v2/office_industry?per_page=99`)
             .then((response) => {
                     this.checkStatus(response);
@@ -283,6 +328,7 @@ class App extends Component {
                 }
             )
             .then(data => {
+                this.setTaxonomyLocalstorage('officeIndustries', data);
                 this.setState({
                     officeIndustries: data
                 });
@@ -529,7 +575,7 @@ class App extends Component {
                     }
                     <Switch>
 
-                        <Route exact path={this.OFFICE_URL} render={() =>
+                        <Route exact path={[this.OFFICE_URL, `${this.OFFICE_URL}page/2/`]} render={() =>
                             <React.Fragment>
                                 <FilterForm
                                     // methods

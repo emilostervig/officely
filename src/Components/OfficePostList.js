@@ -47,7 +47,6 @@ class OfficePostList extends Component {
         let scrolled = window.pageYOffset || (document.documentElement || document.body.parentNode || document.body).scrollTop;
         if(this.props.setListScrollPosition){
             this.props.setListScrollPosition(scrolled);
-
         }
     }
 

@@ -26,7 +26,7 @@ class OfficePostListItem extends Component {
 
 
     handleLinkClick(e){
-        this.props.postClicked();
+        this.props.postClicked(e);
     }
 
     toggleFavoutite = () => {
@@ -113,9 +113,9 @@ class OfficePostListItem extends Component {
                         {post.gallery.slice(0,5).map( (el,i) => {
                             let slide;
                             if(i === 0){
-                                slide = <Link to={post.post_link} key={`${post.ID}_${i}`} className={"slide"} style={{backgroundImage: "url("+el+")"}} onDragStart={handleOnDragStart}/>
+                                slide = <Link to={post.post_link} onClick={this.handleLinkClick} key={`${post.ID}_${i}`} className={"slide"} style={{backgroundImage: "url("+el+")"}} onDragStart={handleOnDragStart}/>
                             } else{
-                                slide = <Link to={post.post_link} key={`${post.ID}_${i}`} className={"slide lazyload"} data-bgset={el} onDragStart={handleOnDragStart}/>
+                                slide = <Link to={post.post_link} onClick={this.handleLinkClick} key={`${post.ID}_${i}`} className={"slide"} style={{backgroundImage: "url("+el+")"}} onDragStart={handleOnDragStart}/>
                             }
                             return slide;
                         })}
