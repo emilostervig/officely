@@ -3,6 +3,7 @@ import React, {Component} from 'react';
 // Components
 import SinglePost from './Components/SinglePost';
 import FilterForm from './Components/FilterForm';
+import ShortFilter from './Components/ShortFilter'
 import Loader from './Components/Loader';
 import NoPosts from './Components/NoPosts';
 import OfficePostList from './Components/OfficePostList';
@@ -177,8 +178,8 @@ class App extends Component {
         let storageLocations = window.localStorage.getItem(key);
         if(storageLocations){
             storageLocations = JSON.parse(storageLocations);
-            let date = storageLocations.time;
             let now = new Date().getTime();
+            let date = storageLocations.time;
             let diff = now - date;
             diff = Math.floor(diff/1000/60/60/24); // get diff in days
             if(diff <= 1){ // if data not a too old
@@ -187,6 +188,8 @@ class App extends Component {
                     [key]: storageLocations.data
                 });
                 return true;
+            } else{
+                window.localStorage.removeItem(key);
             }
         } else{
             return false;
@@ -207,9 +210,13 @@ class App extends Component {
 
     checkLocalStorageInit() {
         let storage = JSON.parse(sessionStorage.getItem('officeFilter'));
-
+        console.log(storage)
         if(storage){
+            console.log('found settings in localStorage');
             let changes = {};
+            if(storage.locations){
+                changes.selectedLocations = storage.locations;
+            }
             if(storage.capacity){
                 changes.capacity = storage.capacity;
             }
@@ -233,13 +240,52 @@ class App extends Component {
         }
     }
 
+    handleOfficesQueryData = (data, more = false) => {
+        if(!data.posts.length){
+            let stateObj = {
+                postsLoading: false,
+                loadedAll: true,
+                loadingMore: false,
+            };
+            if(more === false) {
+                stateObj = {
+                    ...stateObj,
+                    noOffices: true,
+                    offices: data.posts,
+                    postCount: data.foundPosts,
+
+                }
+            }
+            this.setState(stateObj)
+            return true;
+        } else{
+            let stateObj = {
+                noOffices: !data.posts.length,
+                postsLoading: false,
+                offices: data.posts,
+                loadedAll: false,
+                loadingMore: false,
+                postCount: data.foundPosts,
+            };
+            if(more === true){
+                stateObj = {
+                    ...stateObj,
+                    offices: this.state.offices.concat(data.posts),
+                    noOffices: false,
+                };
+            }
+            this.setState(stateObj);
+            return true;
+        }
+    }
+
     getData(){
         Promise.all([
             this.getOfficeLocations(),
             this.getOfficeTypes(),
             this.getOfficeFacilities(),
             this.getOfficeIndustries(),
-            this.getOffices(),
+            //this.getOffices(),
         ]).then(() => {
             this.setState({
                 filterDataLoaded: true,
@@ -352,8 +398,8 @@ class App extends Component {
             this.setState({
                 post: maybePost,
             });
+            return true;
         }
-
         console.log('fetching post from getPostBySlug - slug: '+slug);
         fetch(`${this.API_URL}officely/v2/office/${slug}`)
               .then((response) => {
@@ -421,8 +467,22 @@ class App extends Component {
         }
         // add order
         queryParts.push('officeorder='+this.state.orderbyKey);
+        queryParts = queryParts.join('&');
 
-        let query = queryBase + queryParts.join('&');
+        let storageOffices = JSON.parse(window.localStorage.getItem(queryParts));
+        let now = new Date().getTime();
+        if(storageOffices){
+            let date = storageOffices.time;
+            let diff = now - date;
+            diff = Math.floor(diff/1000/60/60/24); // get diff in days
+            if(diff < 1){
+                console.log('getting offices from localstorage');
+                return this.handleOfficesQueryData(storageOffices.data, more);
+            } else{
+                window.localStorage.removeItem(queryParts);
+            }
+        }
+        let query = queryBase + queryParts;
         console.log(`route: ${this.API_URL}${query}`);
         return fetch(`${this.API_URL}${query}`,
             {
@@ -436,40 +496,14 @@ class App extends Component {
             )
             .then(data => {
                 console.log(data);
-                if(!data.posts.length){
-                    let stateObj = {
-                        postsLoading: false,
-                        loadedAll: true,
-                        loadingMore: false,
-                    };
-                    if(more === false) {
-                        stateObj = {
-                            ...stateObj,
-                            noOffices: true,
-                            offices: data.posts,
-                            postCount: data.foundPosts,
+                this.handleOfficesQueryData(data, more);
+                console.log('setting localstorage posts after REST')
+                let storageObject = {
+                    time: now,
+                    data: data
+                };
+                window.localStorage.setItem(queryParts, JSON.stringify(storageObject));
 
-                        }
-                    }
-                    this.setState(stateObj)
-                } else{
-                    let stateObj = {
-                        noOffices: !data.posts.length,
-                        postsLoading: false,
-                        offices: data.posts,
-                        loadedAll: false,
-                        loadingMore: false,
-                        postCount: data.foundPosts,
-                    };
-                    if(more === true){
-                        stateObj = {
-                            ...stateObj,
-                            offices: this.state.offices.concat(data.posts),
-                            noOffices: false,
-                        };
-                    }
-                    this.setState(stateObj);
-                }
             })
             .catch(error => {
                 console.error("Error when fetching: ", error);
@@ -478,9 +512,15 @@ class App extends Component {
 
 
     updateParentState(key, val){
-        this.setState({
-            [key]: val,
-        });
+        if(typeof key === 'object' && key !== null){
+            // passing an object to change;
+            this.setState(key);
+        } else{
+            this.setState({
+                [key]: val,
+            });
+        }
+
     }
 
     updateFilterValue(obj){
@@ -575,13 +615,14 @@ class App extends Component {
                     }
                     <Switch>
 
-                        <Route exact path={[this.OFFICE_URL, `${this.OFFICE_URL}page/2/`]} render={() =>
+                        <Route exact path={[this.OFFICE_URL, `${this.OFFICE_URL}page/**/`]} render={() =>
                             <React.Fragment>
                                 <FilterForm
                                     // methods
                                     updateFilterValue={this.updateFilterValue}
                                     updateParentState={this.updateParentState}
                                     clearFilter={this.clearFilter}
+                                    getOffices={this.getOffices}
 
                                     // post data
                                     postsLoading={this.state.postsLoading}
@@ -651,6 +692,33 @@ class App extends Component {
                                 user={this.state.user}
                             />
                         }/>
+                        <Route exact path={""} render={() =>
+                            <ShortFilter
+                                // methods
+                                updateFilterValue={this.updateFilterValue}
+                                updateParentState={this.updateParentState}
+                                clearFilter={this.clearFilter}
+
+                                // post data
+                                filterDataLoaded={this.state.filterDataLoaded}
+
+                                // types
+                                officeTypes={this.state.officeTypes}
+                                chosenType={this.state.chosenType}
+                                chosenTypeText={this.state.chosenTypeText}
+
+                                // capacity
+                                capacity={this.state.capacity}
+
+                                // cowork
+                                coworkChecked={this.state.coworkChecked}
+
+                                // locations
+                                officeLocations={this.state.officeLocations}
+                                selectedLocations={this.state.selectedLocations}
+
+                                />
+                        } />
 
 
 

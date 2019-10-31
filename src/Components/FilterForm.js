@@ -34,6 +34,12 @@ class FilterForm extends Component {
         this.handleCoWorkChange = this.handleCoWorkChange.bind(this);
 
     }
+    componentDidMount() {
+        if(this.props.postCount == 0){
+            this.props.getOffices();
+        }
+    }
+
     componentWillMount() {
 
     }
@@ -183,7 +189,6 @@ class FilterForm extends Component {
                                 officeTypes={this.props.officeTypes}
                                 chosenType={this.props.chosenType}
                                 chosenTypeText={this.props.chosenTypeText}
-                                updateParentState={this.props.updateParentState}
                             />
 
                             <PeriodSelector
