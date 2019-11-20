@@ -1,7 +1,19 @@
 import React, {Component} from 'react';
-import DatePicker from "react-datepicker";
+import DatePicker, {registerLocale} from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
+import initialFilter from "../../Data/initialFilter";
+
+const monthsBG = ['Januar', 'Februar', 'Marts', 'April', 'Maj', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'December'];
+const daysBG = ['man', 'tir', 'ons', 'tor', 'fre', 'lør', 'søn'];
+
+registerLocale('da', {
+    localize: {
+        month: n => monthsBG[n],
+        day: n => daysBG[n]
+    },
+    formatLong:{}
+});
 
 class PeriodSelector extends Component {
     constructor(props) {
@@ -71,7 +83,6 @@ class PeriodSelector extends Component {
     };
 
     handleRadioUpdate = (e) => {
-        console.log(e);
         let el = e.target;
         let id = e.target.value;
         let chosen = this.props.periods.find((i) => {
@@ -98,7 +109,6 @@ class PeriodSelector extends Component {
     };
 
     handleDateChange = (date) => {
-        console.log(date);
         let obj = {
             date: date
         };
@@ -185,6 +195,29 @@ class PeriodSelector extends Component {
         }
     }
 
+    isUsed = () => {
+        let arr1 = initialFilter.selectedPeriod;
+        let arr2 = this.state.selected;
+
+        let aProps = Object.getOwnPropertyNames(arr1);
+        let bProps = Object.getOwnPropertyNames(arr2);
+        // If number of properties is different,
+        // objects are not equivalent
+        if (aProps.length !== bProps.length) {
+            return 'used';
+        }
+
+        for (let i = 0; i < aProps.length; i++) {
+            const propName = aProps[i];
+            // If values of same property are not equal,
+            // objects are not equivalent
+            if (arr1[propName] != arr2[propName]) {
+                return 'used';
+            }
+        }
+        return 'not-used';
+    }
+
     render(){
         let periodsMarkup = '';
         let comp = this;
@@ -218,7 +251,7 @@ class PeriodSelector extends Component {
         }
 
         return (
-            <div className="filter-element period-select input-popup type-radio" data-type="radio" ref={node => this.node = node}>
+            <div className={`filter-element period-select input-popup type-radio ${this.isUsed()}`} data-type="radio" ref={node => this.node = node}>
                 <h4 className="filter-heading">
                     Periode
                 </h4>
@@ -230,7 +263,9 @@ class PeriodSelector extends Component {
                     </div>
                 </div>
                 <div className={`input-popup-content ` + (this.state.showPopup ? 'open' : 'closed')+ (this.state.edge === true ? ' edge' : '')} ref={node => this.popupContent = node}>
-                    {periodsMarkup}
+                    <div className={"periods"}>
+                        {periodsMarkup}
+                    </div>
                     <hr className={"divider"}/>
                     <DatePicker
                         inline

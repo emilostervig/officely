@@ -6,8 +6,8 @@ import "nouislider/distribute/nouislider.css";
 // Components
 
 // Functions
-import formatNumber from "../functions/formatNumber";
-import throttle from "../functions/throttle";
+import formatNumber from "../../functions/formatNumber";
+import throttle from "../../functions/throttle";
 
 
 class PriceRange extends Component {
@@ -31,20 +31,18 @@ class PriceRange extends Component {
 
     componentWillMount() {
         document.addEventListener("mousedown", this.handleClick, false);
+        document.addEventListener('clearOfficeFilter', this.onClearFilter, false);
     }
 
     componentWillUnmount() {
         document.removeEventListener('mousedown', this.handleClick, false);
     }
-    componentWillUpdate(nextProps, nextState, nextContext) {
-        if(nextProps.priceChanged !== false){
-            return;
-        }
-        if(nextProps.maxPrice !== this.props.maxPriceDefault || nextProps.minPrice !== this.props.minPriceDefault){
-            this.sliderRef.noUiSlider.set([this.props.minPriceDefault, this.props.maxPriceDefault]);
-            //console.log(this.sliderRef.noUiSlider);
-        }
+
+    onClearFilter = () => {
+        console.log('test precerange reset')
+        this.sliderRef.noUiSlider.set([this.props.minPriceDefault, this.props.maxPriceDefault]);
     }
+
 
     togglePopup = (e) =>{
         this.setState({
@@ -81,7 +79,6 @@ class PriceRange extends Component {
     onOpen = () => {
         let box = this.popupContent;
         let bound = box.getBoundingClientRect();
-        console.log(bound.right, (window.innerWidth || document.documentElement.clientWidth))
         if(bound.right > (window.innerWidth || document.documentElement.clientWidth)){
             this.setState({
                 edge: true,
@@ -95,11 +92,23 @@ class PriceRange extends Component {
             this.onOpen();
         }
         this.togglePopup();
-    }
+    };
+
+    isUsed = () => {
+        let min = parseInt(this.props.minPrice);
+        let max = parseInt(this.props.maxPrice);
+        let minDef = parseInt(this.props.minPriceDefault);
+        let maxDef = parseInt(this.props.maxPriceDefault);
+        if(min !== minDef || max !== maxDef){
+            return 'used';
+        }
+        return 'not-used';
+    };
+
 
     render(){
         return (
-            <div className="filter-element input-popup" id="office_price_filter" ref={node => this.node = node}>
+            <div className={`filter-element input-popup ${this.isUsed()}`} id="office_price_filter" ref={node => this.node = node}>
                 <h4 className="filter-heading">
                 </h4>
                 <div className="input-wrap" onClick={this.handlePopupClick}>

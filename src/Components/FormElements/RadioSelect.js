@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 
-import formatTitle from '../functions/formatTitle';
+import formatTitle from '../../functions/formatTitle';
+import initialFilter from "../../Data/initialFilter";
 
 class RadioSelect extends Component {
     API_URL = process.env.REACT_APP_API_URL;
@@ -11,7 +12,7 @@ class RadioSelect extends Component {
 
         this.state = {
             popupOpen: false,
-            selected: this.props.defaultSelected != null ? {id: this.props.defaultSelected} : false,
+            selected: this.props.defaultSelected != null ? this.props.defaultSelected : false,
             edge: false,
         };
         this.node = React.createRef();
@@ -71,9 +72,31 @@ class RadioSelect extends Component {
     }
 
 
+    isUsed = () => {
+        let arr1 = this.props.initialValue;
+        let arr2 = this.state.selected;
+        if(arr2 === false){
+            return 'not used';
+        }
 
+        let aProps = Object.getOwnPropertyNames(arr1);
+        let bProps = Object.getOwnPropertyNames(arr2);
+        // If number of properties is different,
+        // objects are not equivalent
+        if (aProps.length !== bProps.length) {
+            return 'used';
+        }
 
-
+        for (let i = 0; i < aProps.length; i++) {
+            const propName = aProps[i];
+            // If values of same property are not equal,
+            // objects are not equivalent
+            if (arr1[propName] != arr2[propName]) {
+                return 'used';
+            }
+        }
+        return 'not-used';
+    }
 
 
     render() {
@@ -110,14 +133,13 @@ class RadioSelect extends Component {
             return parseInt(el.id) === parseInt(this.props.defaultSelected.id);
         });
         let currentText = currentType !== undefined ? formatTitle(currentType.name) : this.props.startText;
-        console.log(currentType.id, this.props.defaultSelected.id);
         if(this.props.enableAll && currentType.id === 0){
             currentText = this.props.startText;
         }
 
         if(types.length){
             typesFilter = (
-                <div className={"filter-element input-popup type-radio " + this.props.className} data-type="radio" id={this.props.id} ref={node => this.node = node} >
+                <div className={`filter-element input-popup type-radio ${this.props.className ? this.props.className : ''} ${this.isUsed()}`} data-type="radio" id={this.props.id} ref={node => this.node = node} >
                     <h4 className="filter-heading">
                         {this.props.heading}
                     </h4>

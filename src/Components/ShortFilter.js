@@ -6,6 +6,8 @@ import Capacity from './FormElements/Capacity';
 import CoWork from "./FormElements/CoWork";
 import CitySelector from "./FormElements/CitySelector";
 import Loader from "./Loader";
+import NumberSelector from "./FormElements/NumberSelector";
+import RadioSelect from "./FormElements/RadioSelect";
 
 
 class ShortFilter extends Component {
@@ -20,8 +22,6 @@ class ShortFilter extends Component {
 
 		};
 
-		this.handleRadioChange = this.handleRadioChange.bind(this);
-		this.handleCoWorkChange = this.handleCoWorkChange.bind(this);
 
 	}
 	componentWillMount() {
@@ -42,51 +42,37 @@ class ShortFilter extends Component {
 		window.location = this.OFFICE_URL;
 	};
 
-	handleRadioChange(e){
-		let textElement = Array.prototype.filter.call(e.target.parentNode.children, function(child){
-			return child !== e.target && child.classList.contains('input-title');
+	handleTypeChange = (value) => {
+		this.props.updateFilterValue({
+			chosenType: value
 		});
-		if(textElement){
-			this.props.updateFilterValue({
-				chosenType: e.target.value,
-				chosenTypeText: e.target.dataset.label
-			});
-		}
 	}
 
 
-	handleCoWorkChange(e) {
+	handleCoWorkChange = (e) => {
 		this.props.updateParentState({
 			coworkChecked: !this.props.coworkChecked
 		});
-		/*
-		this.props.updateFilterValue({
-			coworkChecked: !this.props.coworkChecked,
-		});
-		 */
 	}
 
 	handlePeriodUpdate = (value) => {
 		this.props.updateParentState({
 			selectedPeriod: value,
 		})
-		/*
-		this.props.updateFilterValue({
-			selectedPeriod: value,
-		})
-		 */
+
 	};
 
 	handleCityUpdate = (value) => {
 		this.props.updateParentState({
 			selectedLocations: value,
 		})
-		/*
-		this.props.updateFilterValue({
-			selectedLocations: value,
-		})
-		 */
+
 	};
+	handleNumberUpdate = (value) => {
+		this.props.updateParentState({
+			capacity: value
+		})
+	}
 
 
 	render() {
@@ -107,17 +93,28 @@ class ShortFilter extends Component {
 							name={"city-selector"}
 
 						/>
-						<Capacity
-							updateFilterValue={this.props.updateParentState}
+						<NumberSelector
 							capacity={this.props.capacity}
+							maxVal={99}
+							minVal={0}
+							startVal={1}
+							onUpdate={this.handleNumberUpdate}
 						/>
-						<OfficeTypes
-							handleRadioChange={this.handleRadioChange}
-							officeTypes={this.props.officeTypes}
-							chosenType={this.props.chosenType}
-							chosenTypeText={this.props.chosenTypeText}
-							updateParentState={this.props.updateParentState}
+
+						<RadioSelect
+							options={this.props.officeTypes}
+							count={true}
+							enableAll={true}
+							allText={"Alle typer"}
+							startText={"Alle typer"}
+							defaultSelected={this.props.chosenType}
+							initialValue={[]}
+							onChange={this.handleTypeChange}
+							name={"type_radio"}
+							id={"office_type_filter"}
+							heading={"Kontor type"}
 						/>
+
 						<div className="filter-element" id="submit-filter">
 							<button value="submit" className="submit" onClick={this.handleFormSubmit}>
 								Kom godt i gang

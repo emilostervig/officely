@@ -6,8 +6,8 @@ import '@brainhubeu/react-carousel/lib/style.css';
 
 
 //  functions
-import formatNumber from "./functions/formatNumber";
-import formatTitle from './functions/formatTitle';
+import formatNumber from "../functions/formatNumber";
+import formatTitle from '../functions/formatTitle';
 
 class OfficePostListItem extends Component {
 
@@ -74,7 +74,7 @@ class OfficePostListItem extends Component {
             if(cowork === true || cowork === "1"){
                 return (
                     <React.Fragment>
-                        <div className={"cowork-banner"} onMouseEnter={this.toggleShowCowork} onMouseLeave={this.toggleShowCowork}>
+                        <div className={"cowork-banner"} onMouseEnter={this.toggleShowCowork} onMouseLeave={this.toggleShowCowork} onClick={this.toggleShowCowork}>
                             <span className="title">
                                 Udlejer er interesseret i <u >co-working <span className={"icon icomoon icon-info"}/></u>
                             </span>
@@ -131,12 +131,16 @@ class OfficePostListItem extends Component {
                 <article key={post.ID} id={"office-"+post.ID} className="single-post single-office">
                     <div className="post-images">
                         {this.newSplash(post.post_date)}
-                        {this.favouriteBtn(this.state.favourited)}
+                        { /*this.favouriteBtn(this.state.favourited)*/ }
                             {gallery}
                     </div>
                     <div className={"content-wrap"}>
                         <div className="office-area">
-                            <span className="area">Storkøbenhavn</span><span className="city">Nørrebro</span>
+                            {post.office_location !== false ? (
+                                post.office_location.map((el) => {
+                                    return <span className="term" key={post.ID+'_'+el.term_id}>{el.name}</span>
+                                })
+                            ): null}
                         </div>
                         <div className="office-title">
                             <Link to={post.post_link} onClick={this.handleLinkClick}>

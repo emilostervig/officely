@@ -12,7 +12,9 @@ import IndustrySelector from "./FormElements/IndustrySelector";
 import RadioSelect from "./FormElements/RadioSelect";
 import Loader from "./Loader";
 import CheckboxSelect from "./FormElements/CheckboxSelect";
+import NumberSelector from "./FormElements/NumberSelector";
 
+import initialFilter from './../Data/initialFilter';
 
 class FilterForm extends Component {
     API_URL = process.env.REACT_APP_API_URL;
@@ -22,9 +24,7 @@ class FilterForm extends Component {
         super(props);
 
         this.state = {
-            /*chosenType: 'all',
-            chosenTypeText: 'Alle typer',
-            showOfficeType: false,*/
+
         };
 
         this.handleRadioChange = this.handleRadioChange.bind(this);
@@ -35,7 +35,7 @@ class FilterForm extends Component {
 
     }
     componentDidMount() {
-        if(this.props.postCount == 0){
+        if(this.props.postCount === 0){
             this.props.getOffices();
         }
     }
@@ -86,11 +86,7 @@ class FilterForm extends Component {
         });
     }
 
-    /*handleIndustryChange = (selected) => {
-        this.props.updateFilterValue({
-            selectedIndustry: selected
-        })
-    }*/
+
 
     handleCoWorkChange(e) {
         this.props.updateFilterValue({
@@ -145,11 +141,22 @@ class FilterForm extends Component {
         })
     };
 
+    handleNumberUpdate = (value) => {
+        this.props.updateFilterValue({
+            capacity: value
+        })
+    }
     onIndustryChange = (value) => {
     	this.props.updateFilterValue({
 		    selectedIndustry: value.selected,
 		    IndustryText: value.text,
 	    });
+    }
+
+    handleTypeChange = (value) => {
+        this.props.updateFilterValue({
+            chosenType: value
+        });
     }
 
 
@@ -178,17 +185,28 @@ class FilterForm extends Component {
                                 selectedLocations={this.props.selectedLocations}
                                 onChange={this.handleCityUpdate}
                                 name={"city-selector"}
-
-                                />
-                            <Capacity
-                                updateFilterValue={this.props.updateFilterValue}
-                                capacity={this.props.capacity}
                             />
-                            <OfficeTypes
-                                handleRadioChange={this.handleRadioChange}
-                                officeTypes={this.props.officeTypes}
-                                chosenType={this.props.chosenType}
-                                chosenTypeText={this.props.chosenTypeText}
+
+                            <NumberSelector
+                                maxVal={99}
+                                minVal={0}
+                                startVal={this.props.capacity}
+                                onUpdate={this.handleNumberUpdate}
+                            />
+
+
+                            <RadioSelect
+                                options={this.props.officeTypes}
+                                count={true}
+                                enableAll={true}
+                                allText={"Alle typer"}
+                                startText={"Alle typer"}
+                                defaultSelected={this.props.chosenType}
+                                initialValue={initialFilter.chosenType}
+                                onChange={this.handleTypeChange}
+                                name={"type_radio"}
+                                id={"office_type_filter"}
+                                heading={"Kontor type"}
                             />
 
                             <PeriodSelector
@@ -218,19 +236,6 @@ class FilterForm extends Component {
 
                             />
 
-
-	                        {/*<RadioSelect
-                                options={this.props.industries}
-                                count={true}
-                                enableAll={true}
-                                allText={"Alle brancher"}
-                                startText={"Branche"}
-                                defaultSelected={this.props.selectedIndustry}
-                                onChange={this.handleIndustryChange}
-                                name={"industry_radio"}
-                                id={"office_industry_filter"}
-                                className={"invert-color"}
-                            /> */}
 
 							<CheckboxSelect
 								options={this.props.industries}

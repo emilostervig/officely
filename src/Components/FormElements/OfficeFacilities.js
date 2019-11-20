@@ -35,6 +35,15 @@ class OfficeFacilities extends Component {
         }
     }
 
+    isUsed = () => {
+        let chosen = this.props.chosenFacilities.length;
+
+        if(chosen > 0){
+            return 'used';
+        }
+        return 'not-used';
+    }
+
     render() {
         const handleCheckboxChange = this.props.handleCheckboxChange;
         let facilities = this.props.officeFacilities;
@@ -61,7 +70,7 @@ class OfficeFacilities extends Component {
 
         if(facilities.length){
             facilitiesFilter = (
-                <div className="filter-element input-popup type-checkbox" data-type="checkbox" id="office_facilities_filter" ref={(node) => this.node = node}>
+                <div className={`filter-element input-popup type-checkbox ${this.isUsed()}`} data-type="checkbox" id="office_facilities_filter" ref={(node) => this.node = node}>
                     <h4 className="filter-heading">
                         Kontor faciliteter
                     </h4>

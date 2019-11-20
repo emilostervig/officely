@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-import formatTitle from '../functions/formatTitle';
+import formatTitle from '../../functions/formatTitle';
 
 class CheckboxSelect extends Component {
 	constructor(props) {
@@ -81,6 +81,14 @@ class CheckboxSelect extends Component {
 		}
 	}
 
+	isUsed = () => {
+		let used = this.props.selected.length > 0;
+		if(used){
+			return 'used';
+		}
+		return 'not-used';
+	}
+
 	render() {
 		let comp = this;
 		let types = this.props.options || [];
@@ -112,15 +120,13 @@ class CheckboxSelect extends Component {
 				</label>
 			)
 		});
-		let currentType = types.find((el) => {
-			return parseInt(el.id) === parseInt(this.props.selected.id);
-		});
-		let currentText = currentType !== undefined ? formatTitle(currentType.name) : this.props.startText;
+
+		let currentText = this.props.startText;
 
 
 		if(types.length){
 			typesFilter = (
-				<div className={"filter-element input-popup type-checkbox " + this.props.className} data-type="checkbox" id={this.props.id} ref={node => this.node = node} >
+				<div className={`filter-element input-popup type-checkbox ${this.props.className} ${this.isUsed()}`} data-type="checkbox" id={this.props.id} ref={node => this.node = node} >
 					<h4 className="filter-heading">
 						{this.props.heading}
 					</h4>

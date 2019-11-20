@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import SearchInput from "./SearchInput";
 
+// Data
+import initialFilter from '../../Data/initialFilter';
 class CitySelector extends Component {
     constructor(props) {
         super(props);
@@ -34,6 +36,20 @@ class CitySelector extends Component {
             popupOpen: !this.state.popupOpen,
         });
     };
+
+    isUsed = () => {
+        let arr1 = initialFilter.selectedLocations;
+        let arr2 = this.state.chosen;
+        let same = true;
+        if(arr1.length !== arr2.length)
+            same = false;
+        for(var i = arr1.length; i--;) {
+            if(arr1[i] !== arr2[i])
+                same = false;
+        }
+
+        return (same) ? 'not-used' : 'used';
+    }
 
 
 
@@ -131,7 +147,7 @@ class CitySelector extends Component {
         return (
             <React.Fragment>
 
-            <div className="filter-element city-select input-popup type-checkbox" data-type="checkbox" ref={node => this.node = node}>
+            <div className={"filter-element city-select input-popup type-checkbox "+this.isUsed()} data-type="checkbox" ref={node => this.node = node}>
                 <h4 className="filter-heading">
                     {this.props.title}
                 </h4>

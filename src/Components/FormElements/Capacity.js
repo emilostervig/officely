@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import initialFilter from "../../Data/initialFilter";
 
 class Capacity extends Component {
     constructor(props) {
@@ -44,11 +45,24 @@ class Capacity extends Component {
             capacity: val,
         })
     }
+    isUsed = () => {
+        let arr1 = initialFilter.capacity;
+        let arr2 = this.props.capacity;
+        let same = true;
+        if(arr1.length !== arr2.length)
+            same = false;
+        for(var i = arr1.length; i--;) {
+            if(arr1[i] !== arr2[i])
+                same = false;
+        }
+
+        return (same) ? 'not-used' : 'used';
+    }
 
     render(){
         let disabled = (this.props.capacity < 2) ? 'disabled' : '';
         return (
-            <div className="filter-element" id="office_capacity_filter" >
+            <div className={"filter-element " + this.isUsed()} id="office_capacity_filter" >
                 <h4 className="filter-heading">
                     Personer
                 </h4>

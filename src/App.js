@@ -14,11 +14,13 @@ import {Redirect} from 'react-router-dom';
 import {Switch} from "react-router-dom";
 
 // functions
-import groupBy from './Components/functions/groupBy';
+import groupBy from './functions/groupBy';
 
 // Assets
-//import './wpstyle.css'
+import initialFilter from './Data/initialFilter';
+
 const AbortController = window.AbortController;
+
 
 class App extends Component {
     API_URL = process.env.REACT_APP_API_URL;
@@ -26,44 +28,7 @@ class App extends Component {
 
     constructor(props) {
         super(props);
-        this.initialFilter = {
-            // type filter
-            chosenType: 'all',
-            chosenTypeText: 'Alle typer',
 
-            // capacity filter
-            capacity: 1,
-
-            // Cowork filter
-            coworkChecked: false,
-
-            // Price slider
-            priceChanged: false,
-
-            // Orderby
-            orderbyKey: 'price_asc',
-            orderbyTitle: 'Pris lav til høj',
-
-            // Period
-            selectedPeriod: {
-                period: false,
-                startDate: false,
-                endDate: false
-            },
-
-            // Industries
-            selectedIndustry: [],
-
-            // Locations
-            selectedLocations: [],
-
-            // Facilities filter
-            chosenFacilities: [],
-            chosenFacilitiesText: 'Vælg faciliteter',
-            chosenFacilitiesDefaultText: 'Vælg faciliteter',
-
-
-        };
         this.state = {
             filterDataLoaded: false,
             // User
@@ -106,7 +71,7 @@ class App extends Component {
 
             // test redirect from outside react
             redirect: false,
-            ...this.initialFilter
+            ...initialFilter
         };
         this.periods = [
             {
@@ -432,8 +397,8 @@ class App extends Component {
         if(more === true){
             queryParts.push('offset='+this.state.offices.length);
         }
-        if(this.state.chosenType !== 'all'){
-            queryParts.push('office_type='+this.state.chosenType);
+        if(this.state.chosenType.id !== initialFilter.chosenType.id){
+            queryParts.push('office_type='+this.state.chosenType.id);
         }
         if(this.state.chosenFacilities.length){
             queryParts.push('office_facilities='+this.state.chosenFacilities);
@@ -443,8 +408,13 @@ class App extends Component {
         }
 
         if(this.state.priceChanged === true){
-            queryParts.push('minprice='+this.state.minPrice);
-            queryParts.push('maxprice='+this.state.maxPrice);
+            if(this.state.minPrice !== initialFilter.minPriceDefault){
+                queryParts.push('minprice='+this.state.minPrice);
+            }
+            if(this.state.maxPrice !== initialFilter.maxPriceDefault){
+                console.log(this.state.maxPrice, initialFilter.maxPriceDefault);
+                queryParts.push('maxprice='+this.state.maxPrice);
+            }
         }
         if(this.state.capacity !== 1){
             queryParts.push('capacity='+this.state.capacity);
@@ -468,21 +438,23 @@ class App extends Component {
         // add order
         queryParts.push('officeorder='+this.state.orderbyKey);
         queryParts = queryParts.join('&');
-
-        let storageOffices = JSON.parse(window.localStorage.getItem(queryParts));
+        let query = queryBase + queryParts;
+        let storageKey = `officesearch_${queryParts}`;
+        let storageOffices = JSON.parse(window.localStorage.getItem(storageKey));
         let now = new Date().getTime();
         if(storageOffices){
             let date = storageOffices.time;
             let diff = now - date;
             diff = Math.floor(diff/1000/60/60/24); // get diff in days
-            if(diff < 1){
+            if(diff < 1 && date > window.wpApiSettings.updateTime){
                 console.log('getting offices from localstorage');
+                console.log(query);
                 return this.handleOfficesQueryData(storageOffices.data, more);
             } else{
-                window.localStorage.removeItem(queryParts);
+                window.localStorage.removeItem(storageKey);
             }
         }
-        let query = queryBase + queryParts;
+
         console.log(`route: ${this.API_URL}${query}`);
         return fetch(`${this.API_URL}${query}`,
             {
@@ -502,7 +474,7 @@ class App extends Component {
                     time: now,
                     data: data
                 };
-                window.localStorage.setItem(queryParts, JSON.stringify(storageObject));
+                window.localStorage.setItem(storageKey, JSON.stringify(storageObject));
 
             })
             .catch(error => {
@@ -524,13 +496,8 @@ class App extends Component {
     }
 
     updateFilterValue(obj){
-        console.log(this.initialFilter.chosenFacilities);
         console.log('updateFilterValue - trigger getOffices', obj)
-        console.log(this.initialFilter.chosenFacilities);
-        /*let newOptions = this.state.chosenFilter;
-        for (const [key, value] of Object.entries(obj)) {
-        newOptions[key] = value;
-        }*/
+
         // TODO: create a single object in state to run filters on. Use key value to set query parameters in fetch.
 
         this.setState(
@@ -540,10 +507,10 @@ class App extends Component {
         );
     }
     clearFilter = () => {
-        console.log('running clearFilter');
-        console.log(this.initialFilter.chosenFacilities);
+        let evt = new Event('clearOfficeFilter');
+        document.dispatchEvent(evt);
         this.setState(
-            this.initialFilter, () => {
+            initialFilter, () => {
                 this.getOffices();
             }
         )

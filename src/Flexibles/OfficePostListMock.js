@@ -6,7 +6,7 @@ import OfficePostListItem from '../Components/OfficePostListItem';
 import Loader from '../Components/Loader';
 
 // functions
-import throttle from '../Components/functions/throttle';
+import throttle from '../functions/throttle';
 import Carousel, { Dots } from "@brainhubeu/react-carousel";
 
 class OfficePostListMock extends Component {
@@ -120,7 +120,8 @@ class OfficePostListMock extends Component {
 								draggable: true
 							},
 							441:{
-								slidesPerPage: 1,
+								slidesPerPage: 1.5,
+								centered: true
 							}
 						}}
 

@@ -12,9 +12,9 @@ import PeriodSelector from "./FormElements/PeriodSelector";
 import ShareBtn from "./ShareBtn";
 
 // functions
-import formatNumber from "./functions/formatNumber";
+import formatNumber from "../functions/formatNumber";
 import OfficePostList from "./OfficePostList";
-import throttle from "./functions/throttle";
+import throttle from "../functions/throttle";
 
 
 class SinglePost extends Component {
@@ -42,7 +42,7 @@ class SinglePost extends Component {
         // ref
         this.bookingBox = React.createRef();
         this.galleryBox = React.createRef();
-        //this.bookingRow = React.createRef();
+        this.bookingRow = React.createRef();
 
         // methods
         this.scrollToPost = this.scrollToPost.bind(this);
@@ -53,24 +53,22 @@ class SinglePost extends Component {
     }
 
     componentWillMount() {
-        console.log('componentWillMount')
 
     }
 
     componentWillUnmount(){
-        console.log('componentWillUnmount');
         document.removeEventListener('scroll', this.throttleScroll)
         this.props.clearSingleOffice();
     }
 
     componentDidMount() {
-        console.log('componentDidMount')
         let comp = this;
         if(!this.props.post || ('ID' in this.props.post) === false || ( this.props.slug !== this.props.post.post_name ) ){
             this.props.clearSingleOffice();
             this.props.getPostBySlug(this.props.slug)
+            this.getBookedDates(this.props.post.ID);
+
         }
-        this.getBookedDates(230)
         const scrollEvent = document.addEventListener('scroll', this.throttleScroll)
 
         this.ownerInterval = setInterval(function(){
@@ -193,10 +191,12 @@ class SinglePost extends Component {
                 }
             )
             .then(data => {
-                if(data != false){
-                    this.setState({
-                        owner: data,
-                    })
+                if(data != false ){
+                    if(this.props.post.post_author === id){
+                        this.setState({
+                            owner: data,
+                        })
+                    }
                     clearInterval(this.ownerInterval);
                 }
             })
@@ -257,8 +257,8 @@ class SinglePost extends Component {
         let nonce = window.wpApiSettings.nonce;
         let people = this.state.selectedPeople;
         let period = this.state.selectedPeriod.period.id;
-        let startDate = this.state.startDate;
-        let endDate = this.state.endDate;
+        let startDate = this.state.selectedPeriod.startDate;
+        let endDate = this.state.selectedPeriod.endDate;
         console.log(people, period, startDate, endDate);
         if(people === undefined || people == null){
             return false;
@@ -379,7 +379,12 @@ class SinglePost extends Component {
         }
         let newGallery = null;
         const handleOnDragStart = e => e.preventDefault()
-        if('gallery' in this.props.post && this.props.post.gallery !== false && this.props.post.gallery !== null && typeof this.props.post.gallery !== "undefined" ){
+        if('gallery' in this.props.post &&
+            this.props.post.gallery !== false &&
+            this.props.post.gallery !== null &&
+            typeof this.props.post.gallery !== "undefined" &&
+            this.props.post.gallery.length > 1
+        ){
             newGallery = (
                 <React.Fragment>
                     <Carousel
@@ -422,11 +427,11 @@ class SinglePost extends Component {
                         <div className="gallery" ref={(node) => {
                             this.galleryBox = node;
                         }}>
-                            {!!window.wpApiSettings.loggedIn &&
+                            {/*!!window.wpApiSettings.loggedIn &&
                                 <div className={"favourite-post " + (this.state.favourited ? 'active' : '')} onClick={this.toggleFavoutite}>
                                     <span className={"icon icomoon icon-hjerte-aktiv"}  />
                                 </div>
-                            }
+                            */}
                             <div className="image-wrap" >
                                 {newGallery}
                             </div>
@@ -449,7 +454,7 @@ class SinglePost extends Component {
                                     onUpdate={this.handleUpdatePeople}
                                     minVal={1}
                                     startVal={1}
-                                    maxVal={10}
+                                    maxVal={post.office_capacity}
                                     />
 
 
@@ -490,13 +495,11 @@ class SinglePost extends Component {
 
                                 <div className="post-location">
                                     <div className="location">
-
-                                        <div className="municipality">
-                                            Storkøbenhavn
-                                        </div>
-                                        <div className="city">
-                                            Amager
-                                        </div>
+                                        {post.office_location !== false ? (
+                                            post.office_location.map((el) => {
+                                                return <span className="term" key={post.ID+'_'+el.term_id}>{el.name}</span>
+                                            })
+                                        ): null}
 
                                     </div>
 
@@ -528,15 +531,19 @@ class SinglePost extends Component {
                                             </tr>
                                         : null}
 
+                                        {('office_size' in post && post.office_size) ?
 
                                             <tr className="area">
                                                 <td className="name">Areal:</td>
-                                                <td className="value">12kvm (placeholder, mangler data)</td>
+                                                <td className="value">{post.office_size}m<sup>2</sup></td>
                                             </tr>
-                                            <tr className="location">
-                                                <td className="name">Beliggenhed:</td>
-                                                <td className="value">Amagerfælledvej, København (placeholder, mangler data)</td>
-                                            </tr>
+
+                                        : null}
+
+                                        <tr className="location">
+                                            <td className="name">Beliggenhed:</td>
+                                            <td className="value">Amagerfælledvej, København (placeholder, mangler data)</td>
+                                        </tr>
                                         </tbody>
                                     </table>
                                     <h2 className="office-title">
@@ -567,6 +574,9 @@ class SinglePost extends Component {
                                         </h2>
                                         <div className="accordion-wrap">
                                             {post.office_rules.map((el) => {
+                                                if (el.value === null || el.value.length === 0){
+                                                    return null;
+                                                }
                                                 return <Accordion
                                                     label={el.name}
                                                     key={el.name}

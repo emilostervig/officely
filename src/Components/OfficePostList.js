@@ -7,7 +7,7 @@ import OfficePostListItem from './OfficePostListItem';
 import Loader from './Loader';
 
 // functions
-import throttle from './functions/throttle';
+import throttle from '../functions/throttle';
 
 class OfficePostList extends Component {
     constructor(props) {

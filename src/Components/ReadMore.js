@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import throttle from './functions/throttle';
-import debounce from './functions/debounce';
+import throttle from '../functions/throttle';
+import debounce from '../functions/debounce';
 class ReadMore extends Component {
 
 
