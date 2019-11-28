@@ -370,7 +370,7 @@ class SinglePost extends Component {
             })
         }
         return(
-            <React.fragment>
+            <React.Fragment>
                 <div className={`booking-error-modal-overlay ${open ? 'open' : ''}` } onClick={closeBox}/>
                 <div className={`booking-error-modal ${open ? 'open' : ''}`}>
                     <h3 className="modal-heading" > Ups! </h3>
@@ -383,8 +383,8 @@ class SinglePost extends Component {
                         </div>
                     </div>
                 </div>
-            </React.fragment>
-        )
+            </React.Fragment>
+        );
     }
     confirmationBox = (open, data) => {
         let closeBox = () => {
