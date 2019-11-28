@@ -525,6 +525,7 @@ class SinglePost extends Component {
                         post: post
                     })}
                     {this.errorBox(this.state.errorBoxOpen)}
+
                     <div id={"post-"+post.ID} className={"single-office"} ref={(node) => {
                         if(node !== null){
                             let bound = node.getBoundingClientRect();
