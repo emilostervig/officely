@@ -251,7 +251,7 @@ class PeriodSelector extends Component {
         }
 
         return (
-            <div className={`filter-element period-select input-popup type-radio ${this.isUsed()}`} data-type="radio" ref={node => this.node = node}>
+            <div className={`filter-element period-select input-popup type-radio ${this.isUsed()} ${this.props.className}`} data-type="radio" ref={node => this.node = node}>
                 <h4 className="filter-heading">
                     Periode
                 </h4>

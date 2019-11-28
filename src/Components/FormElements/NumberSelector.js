@@ -60,10 +60,11 @@ class NumberSelector extends Component {
         return (same) ? 'not-used' : 'used';
     }
     render(){
+        let extraClass = this.props.className ? this.props.className : '';
         let disabledMin = (this.state.val <= this.minVal) ? 'disabled' : '';
         let disabledMax = (this.state.val >= this.maxVal) ? 'disabled' : '';
         return (
-            <div className={"filter-element " + this.isUsed()} id="office_capacity_filter" >
+            <div className={`filter-element ${this.isUsed()} ${extraClass} `} id="office_capacity_filter" >
                 <h4 className="filter-heading">
                     Personer
                 </h4>

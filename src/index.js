@@ -11,7 +11,7 @@ import App from './App';
 import OfficePostListMock from "./Flexibles/OfficePostListMock";
 
 if(document.getElementById('root')){
-	ReactDOM.render(<App ref={(comp) => {window.redirectToArchive = comp.redirectToArchive}} />, document.getElementById('root'));
+	ReactDOM.render(<App  />, document.getElementById('root'));
 }
 
 

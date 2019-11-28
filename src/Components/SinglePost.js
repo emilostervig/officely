@@ -38,6 +38,9 @@ class SinglePost extends Component {
             endDate: false,
             bookedDates: false,
             relatedOffices:[],
+            numberInvalid: false,
+            periodInvalid: false,
+            confirmationBoxOpen: false,
         };
         // ref
         this.bookingBox = React.createRef();
@@ -214,19 +217,23 @@ class SinglePost extends Component {
     handleUpdatePeople(val){
         this.setState({
             selectedPeople: val,
+            numberInvalid: false,
         });
     }
 
     handleUpdatePeriod(selected){
-    console.log(selected)
-        this.setState({
+        console.log(selected);
+        let newState = {
             selectedPeriod: {
                 period: selected.period,
                 startDate: selected.startDate,
                 endDate: selected.endDate,
             },
-
-        });
+        };
+        if(selected.startDate !== false && selected.endDate !== false){
+            newState.periodInvalid = false;
+        }
+        this.setState(newState);
 
     }
 
@@ -246,10 +253,28 @@ class SinglePost extends Component {
     handleSubmitBooking = () => {
 
         if(!window.wpApiSettings.loggedIn){
-            let loginModal = new Event('showLoginModal');
+            let loginModal = new Event('showLoginModal',{referer: this.props.slug});
             window.dispatchEvent(loginModal);
         } else{
-            this.handleBookingRequest();
+            let stateChanges = {};
+            let errors = false;
+            if(this.state.selectedPeriod.startDate === false || this.state.selectedPeriod.endDate === false){
+                stateChanges.periodInvalid = true;
+                errors = true;
+            }
+            if(this.state.selectedPeople < 1 || this.state.selectedPeople === false) {
+                stateChanges.numberInvalid = true;
+                errors = true;
+            }
+
+            if(errors === false){
+               this.setState({
+                   confirmationBoxOpen: true,
+               })
+            } else{
+                // submit had errors
+                this.setState(stateChanges);
+            }
         }
     }
 
@@ -326,14 +351,69 @@ class SinglePost extends Component {
         return tmp;
     }
 
+    isOwnPost = () => {
+        if(window.wpApiSettings.loggedIn !== true){
+            return false;
 
+        }
+
+        let user = parseInt(window.wpApiSettings.id);
+        let author = parseInt(this.props.post.post_author);
+        return author === user;
+    };
+    confirmationBox = (open, data) => {
+        let closeBox = () => {
+            this.setState({
+                confirmationBoxOpen: false,
+            })
+        }
+        let formattedDate = (date) => {
+            if(!date){
+                return false;
+            }
+            const monthNames = [
+                "Januar", "Februar", "Marts",
+                "April", "Maj", "Juni",
+                "Juli", "August", "September",
+                "Oktober", "November", "December"
+            ];
+            date = new Date(date);
+            let year = date.getFullYear();
+            let monthNum = date.getMonth();
+            let month = monthNames[monthNum].substr(0, 3);
+            let day = date.getDate();
+            return `${day}. ${month}. ${year}`;
+        };
+        return(
+            <React.Fragment>
+                <div className={`booking-confirmation-modal-overlay ${open ? 'open' : ''}` } onClick={closeBox}/>
+                <div className={`booking-confirmation-modal ${open ? 'open' : ''}`}>
+                    <h3 className="modal-heading" dangerouslySetInnerHTML={{__html: window.wpApiSettings.bookingboxHeading}} />
+                    <div className="inside-padding">
+
+                        <span className="close-btn" onClick={closeBox}/>
+                        <div className="content">
+                            <div dangerouslySetInnerHTML={{__html: window.wpApiSettings.bookingboxContent}} />
+                            Periode: {data.period.name}
+                            Start: {formattedDate(data.startDate)}
+                            Kontor: {data.post.post_title}
+                            Udlejer: {data.post.post_author_name}
+                            <div dangerouslySetInnerHTML={{__html: window.wpApiSettings.bookingboxContentAfter}} />
+                            <button onClick={this.handleBookingRequest}>Send anmodning</button>
+                        </div>
+                    </div>
+                </div>
+            </React.Fragment>
+        )
+    }
 
     render(){
         let post = this.props.post;
         let owner = this.state.owner;
         let comp = this;
         let renderPost = null;
-
+        let numberClass = this.state.numberInvalid ? 'invalid' : '';
+        let periodClass = this.state.periodInvalid ? 'invalid' : '';
 
 
         let gallery = null;
@@ -409,229 +489,240 @@ class SinglePost extends Component {
 
         if('ID' in post){
             renderPost = (
-                <div id={"post-"+post.ID} className={"single-office"} ref={(node) => {
-                    if(node !== null){
-                        let bound = node.getBoundingClientRect();
-                        this.postBottom = node.clientHeight;
-                    }
-
-                }}>
-                    <div className="flex-row booking" ref={(node) => {
+                <React.Fragment>
+                    {this.confirmationBox(this.state.confirmationBoxOpen, {
+                        period: this.state.selectedPeriod.period,
+                        startDate: this.state.selectedPeriod.startDate,
+                        post: post
+                    })}
+                    <div id={"post-"+post.ID} className={"single-office"} ref={(node) => {
                         if(node !== null){
-                            this.bookingRow = node;
-                            let bound =  node.getBoundingClientRect()
-                            this.bookingRowTop = bound.top;
-                            this.bookingRowLeft = bound.left;
+                            let bound = node.getBoundingClientRect();
+                            this.postBottom = node.clientHeight;
                         }
+
                     }}>
-                        <div className="gallery" ref={(node) => {
-                            this.galleryBox = node;
-                        }}>
-                            {/*!!window.wpApiSettings.loggedIn &&
-                                <div className={"favourite-post " + (this.state.favourited ? 'active' : '')} onClick={this.toggleFavoutite}>
-                                    <span className={"icon icomoon icon-hjerte-aktiv"}  />
-                                </div>
-                            */}
-                            <div className="image-wrap" >
-                                {newGallery}
-                            </div>
 
-                        </div>
-                        <div className="booking-content" ref={(node) => {
-                            this.bookingBox = node;
+                        <div className="flex-row booking" ref={(node) => {
                             if(node !== null){
+                                this.bookingRow = node;
                                 let bound =  node.getBoundingClientRect()
-                                this.bookingBoxTop = bound.top;
-                                this.bookingBoxLeft = bound.left;
+                                this.bookingRowTop = bound.top;
+                                this.bookingRowLeft = bound.left;
                             }
-
                         }}>
-                            <div className="inside-booking-content">
-                                {this.newSplash(post.post_date)}
-                                <h1 className="post-title">{post.post_title}</h1>
+                            <div className="gallery" ref={(node) => {
+                                this.galleryBox = node;
+                            }}>
+                                {/*!!window.wpApiSettings.loggedIn &&
+                                    <div className={"favourite-post " + (this.state.favourited ? 'active' : '')} onClick={this.toggleFavoutite}>
+                                        <span className={"icon icomoon icon-hjerte-aktiv"}  />
+                                    </div>
+                                */}
+                                <div className="image-wrap" >
+                                    {newGallery}
+                                </div>
 
-                                <NumberSelector
-                                    onUpdate={this.handleUpdatePeople}
-                                    minVal={1}
-                                    startVal={1}
-                                    maxVal={post.office_capacity}
+                            </div>
+                            <div className="booking-content" ref={(node) => {
+                                this.bookingBox = node;
+                                if(node !== null){
+                                    let bound =  node.getBoundingClientRect()
+                                    this.bookingBoxTop = bound.top;
+                                    this.bookingBoxLeft = bound.left;
+                                }
+
+                            }}>
+                                <div className="inside-booking-content">
+                                    {this.newSplash(post.post_date)}
+                                    <h1 className="post-title">{post.post_title}</h1>
+
+                                    <NumberSelector
+                                        onUpdate={this.handleUpdatePeople}
+                                        minVal={1}
+                                        startVal={1}
+                                        maxVal={post.office_capacity}
+                                        classname={numberClass}
+                                        />
+
+
+                                    <PeriodSelector
+                                        periods={this.props.periods}
+                                        onUpdate={this.handleUpdatePeriod}
+                                        bookedDates={post.booked_dates}
+                                        selected={this.state.selectedPeriod}
+                                        className={periodClass}
                                     />
 
 
-                                <PeriodSelector
-                                    periods={this.props.periods}
-                                    onUpdate={this.handleUpdatePeriod}
-                                    bookedDates={post.booked_dates}
-                                    selected={this.state.selectedPeriod}
-                                />
+                                    <div className="office-price">
 
+                                        <span className="price-val">
+                                            {formatNumber(post.office_price, 0)},-
+                                        </span>
+                                        <span className="price-text">
+                                             / pr. mdr.
+                                        </span>
+                                    </div>
 
-                                <div className="office-price">
-
-                                    <span className="price-val">
-                                        {formatNumber(post.office_price, 0)},-
-                                    </span>
-                                    <span className="price-text">
-                                         / pr. mdr.
-                                    </span>
+                                    <div className="safety-notice">
+                                        <p>Aftalen er først i hus når i begge har godkendt aftalen. Og bare rolig du betaler ikke før alt er på plads!</p>
+                                    </div>
                                 </div>
-
-                                <div className="safety-notice">
-                                    <p>Aftalen er først i hus når i begge har godkendt aftalen. Og bare rolig du betaler ikke før alt er på plads!</p>
-                                </div>
-                            </div>
-
-                            <div className="booking-btn">
-                                <button className={"btn yellow"} onClick={this.handleSubmitBooking}>
-                                    Send anmodning
-                                    <span className="icon icomoon icon-right"/>
-                                </button>
+                                {!this.isOwnPost() &&
+                                    <div className="booking-btn">
+                                        <button className={"btn yellow"} onClick={this.handleSubmitBooking}>
+                                            Send anmodning
+                                            <span className="icon icomoon icon-right"/>
+                                        </button>
+                                    </div>
+                                }
                             </div>
                         </div>
-                    </div>
-                    <div className="grid-container office-sections section-box">
-                        <div className="row">
-                            <div className="col-sm-12 col-md-8">
+                        <div className="grid-container office-sections section-box">
+                            <div className="row">
+                                <div className="col-sm-12 col-md-8">
 
-                                <div className="post-location">
-                                    <div className="location">
-                                        {post.office_location !== false ? (
-                                            post.office_location.map((el) => {
-                                                return <span className="term" key={post.ID+'_'+el.term_id}>{el.name}</span>
-                                            })
-                                        ): null}
+                                    <div className="post-location">
+                                        <div className="location">
+                                            {post.office_location !== false ? (
+                                                post.office_location.map((el) => {
+                                                    return <span className="term" key={post.ID+'_'+el.term_id}>{el.name}</span>
+                                                })
+                                            ): null}
+
+                                        </div>
 
                                     </div>
 
-                                </div>
-
-                                {post.office_facilities.length > 0 &&
-                                    <div className="facilities office-section section-box">
-                                        <h2 className="facilities-title section-title">
-                                            Faciliteter
-                                        </h2>
-                                        <div className="facilities-wrap">
-                                            {post.office_facilities.map((fac) => {
-                                                return (<div className={"single-facility"} key={fac.term_id}> <div className="checkmark icomoon icon-checkmark"/> <span className="title">{fac.name}</span> </div> );
-                                            })}
-                                        </div>
-                                    </div>
-                                }
-
-                                <div className="about office-section section-box">
-                                    <h2 className="about-title section-title">
-                                        Om lejemålet
-                                    </h2>
-                                    <table className={"simple-data"}>
-                                        <tbody>
-                                        {('office_types' in post && post.office_types.length) ?
-                                            <tr className={"type"}>
-                                                <td className={"name"}>Kontortype:</td>
-                                                <td className="value">{post.office_types[0].name}</td>
-                                            </tr>
-                                        : null}
-
-                                        {('office_size' in post && post.office_size) ?
-
-                                            <tr className="area">
-                                                <td className="name">Areal:</td>
-                                                <td className="value">{post.office_size}m<sup>2</sup></td>
-                                            </tr>
-
-                                        : null}
-
-                                        <tr className="location">
-                                            <td className="name">Beliggenhed:</td>
-                                            <td className="value">Amagerfælledvej, København (placeholder, mangler data)</td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                    <h2 className="office-title">
-                                        {post.post_title}
-                                    </h2>
-                                    <ReadMore
-                                        maxHeight={'65px'}
-                                        openText={"Skjul"}
-                                        closedText={"Læs videre"}
-                                    >
-
-                                        <div dangerouslySetInnerHTML={{__html: post.post_content}}/>
-                                    </ReadMore>
-
-
-                                    <div className="map">
-                                        <img src={this.IMAGES+"map.png"}/>
-                                        <div className="nb-text">
-                                            NB. Du får den præcise adresse ved gensidig aftale om leje
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {post.office_rules != null && post.office_rules.length > 0 &&
-                                    <div className="office-rules office-section section-box">
-                                        <h2 className="section-title">
-                                            Kontorregler
-                                        </h2>
-                                        <div className="accordion-wrap">
-                                            {post.office_rules.map((el) => {
-                                                if (el.value === null || el.value.length === 0){
-                                                    return null;
-                                                }
-                                                return <Accordion
-                                                    label={el.name}
-                                                    key={el.name}
-                                                >
-                                                    {el.value}
-                                                </Accordion>
-                                            })}
-                                        </div>
-                                    </div>
-                                }
-
-                                <div className="security-notice office-section">
-                                    <div className="flex-row">
-                                        <div className="icon">
-                                            <span className="icomoon icon-sikkerhed"/>
-                                        </div>
-                                        <div className="message">
-                                            <h3 className="heading">
-                                                Vigtigt!
-                                            </h3>
-                                            <div className="security-content">
-                                                <p>
-                                                    <strong>Kommuniker <u>altid</u> kun via Officely.</strong> For at vi kan beskytte dig skal du aldrig overføre penge eller kommunikere uden for officely-webstedet. Officely er din sikkerhed.
-                                                </p>
+                                    {post.office_facilities.length > 0 &&
+                                        <div className="facilities office-section section-box">
+                                            <h2 className="facilities-title section-title">
+                                                Faciliteter
+                                            </h2>
+                                            <div className="facilities-wrap">
+                                                {post.office_facilities.map((fac) => {
+                                                    return (<div className={"single-facility"} key={fac.term_id}> <div className="checkmark icomoon icon-checkmark"/> <span className="title">{fac.name}</span> </div> );
+                                                })}
                                             </div>
                                         </div>
+                                    }
 
+                                    <div className="about office-section section-box">
+                                        <h2 className="about-title section-title">
+                                            Om lejemålet
+                                        </h2>
+                                        <table className={"simple-data"}>
+                                            <tbody>
+                                            {('office_types' in post && post.office_types.length) ?
+                                                <tr className={"type"}>
+                                                    <td className={"name"}>Kontortype:</td>
+                                                    <td className="value">{post.office_types[0].name}</td>
+                                                </tr>
+                                            : null}
+
+                                            {('office_size' in post && post.office_size) ?
+
+                                                <tr className="area">
+                                                    <td className="name">Areal:</td>
+                                                    <td className="value">{post.office_size}m<sup>2</sup></td>
+                                                </tr>
+
+                                            : null}
+
+                                            <tr className="location">
+                                                <td className="name">Beliggenhed:</td>
+                                                <td className="value">Amagerfælledvej, København (placeholder, mangler data)</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                        <h2 className="office-title">
+                                            {post.post_title}
+                                        </h2>
+                                        <ReadMore
+                                            maxHeight={'65px'}
+                                            openText={"Skjul"}
+                                            closedText={"Læs videre"}
+                                        >
+
+                                            <div dangerouslySetInnerHTML={{__html: post.post_content}}/>
+                                        </ReadMore>
+
+
+                                        <div className="map">
+                                            <img src={this.IMAGES+"map.png"}/>
+                                            <div className="nb-text">
+                                                NB. Du får den præcise adresse ved gensidig aftale om leje
+                                            </div>
+                                        </div>
                                     </div>
 
-                                </div>
-                                <div className="owner-info office-section section-box">
-                                    {owner !== false ? (
-
-                                        <React.Fragment>
-                                            <h2 className="owner-info-title section-title">
-                                                Udlejer information
+                                    {post.office_rules != null && post.office_rules.length > 0 &&
+                                        <div className="office-rules office-section section-box">
+                                            <h2 className="section-title">
+                                                Kontorregler
                                             </h2>
-                                            <div dangerouslySetInnerHTML={{__html: this.state.owner}}/>
-                                        </React.Fragment>
-                                    ) : (
-                                        <Loader/>
-                                    )}
+                                            <div className="accordion-wrap">
+                                                {post.office_rules.map((el) => {
+                                                    if (el.value === null || el.value.length === 0){
+                                                        return null;
+                                                    }
+                                                    return <Accordion
+                                                        label={el.name}
+                                                        key={el.name}
+                                                    >
+                                                        {el.value}
+                                                    </Accordion>
+                                                })}
+                                            </div>
+                                        </div>
+                                    }
 
-                                </div>
-                                <div className="share-btn-section ">
-                                    <ShareBtn
-                                        icon={"icon-download"}
-                                        buttonTitle={"Del"}
-                                    />
+                                    <div className="security-notice office-section">
+                                        <div className="flex-row">
+                                            <div className="icon">
+                                                <span className="icomoon icon-sikkerhed"/>
+                                            </div>
+                                            <div className="message">
+                                                <h3 className="heading">
+                                                    Vigtigt!
+                                                </h3>
+                                                <div className="security-content">
+                                                    <p>
+                                                        <strong>Kommuniker <u>altid</u> kun via Officely.</strong> For at vi kan beskytte dig skal du aldrig overføre penge eller kommunikere uden for officely-webstedet. Officely er din sikkerhed.
+                                                    </p>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                    <div className="owner-info office-section section-box">
+                                        {owner !== false ? (
+
+                                            <React.Fragment>
+                                                <h2 className="owner-info-title section-title">
+                                                    Udlejer information
+                                                </h2>
+                                                <div dangerouslySetInnerHTML={{__html: this.state.owner}}/>
+                                            </React.Fragment>
+                                        ) : (
+                                            <Loader/>
+                                        )}
+
+                                    </div>
+                                    <div className="share-btn-section ">
+                                        <ShareBtn
+                                            icon={"icon-download"}
+                                            buttonTitle={"Del"}
+                                        />
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                </div>
+                    </div>
+                </React.Fragment>
             )
         } else{
             renderPost = (
