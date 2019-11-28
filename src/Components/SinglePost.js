@@ -41,6 +41,7 @@ class SinglePost extends Component {
             numberInvalid: false,
             periodInvalid: false,
             confirmationBoxOpen: false,
+            errorBoxOpen: false,
         };
         // ref
         this.bookingBox = React.createRef();
@@ -272,6 +273,7 @@ class SinglePost extends Component {
                    confirmationBoxOpen: true,
                })
             } else{
+                stateChanges.errorBoxOpen = true;
                 // submit had errors
                 this.setState(stateChanges);
             }
@@ -361,6 +363,29 @@ class SinglePost extends Component {
         let author = parseInt(this.props.post.post_author);
         return author === user;
     };
+    errorBox = (open) => {
+        let closeBox = () => {
+            this.setState({
+                errorBoxOpen: false,
+            })
+        }
+        return(
+            <React.fragment>
+                <div className={`booking-error-modal-overlay ${open ? 'open' : ''}` } onClick={closeBox}/>
+                <div className={`booking-error-modal ${open ? 'open' : ''}`}>
+                    <h3 className="modal-heading" > Ups! </h3>
+                    <div className="inside-padding">
+
+                        <span className="close-btn" onClick={closeBox}/>
+                        <div className="content">
+                            <p>Der var en fejl med din anmodning. Tjek venligst din indtastning og prøv igen.</p>
+                            <button onClick={this.handleBookingRequest}>Send anmodning</button>
+                        </div>
+                    </div>
+                </div>
+            </React.fragment>
+        )
+    }
     confirmationBox = (open, data) => {
         let closeBox = () => {
             this.setState({
@@ -394,10 +419,14 @@ class SinglePost extends Component {
                         <span className="close-btn" onClick={closeBox}/>
                         <div className="content">
                             <div dangerouslySetInnerHTML={{__html: window.wpApiSettings.bookingboxContent}} />
-                            Periode: {data.period.name}
-                            Start: {formattedDate(data.startDate)}
-                            Kontor: {data.post.post_title}
-                            Udlejer: {data.post.post_author_name}
+                            <h3 className="office-title">
+                                {data.post.post_title}
+                            </h3>
+                            <div className="data">
+                                <strong>Periode</strong>: {data.period.name}
+                                <strong>Start</strong>: {formattedDate(data.startDate)}
+                            </div>
+
                             <div dangerouslySetInnerHTML={{__html: window.wpApiSettings.bookingboxContentAfter}} />
                             <button onClick={this.handleBookingRequest}>Send anmodning</button>
                         </div>
