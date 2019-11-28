@@ -524,6 +524,7 @@ class SinglePost extends Component {
                         startDate: this.state.selectedPeriod.startDate,
                         post: post
                     })}
+                    {this.errorBox(this.state.errorBoxOpen)}
                     <div id={"post-"+post.ID} className={"single-office"} ref={(node) => {
                         if(node !== null){
                             let bound = node.getBoundingClientRect();

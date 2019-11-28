@@ -5,8 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9c6e1259-6001-41ab-84af-ccf9fcedd095" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Components/SinglePost.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/SinglePost.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -52,24 +51,15 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Components/SinglePost.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-289">
-              <caret line="39" column="30" lean-forward="true" selection-start-line="39" selection-start-column="30" selection-end-line="39" selection-end-column="30" />
+            <state relative-caret-position="163">
+              <caret line="526" column="60" selection-start-line="526" selection-start-column="60" selection-end-line="526" selection-end-column="60" />
               <folding>
                 <element signature="e#12#51#0" expanded="true" />
                 <element signature="e#179#213#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/.gitignore">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="357">
-              <caret line="21" column="5" lean-forward="true" selection-start-line="21" selection-start-column="5" selection-end-line="21" selection-end-column="5" />
             </state>
           </provider>
         </entry>
@@ -163,7 +153,6 @@
       <find>handleOfficesQueryData</find>
       <find>getOff</find>
       <find>getOffices</find>
-      <find>handleSubmitBooking</find>
       <find>classNa</find>
       <find>kontakt</find>
       <find>post</find>
@@ -176,6 +165,7 @@
       <find>selectedPeriod</find>
       <find>format</find>
       <find>confirmationBoxOpen</find>
+      <find>handleSubmitBooking</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -236,8 +226,8 @@
         <option value="$PROJECT_DIR$/src/Components/FormElements/PeriodSelector.js" />
         <option value="$PROJECT_DIR$/src/Components/BookingConfirmationBox.js" />
         <option value="$PROJECT_DIR$/src/index.js" />
-        <option value="$PROJECT_DIR$/src/Components/SinglePost.js" />
         <option value="$PROJECT_DIR$/.gitignore" />
+        <option value="$PROJECT_DIR$/src/Components/SinglePost.js" />
       </list>
     </option>
   </component>
@@ -407,12 +397,12 @@
       <workItem from="1574668988822" duration="3650000" />
       <workItem from="1574761403280" duration="9544000" />
       <workItem from="1574839919785" duration="607000" />
-      <workItem from="1574925537021" duration="6620000" />
+      <workItem from="1574925537021" duration="7766000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="454621000" />
+    <option name="totallyTimeSpent" value="455767000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="1912" y="-8" width="1936" height="1056" extended-state="6" />
@@ -791,21 +781,21 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Components/SinglePost.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-289">
-          <caret line="39" column="30" lean-forward="true" selection-start-line="39" selection-start-column="30" selection-end-line="39" selection-end-column="30" />
-          <folding>
-            <element signature="e#12#51#0" expanded="true" />
-            <element signature="e#179#213#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="357">
           <caret line="21" column="5" lean-forward="true" selection-start-line="21" selection-start-column="5" selection-end-line="21" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Components/SinglePost.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="163">
+          <caret line="526" column="60" selection-start-line="526" selection-start-column="60" selection-end-line="526" selection-end-column="60" />
+          <folding>
+            <element signature="e#12#51#0" expanded="true" />
+            <element signature="e#179#213#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
