@@ -5,11 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9c6e1259-6001-41ab-84af-ccf9fcedd095" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Components/FormElements/NumberSelector.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/FormElements/NumberSelector.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Components/FormElements/PeriodSelector.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/FormElements/PeriodSelector.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Components/SinglePost.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/SinglePost.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -55,7 +52,7 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Components/SinglePost.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="452">
@@ -64,6 +61,15 @@
                 <element signature="e#12#51#0" expanded="true" />
                 <element signature="e#179#213#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="187">
+              <caret line="11" column="9" selection-start-line="11" selection-start-column="9" selection-end-line="11" selection-end-column="9" />
             </state>
           </provider>
         </entry>
@@ -181,7 +187,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/Components/Capacity.js" />
         <option value="$PROJECT_DIR$/src/Components/OfficeList.js" />
         <option value="$PROJECT_DIR$/webpack.config.js" />
         <option value="$PROJECT_DIR$/src/Components/FormElements/Order.js" />
@@ -232,6 +237,7 @@
         <option value="$PROJECT_DIR$/src/Components/BookingConfirmationBox.js" />
         <option value="$PROJECT_DIR$/src/index.js" />
         <option value="$PROJECT_DIR$/src/Components/SinglePost.js" />
+        <option value="$PROJECT_DIR$/.gitignore" />
       </list>
     </option>
   </component>
@@ -401,17 +407,18 @@
       <workItem from="1574668988822" duration="3650000" />
       <workItem from="1574761403280" duration="9544000" />
       <workItem from="1574839919785" duration="607000" />
-      <workItem from="1574925537021" duration="1318000" />
+      <workItem from="1574925537021" duration="1619000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="449319000" />
+    <option name="totallyTimeSpent" value="449620000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="1912" y="-8" width="1936" height="1056" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.17860906" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.17860906" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="npm" order="2" side_tool="true" />
       <window_info id="Favorites" order="3" side_tool="true" />
@@ -425,7 +432,7 @@
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.50217867" side_tool="true" weight="0.21910696" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="10" sideWeight="0.49782136" visible="true" weight="0.21885157" />
+      <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.49782136" visible="true" weight="0.21885157" />
       <window_info anchor="bottom" id="TypeScript" order="11" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -436,13 +443,6 @@
     <option name="version" value="1" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/node_modules/@crossfield/react-read-more/dist/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="250">
-          <caret line="56" column="49" selection-start-line="56" selection-start-column="31" selection-end-line="56" selection-end-column="49" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Components/Accordion.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="510">
@@ -799,6 +799,13 @@
             <element signature="e#12#51#0" expanded="true" />
             <element signature="e#179#213#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="11" column="9" selection-start-line="11" selection-start-column="9" selection-end-line="11" selection-end-column="9" />
         </state>
       </provider>
     </entry>
