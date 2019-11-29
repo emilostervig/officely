@@ -42,6 +42,7 @@ class SinglePost extends Component {
             periodInvalid: false,
             confirmationBoxOpen: false,
             errorBoxOpen: false,
+            conversation: false,
         };
         // ref
         this.bookingBox = React.createRef();
@@ -269,9 +270,10 @@ class SinglePost extends Component {
             }
 
             if(errors === false){
-               this.setState({
+               /*this.setState({
                    confirmationBoxOpen: true,
-               })
+               })*/
+               this.handleBookingRequest();
             } else{
                 stateChanges.errorBoxOpen = true;
                 // submit had errors
@@ -318,10 +320,18 @@ class SinglePost extends Component {
             .then(response => response.json())
             .then(data => {
                 console.log(data);
-                if(data.code)
-                if(data !== false){
-                    // TODO: booking added, disable button?
+                if(data.success){
+                    this.setState({
+                        confirmationBoxOpen: true,
+                        conversation: data.conversation_id,
+
+                    })
+                } else{
+                    this.setState({
+                        errorBoxOpen: true,
+                    })
                 }
+
 
             })
             .catch(error => {
@@ -378,8 +388,10 @@ class SinglePost extends Component {
 
                         <span className="close-btn" onClick={closeBox}/>
                         <div className="content">
-                            <p>Der var en fejl med din anmodning. Tjek venligst din indtastning og prøv igen.</p>
-                            <button onClick={this.handleBookingRequest}>Send anmodning</button>
+                            <p>Der var en fejl med din anmodning.
+                                <br/>
+                                Tjek venligst din indtastning og prøv igen.
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -418,17 +430,33 @@ class SinglePost extends Component {
 
                         <span className="close-btn" onClick={closeBox}/>
                         <div className="content">
-                            <div dangerouslySetInnerHTML={{__html: window.wpApiSettings.bookingboxContent}} />
-                            <h3 className="office-title">
-                                {data.post.post_title}
-                            </h3>
-                            <div className="data">
-                                <strong>Periode</strong>: {data.period.name}
-                                <strong>Start</strong>: {formattedDate(data.startDate)}
+
+                            <div className={"before-content"} dangerouslySetInnerHTML={{__html: window.wpApiSettings.bookingboxContent}} />
+                            <div className="data-row">
+                                {this.props.post.thumbnail &&
+                                    <div className="left-col">
+                                        <img src={this.props.post.thumbnail}/>
+                                    </div>
+                                }
+
+                                <div className="right-col">
+                                    <h3 className="office-title">
+                                        {data.post.post_title}
+                                    </h3>
+                                    <div className="data">
+                                        <p><strong>Antal personer</strong>: {data.people}</p>
+                                        <p><strong>Ønsket periode</strong>: {data.period.name}</p>
+                                        <p><strong>Startdato</strong>: {formattedDate(data.startDate)}</p>
+                                    </div>
+                                </div>
+
                             </div>
 
-                            <div dangerouslySetInnerHTML={{__html: window.wpApiSettings.bookingboxContentAfter}} />
-                            <button onClick={this.handleBookingRequest}>Send anmodning</button>
+                            <div className={"after-content"} dangerouslySetInnerHTML={{__html: window.wpApiSettings.bookingboxContentAfter}} />
+
+                            {this.state.conversation &&
+                                <a href={`${window.wpApiSettings.messagesLink}?conversation_id=${this.state.conversation}`} className="bbh-btn btn yellow has-icon">Skriv til udlejeren <span className="icon icomoon icon-right"/></a>
+                            }
                         </div>
                     </div>
                 </div>
@@ -522,6 +550,7 @@ class SinglePost extends Component {
                     {this.confirmationBox(this.state.confirmationBoxOpen, {
                         period: this.state.selectedPeriod.period,
                         startDate: this.state.selectedPeriod.startDate,
+                        people: this.state.selectedPeople,
                         post: post
                     })}
                     {this.errorBox(this.state.errorBoxOpen)}

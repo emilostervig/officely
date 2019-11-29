@@ -5,6 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9c6e1259-6001-41ab-84af-ccf9fcedd095" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/static/js/main.f2997c6b.chunk.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/build/static/js/main.f2997c6b.chunk.js.map" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Components/SinglePost.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/SinglePost.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -54,8 +56,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Components/SinglePost.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="340">
-              <caret line="526" column="58" selection-start-line="526" selection-start-column="58" selection-end-line="526" selection-end-column="58" />
+            <state relative-caret-position="299">
+              <caret line="443" column="62" lean-forward="true" selection-start-line="443" selection-start-column="62" selection-end-line="443" selection-end-column="62" />
               <folding>
                 <element signature="e#12#51#0" expanded="true" />
                 <element signature="e#179#213#0" expanded="true" />
@@ -136,7 +138,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>this.props.maxPriceDefault</find>
       <find>priceChanged</find>
       <find>clear</find>
       <find>handlePr</find>
@@ -166,6 +167,7 @@
       <find>format</find>
       <find>confirmationBoxOpen</find>
       <find>handleSubmitBooking</find>
+      <find>conversation</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -397,12 +399,13 @@
       <workItem from="1574668988822" duration="3650000" />
       <workItem from="1574761403280" duration="9544000" />
       <workItem from="1574839919785" duration="607000" />
-      <workItem from="1574925537021" duration="8803000" />
+      <workItem from="1574925537021" duration="11991000" />
+      <workItem from="1575015103841" duration="2085000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="456804000" />
+    <option name="totallyTimeSpent" value="462077000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="1912" y="-8" width="1936" height="1056" extended-state="6" />
@@ -703,6 +706,13 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Components/BookingConfirmationBox.js" />
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="357">
+          <caret line="21" column="5" lean-forward="true" selection-start-line="21" selection-start-column="5" selection-end-line="21" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/App.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="68">
@@ -781,17 +791,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="21" column="5" lean-forward="true" selection-start-line="21" selection-start-column="5" selection-end-line="21" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Components/SinglePost.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="526" column="58" selection-start-line="526" selection-start-column="58" selection-end-line="526" selection-end-column="58" />
+        <state relative-caret-position="299">
+          <caret line="443" column="62" lean-forward="true" selection-start-line="443" selection-start-column="62" selection-end-line="443" selection-end-column="62" />
           <folding>
             <element signature="e#12#51#0" expanded="true" />
             <element signature="e#179#213#0" expanded="true" />
