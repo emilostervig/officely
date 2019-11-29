@@ -307,6 +307,7 @@ class SinglePost extends Component {
             startDate: startDate,
             endDate: endDate
         }
+        console.log(data);
         fetch(`${this.API_URL}officely/v2/submitbooking/${this.props.post.ID}`,
             {
                 method: "POST",
