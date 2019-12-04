@@ -16,7 +16,6 @@ if(document.getElementById('root')){
 
 
 let flexibles = document.getElementsByClassName('office-list-flexible');
-console.log(flexibles);
 
 for (let i = 0; i < flexibles.length; i++) {
 	let el = flexibles[i];
